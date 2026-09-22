@@ -1,5 +1,6 @@
 import "server-only";
 import { TypeSafeClient, choice, score } from "@typesafe-ai/sdk";
+import { ALBUM_DEBUT_STATS, projectNewAlbumSongs } from "./album-stats";
 import type { EventContext } from "./event";
 import { SONG_STATS, type Song, type SongWithStats } from "./songs";
 
@@ -63,8 +64,78 @@ function buildQuestions(songs: Song[]) {
   return q;
 }
 
+const pct = (x: number) => `${Math.round(x * 100)}%`;
+
+/**
+ * 「新アルバム曲は何曲入るか」の過去実績と目安。lib/album-debut-stats.json（setlist.fm 全期間の集計）から作る。
+ * Jev は知識を持たないので、「アルバム発売直後は新曲が多い」という感覚も数字で渡さないと予想が公演ごとにぶれる。
+ * 実績が 1 枚も無ければ null（guidance は定性的な 1 行に戻る）。
+ */
+export function buildNewAlbumHistory(event: EventContext) {
+  if (!event.newAlbum) return null;
+  const projection = projectNewAlbumSongs(event.newAlbum, event.setlistSize);
+  const { summary, rule } = ALBUM_DEBUT_STATS;
+  return {
+    rule: `発売日から ${rule.tourWindowDays} 日以内・${rule.oneManMinSongs} 曲以上の公演を「発売直後のツアー」として集計（フェス・TV は除外）`,
+    measured: ALBUM_DEBUT_STATS.albums
+      .filter((a) => a.status === "measured" && a.firstShow && a.tour)
+      .map((a) => ({
+        album: a.album,
+        released: a.released,
+        firstShow: {
+          date: a.firstShow!.date,
+          songs: a.firstShow!.songs,
+          newAlbumSongs: a.firstShow!.newAlbumSongs,
+          share: a.firstShow!.newAlbumShare,
+          preReleasedPlayed: `${a.firstShow!.preReleasedPlayed}/${a.preReleased.length}`,
+          albumOnlyPlayed: `${a.firstShow!.albumOnlyPlayed}/${a.albumOnly.length}`,
+        },
+        tour: {
+          shows: a.tour!.shows,
+          avgNewAlbumSongs: a.tour!.avgNewAlbumSongs,
+          avgShare: a.tour!.avgNewAlbumShare,
+          tracksPlayed: `${a.tour!.tracksPlayed}/${a.trackCount}`,
+        },
+      })),
+    noData: summary.noDataAlbums,
+    projection: {
+      album: projection.album,
+      setlistSize: event.setlistSize,
+      firstShowShare: projection.share,
+      expectedNewAlbumSongs: projection.expectedSongs,
+      preReleasedFirstShowRate: summary.preReleasedFirstShowRate,
+      albumOnlyFirstShowRate: summary.albumOnlyFirstShowRate,
+      preReleased: projection.preReleased,
+      albumOnly: projection.albumOnly,
+    },
+  };
+}
+
+/** 新アルバム曲の目安を guidance の文にする。実績が無いときは定性的な 1 行 */
+function newAlbumGuidance(history: ReturnType<typeof buildNewAlbumHistory>): string[] {
+  const p = history?.projection;
+  if (!p || p.firstShowShare === null || p.expectedNewAlbumSongs === null) {
+    return ["アルバム発売日のツアー初日なので、新アルバム収録曲は多めに演奏される傾向がある"];
+  }
+  const { firstShowShare, expectedNewAlbumSongs } = p;
+  const lines = [
+    `フルアルバム発売直後のツアー初日では、過去実績（newAlbumHistory）で新アルバム曲がセトリの ${pct(firstShowShare)} を占めた。` +
+      `この公演（${p.setlistSize} 曲）では onNewAlbum=true の曲を ${expectedNewAlbumSongs} 曲前後入れるのが基準。` +
+      "新アルバム曲を全部入れる・ほとんど外す、のどちらにも寄せない",
+  ];
+  if (p.preReleasedFirstShowRate !== null && p.albumOnlyFirstShowRate !== null) {
+    lines.push(
+      `新アルバム曲でも albumTrackType=pre-released（先行シングル、演奏実績あり）は ${pct(p.preReleasedFirstShowRate)}、` +
+        `album-only（アルバム初出）は ${pct(p.albumOnlyFirstShowRate)} が初日に演奏された。先行シングルを優先し、album-only は半分程度に絞る`,
+    );
+  }
+  return lines;
+}
+
 /** Jev / Gemini に渡す「判断材料」。両エンジンで同じものを使う（比較の前提を揃えるため） */
 export function buildState(event: EventContext, songs: SongWithStats[]) {
+  const newAlbumHistory = buildNewAlbumHistory(event);
+  const preReleased = new Set(newAlbumHistory?.projection.preReleased ?? []);
   return {
     event: {
       tour: event.tour,
@@ -80,8 +151,10 @@ export function buildState(event: EventContext, songs: SongWithStats[]) {
       since: SONG_STATS.since,
       totalShows: SONG_STATS.totalShows,
     },
+    /** フルアルバム発売直後のツアーで新アルバム曲が占めた割合（過去実績）と、この公演の目安 */
+    newAlbumHistory,
     guidance: [
-      "アルバム発売日のツアー初日なので、新アルバム収録曲は多めに演奏される傾向がある",
+      ...newAlbumGuidance(newAlbumHistory),
       "staple=true の曲はライブ定番で、ツアーをまたいで演奏されやすい",
       "tieup がある曲は認知度が高く、アリーナ規模のライブで選ばれやすい",
       "era=phase1 かつ staple でない曲は、FC ツアーであっても演奏頻度は低い",
@@ -98,6 +171,8 @@ export function buildState(event: EventContext, songs: SongWithStats[]) {
       tieup: s.tieup ?? null,
       staple: s.staple ?? false,
       onNewAlbum: s.pops ?? false,
+      // 新アルバム曲の内訳。pre-released = 先行シングル（演奏実績あり）/ album-only = アルバム初出。新アルバム曲以外は null
+      albumTrackType: s.pops ? (preReleased.has(s.id) ? "pre-released" : "album-only") : null,
       // 過去ライブの演奏実績。stats が null の曲は実績データ未集計
       stats: s.stats,
     })),

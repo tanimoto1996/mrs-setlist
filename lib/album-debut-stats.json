@@ -1,0 +1,235 @@
+{
+  "generatedAt": "2026-09-22T17:39:56.278Z",
+  "source": "setlist.fm",
+  "dataRange": {
+    "since": "2015-01-01",
+    "until": "2026-08-09"
+  },
+  "rule": {
+    "oneManMinSongs": 15,
+    "tourWindowDays": 120
+  },
+  "summary": {
+    "measuredAlbums": [
+      "ANTENNA"
+    ],
+    "noDataAlbums": [
+      "TWELVE",
+      "Mrs. GREEN APPLE",
+      "ENSEMBLE",
+      "Attitude"
+    ],
+    "firstShowShare": 0.333,
+    "tourShare": 0.321,
+    "preReleasedFirstShowRate": 0.667,
+    "albumOnlyFirstShowRate": 0.5,
+    "albumOnlyTourRate": 0.625
+  },
+  "albums": [
+    {
+      "album": "TWELVE",
+      "released": "2016-01-13",
+      "trackCount": 12,
+      "preReleased": [
+        "gaou-jin",
+        "start",
+        "vip",
+        "aijou-to-hokosaki",
+        "risky-game"
+      ],
+      "albumOnly": [
+        "public",
+        "misukasazu",
+        "koi-to-gin",
+        "doutoku-to-sara",
+        "shoki-no-uta",
+        "umbrella",
+        "ai"
+      ],
+      "status": "no-data",
+      "firstShow": null,
+      "tour": null
+    },
+    {
+      "album": "Mrs. GREEN APPLE",
+      "released": "2017-01-11",
+      "trackCount": 12,
+      "preReleased": [
+        "speaking",
+        "in-the-morning",
+        "kujira-no-uta",
+        "samama-festival"
+      ],
+      "albumOnly": [
+        "just-a-friend",
+        "simpathy",
+        "connected",
+        "oz",
+        "whoo-whoo-whoo",
+        "dokoka-de-hi-wa-noboru",
+        "they-are",
+        "soft-drink"
+      ],
+      "status": "no-data",
+      "firstShow": null,
+      "tour": null
+    },
+    {
+      "album": "ENSEMBLE",
+      "released": "2018-04-18",
+      "trackCount": 13,
+      "preReleased": [
+        "anzenpai",
+        "wanted-wanted",
+        "reverse",
+        "nani-wo-nani-wo"
+      ],
+      "albumOnly": [
+        "love-me-love-you",
+        "party",
+        "soup",
+        "splash",
+        "hug",
+        "aufheben",
+        "tenbyou-no-uta",
+        "shunshu",
+        "hikari-no-uta"
+      ],
+      "status": "no-data",
+      "firstShow": null,
+      "tour": null
+    },
+    {
+      "album": "Attitude",
+      "released": "2019-10-02",
+      "trackCount": 19,
+      "preReleased": [
+        "inferno",
+        "romanticism",
+        "boku-no-koto",
+        "ao-to-natsu"
+      ],
+      "albumOnly": [
+        "attitude",
+        "cheers",
+        "circle",
+        "propose",
+        "viking",
+        "ke-mo-sabe",
+        "folktale",
+        "uso-janai-yo",
+        "smile-of-dreamer",
+        "kudari",
+        "tsuki-to-anemone",
+        "lovin",
+        "coffee",
+        "tomoshibi",
+        "himitsu"
+      ],
+      "status": "no-data",
+      "firstShow": null,
+      "tour": null
+    },
+    {
+      "album": "ANTENNA",
+      "released": "2023-07-05",
+      "trackCount": 14,
+      "preReleased": [
+        "dance-hall",
+        "blue-ambience",
+        "floriginal",
+        "new-my-normal",
+        "magic",
+        "soranji"
+      ],
+      "albumOnly": [
+        "antenna",
+        "blizzard",
+        "doodle",
+        "feeling",
+        "loneliness",
+        "norn",
+        "part-of-me",
+        "enen"
+      ],
+      "status": "measured",
+      "firstShow": {
+        "date": "2023-07-08",
+        "venue": "Saitama Super Arena",
+        "tour": null,
+        "url": "https://www.setlist.fm/setlist/mrs-green-apple/2023/saitama-super-arena-saitama-japan-73a7caed.html",
+        "songs": 24,
+        "newAlbumSongs": 8,
+        "newAlbumShare": 0.333,
+        "preReleasedPlayed": 4,
+        "albumOnlyPlayed": 4,
+        "newAlbumSongIds": [
+          "blizzard",
+          "new-my-normal",
+          "loneliness",
+          "dance-hall",
+          "norn",
+          "magic",
+          "soranji",
+          "feeling"
+        ]
+      },
+      "tour": {
+        "shows": 8,
+        "from": "2023-07-08",
+        "to": "2023-08-13",
+        "tourName": null,
+        "avgSongs": 23.25,
+        "avgNewAlbumSongs": 7.5,
+        "avgNewAlbumShare": 0.321,
+        "tracksPlayed": 10,
+        "preReleasedPlayed": 5,
+        "albumOnlyPlayed": 5,
+        "trackPlayRate": {
+          "antenna": 0.25,
+          "dance-hall": 1,
+          "blizzard": 0.75,
+          "doodle": 0,
+          "blue-ambience": 0,
+          "feeling": 0.75,
+          "floriginal": 0.25,
+          "new-my-normal": 0.75,
+          "loneliness": 1,
+          "magic": 1,
+          "soranji": 1,
+          "norn": 0.75,
+          "part-of-me": 0,
+          "enen": 0
+        }
+      }
+    },
+    {
+      "album": "POPS",
+      "released": "2026-09-30",
+      "trackCount": 16,
+      "preReleased": [
+        "brand-new",
+        "good-day",
+        "lulu",
+        "kaze-to-machi",
+        "carrying-happiness",
+        "natsu-no-kage",
+        "variety"
+      ],
+      "albumOnly": [
+        "kyohan",
+        "cinderella",
+        "hon-to-suisei",
+        "a-posteriori",
+        "episode",
+        "really-really",
+        "project4",
+        "mayakashi",
+        "kinjita-asobi"
+      ],
+      "status": "upcoming",
+      "firstShow": null,
+      "tour": null
+    }
+  ]
+}

@@ -9,6 +9,11 @@ export interface EventContext {
   rumors: string;
   /** 本編＋アンコールの想定曲数 */
   setlistSize: number;
+  /**
+   * この公演で「新アルバム」に当たるアルバム名（lib/songs.ts の album と一致）。
+   * lib/album-stats.ts の過去実績から「新アルバム曲は何曲入るか」の目安を出して state に渡す
+   */
+  newAlbum?: string;
 }
 
 export const SHADOWS_OPENING: EventContext = {
@@ -24,4 +29,5 @@ export const SHADOWS_OPENING: EventContext = {
   ],
   rumors: "",
   setlistSize: 24,
+  newAlbum: "POPS",
 };

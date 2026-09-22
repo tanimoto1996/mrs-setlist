@@ -3,13 +3,13 @@
  *
  *   npm run build:stats -- [--in data/setlists.json] [--out lib/song-stats.json]
  *
- * - 曲名は lib/song-title.ts の normalizeSongTitle() を両側に当ててから比較する
+ * - 曲名は lib/song-title.ts の buildTitleIndex()（normalizeSongTitle() + ローマ字エイリアス）で突合する
  * - SE / Tape（isTape=true）は集計対象外
  * - songs.ts に無い曲は「未マッチ一覧」として出すだけで、songs.ts には触らない
  * - avgPosition は「その公演の演奏曲（Tape 除く、アンコール含む）の中で何番目か」を 0〜1 に正規化した平均
  */
 import { readFileSync, writeFileSync } from "node:fs";
-import { normalizeSongTitle } from "../lib/song-title.ts";
+import { buildTitleIndex, normalizeSongTitle } from "../lib/song-title.ts";
 import { SONGS, type Song, type SongStats, type SongStatsFile } from "../lib/songs.ts";
 import type { SetlistsFile } from "./setlistfm.ts";
 
@@ -30,14 +30,8 @@ try {
   process.exit(1);
 }
 
-// ---- songs.ts 側のインデックス ----
-const byKey = new Map<string, Song>();
-for (const song of SONGS) {
-  const key = normalizeSongTitle(song.title);
-  const dup = byKey.get(key);
-  if (dup) console.warn(`警告: 正規化後の曲名が衝突 "${dup.title}" / "${song.title}" → ${key}`);
-  byKey.set(key, song);
-}
+// ---- songs.ts 側のインデックス（ローマ字エイリアス込み） ----
+const byKey: Map<string, Song> = buildTitleIndex(SONGS, (m) => console.warn(`警告: ${m}`));
 
 // ---- 集計 ----
 interface Acc {

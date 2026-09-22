@@ -11,6 +11,9 @@ paths:
 - `id` は全体で一意。追加前に `grep -n '"<id>"' lib/songs.ts` で重複確認する。
 - `album` は `ALBUM_ORDER` に含まれる文字列と完全一致させる。新アルバムを足すときは `ALBUM_ORDER` にも追加し、
   リリース順が新しいものを上に置く。シングル曲・配信曲は `"single"`。
+  フルアルバムなら `lib/albums.ts` の `FULL_ALBUMS` に発売日も足す（新譜曲比率の集計対象になる）。
+- setlist.fm 側がローマ字（"Ao to Natsu"）で登録している曲は `lib/song-title.ts` の `SONG_TITLE_ALIASES` に
+  別表記 → id を足す。`songs.ts` の title 自体は日本語の正式表記のまま。
 - `era` は `year` から自動算出（2022 以降が phase2）。手で指定しない。
 - `mood` は `up` / `mid` / `ballad` の 3 値。迷ったら `mid`。
 - `staple`（ライブ定番）は主観フラグ。ユーザーが明示したときだけ付ける。勝手に付けない。

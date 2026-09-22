@@ -6,7 +6,7 @@
 
 | ファイル | 保証していること |
 | --- | --- |
-| `smoke.spec.ts` | ページが開く、公演情報と全曲ライブラリが出る、初期状態、スマホ下部バー、`GET /api/predict` が 405 |
+| `smoke.spec.ts` | ページが開く、公演情報と全曲ライブラリが出る、初期状態、New Album Odds（過去実績と POPS の目安）、スマホ下部バー、`GET /api/predict` が 405 |
 | `my-setlist.spec.ts` | 曲を押して積む / 外す、並べ替え、リロード後も残る（localStorage）、検索・クイックフィルタ、24 曲の上限 |
 | `jev.spec.ts` | Jev の予想（**モック**）が slot 順に並ぶ、送信ボディ（`engine: "jev"`）、エラー表示、モックし忘れ時の安全弁 |
 | `gemini.spec.ts` | Gemini の予想（**モック**）が Gemini のカードに並び `engine: "gemini"` で呼ぶ、Jev との共通曲数、エラーは Gemini 側だけ、俺 / Jev / Gemini の 3 者採点と引き分け |
@@ -48,7 +48,7 @@ npx playwright test e2e/jev.spec.ts -g "失敗"   # 絞り込み（push ゲー�
   `<main aria-busy="false">`（hydration 完了）を待つ。リロードも `ui.reload(page)`。
   hydration 前に入力すると React が状態を初期化して消えるので、この待ちがないテストはフレークする。
 - 初期状態は `seed({ mine: [...], actual: [...], jev: ... })`。`ui.open(page)` より前に呼ぶ。
-- 画面の場所は `ui.library(page)` / `ui.mine(page)` / `ui.jev(page)` / `ui.gemini(page)` / `ui.result(page)`、
+- 画面の場所は `ui.library(page)` / `ui.odds(page)` / `ui.mine(page)` / `ui.jev(page)` / `ui.gemini(page)` / `ui.result(page)`、
   曲チップは `ui.chip(page, "Soranji")`（表示名の完全一致）、セトリの行は `ui.tracks(section)`。
 - 曲を名指しするときは `SONG` に id と表示名を足す。`lib/songs.ts` を変えたら追随。
 - ブラウザで未捕捉の例外が 1 つでも出ると、そのテストは失敗扱いになる（fixtures が `pageerror` を集めている）。

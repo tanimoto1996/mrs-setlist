@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState, type CSSProperties } from "react";
+import { ALBUM_DEBUT_STATS, projectNewAlbumSongs } from "@/lib/album-stats";
 import { SHADOWS_OPENING } from "@/lib/event";
 import type { Engine, PredictionResult, Slot, SongPrediction } from "@/lib/jev";
 import { scoreSetlist, type ScoreBreakdown } from "@/lib/scoring";
@@ -51,6 +52,8 @@ const rise = (i: number) => ({ "--i": i }) as CSSProperties;
 const pad2 = (n: number) => String(n).padStart(2, "0");
 
 const pct = (p: SongPrediction) => Math.round(p.likelihood * 100);
+
+const pctOf = (x: number) => `${Math.round(x * 100)}%`;
 
 const today = () => new Date().toISOString().slice(0, 10);
 
@@ -388,7 +391,9 @@ export default function Page() {
 
             {/* ---- 予想と答え合わせ ---- */}
             <div className="rail space-y-6">
-              <section className="card rise p-6" aria-labelledby="mine-heading" style={rise(3)}>
+              <NewAlbumOdds setlistSize={size} />
+
+              <section className="card rise p-6" aria-labelledby="mine-heading" style={rise(4)}>
                 <div className="flex items-end justify-between gap-4">
                   <div>
                     <h2 id="mine-heading" className="section-title scroll-mt-6">
@@ -421,7 +426,7 @@ export default function Page() {
                 />
               </section>
 
-              <section className="card rise p-6" aria-labelledby="jev-heading" style={rise(4)}>
+              <section className="card rise p-6" aria-labelledby="jev-heading" style={rise(5)}>
                 <div className="flex items-end justify-between gap-4">
                   <div>
                     <h2 id="jev-heading" className="section-title">
@@ -486,7 +491,7 @@ export default function Page() {
                 </div>
               </section>
 
-              <section className="card rise p-6" aria-labelledby="gemini-heading" style={rise(5)}>
+              <section className="card rise p-6" aria-labelledby="gemini-heading" style={rise(6)}>
                 <div className="flex items-end justify-between gap-4">
                   <div>
                     <h2 id="gemini-heading" className="section-title">
@@ -548,7 +553,7 @@ export default function Page() {
                 </div>
               </section>
 
-              <section className={`card rise p-6 ${hasActual ? "band-lime" : ""}`} aria-labelledby="result-heading" style={rise(6)}>
+              <section className={`card rise p-6 ${hasActual ? "band-lime" : ""}`} aria-labelledby="result-heading" style={rise(7)}>
                 <h2 id="result-heading" className="section-title">
                   Result
                 </h2>
@@ -618,6 +623,71 @@ export default function Page() {
         </a>
       </main>
     </>
+  );
+}
+
+/**
+ * フルアルバム発売直後のツアーで新譜曲がセトリを占めた割合（setlist.fm の過去実績）と、この公演での目安。
+ * 同じ数字を lib/jev.ts の buildState() が Jev / Gemini の前提（newAlbumHistory）として渡している。
+ */
+function NewAlbumOdds({ setlistSize }: { setlistSize: number }) {
+  const album = SHADOWS_OPENING.newAlbum ?? "POPS";
+  const projection = projectNewAlbumSongs(album, setlistSize);
+  const history = ALBUM_DEBUT_STATS.albums.filter((a) => a.status !== "upcoming");
+  const measured = ALBUM_DEBUT_STATS.albums.find((a) => a.status === "measured" && a.firstShow);
+  const title = (id: string) => SONG_MAP.get(id)?.title ?? id;
+
+  return (
+    <section className="card rise p-6" aria-labelledby="odds-heading" style={rise(3)}>
+      <div className="flex items-end justify-between gap-4">
+        <div>
+          <h2 id="odds-heading" className="section-title">
+            New Album Odds
+          </h2>
+          <p className="mt-1 text-sm font-bold text-dusk">フルアルバム発売直後のツアーで、新譜曲はセトリの何割か</p>
+        </div>
+        {projection.share !== null && (
+          <p className="latin text-3xl font-bold text-deep tabular-nums" aria-label={`初日の新譜曲比率 ${pctOf(projection.share)}`}>
+            {pctOf(projection.share)}
+          </p>
+        )}
+      </div>
+
+      {projection.share !== null && projection.expectedSongs !== null ? (
+        <p className="mt-4 rounded-2xl bg-mint px-4 py-3 text-sm font-bold leading-6 text-deep">
+          <span className="latin">{album}</span> から約 {projection.expectedSongs} 曲 / {setlistSize} 曲が入る目安。
+          収録 {projection.trackCount} 曲 = 先行シングル {projection.preReleased.length}（演奏実績あり）＋ アルバム初出 {projection.albumOnly.length}。
+        </p>
+      ) : (
+        <p className="mt-4 text-sm leading-6 text-dusk">過去のフルアルバムで測れたツアーが無いので、目安を出せない。</p>
+      )}
+
+      <ul className="mt-4 divide-y divide-line text-sm">
+        {history.map((a) => (
+          <li key={a.album} className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 py-2">
+            <span className="latin font-bold text-deep">
+              {a.album} <span className="text-xs text-teal tabular-nums">{a.released.slice(0, 4)}</span>
+            </span>
+            {a.status === "measured" && a.firstShow && a.tour ? (
+              <span className="text-dusk tabular-nums">
+                初日 {a.firstShow.newAlbumSongs}/{a.firstShow.songs} 曲 · {pctOf(a.firstShow.newAlbumShare)} · ツアー {a.tour.shows} 公演平均{" "}
+                {pctOf(a.tour.avgNewAlbumShare)}
+              </span>
+            ) : (
+              <span className="text-xs text-dusk">setlist.fm にツアーのデータ無し</span>
+            )}
+          </li>
+        ))}
+      </ul>
+
+      {measured?.firstShow && (
+        <p className="mt-3 text-xs leading-5 text-dusk">
+          {measured.album} の初日は先行シングル {measured.firstShow.preReleasedPlayed}/{measured.preReleased.length}、アルバム初出{" "}
+          {measured.firstShow.albumOnlyPlayed}/{measured.albumOnly.length} が演奏された。
+          今回の先行シングルは {projection.preReleased.map(title).join(" / ")}。 この目安は Jev と Gemini の前提にも渡している。
+        </p>
+      )}
+    </section>
   );
 }
 

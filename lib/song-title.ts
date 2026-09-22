@@ -15,3 +15,86 @@ export function normalizeSongTitle(raw: string): string {
   t = t.replace(/[^\p{L}\p{N}]+/gu, "");
   return t;
 }
+
+/**
+ * setlist.fm 側の別表記 → lib/songs.ts の id。
+ * 古い登録はローマ字（"Que Sera Sera" / "Dance Hall" / "Ao to Natsu"）で書かれていて、
+ * normalizeSongTitle() だけでは日本語タイトルと突合できない。ここに 1 行ずつ足す。
+ * キーは setlist.fm の表記そのまま（照合時に normalizeSongTitle() を当てる）。
+ * メドレー表記（"Ao to Natsu / Lilac"）は 1 曲に決められないので登録しない。
+ */
+export const SONG_TITLE_ALIASES: Record<string, string> = {
+  "Que Sera Sera": "que-sera-sera",
+  "Dance Hall": "dance-hall",
+  Lilac: "lilac",
+  "Ao to Natsu": "ao-to-natsu",
+  Froliginal: "floriginal",
+  "New My Normal": "new-my-normal",
+  "Watashi wa Saikyou": "watashi-wa-saikyo",
+  Inferno: "inferno",
+  Shunshuu: "shunshu",
+  Darling: "darling",
+  Tengoku: "tengoku",
+  Kusushiki: "kususiki",
+  Public: "public",
+  "Aijou to Hokosaki": "aijou-to-hokosaki",
+  "Boku no Koto": "boku-no-koto",
+  Gahoujin: "gaou-jin",
+  Apollodorus: "apollodorus",
+  "Ke‐Mo Sah‐Bee": "ke-mo-sabe",
+  "Nani wo Nani wo": "nani-wo-nani-wo",
+  "Kaze to Machi": "kaze-to-machi",
+  // 藍（あい）。setlist.fm では "Ao" で登録されている
+  Ao: "ai",
+  "Uso Janai yo": "uso-janai-yo",
+  "Hikari no Uta": "hikari-no-uta",
+  Kudari: "kudari",
+  Romanticism: "romanticism",
+  "Avoid Note": "avoid-note",
+  Aufheben: "aufheben",
+  "Kujira no Uta": "kujira-no-uta",
+  "Bitter Vacances": "bitter-vacances",
+  Anzenpai: "anzenpai",
+  "Shoki no Uta": "shoki-no-uta",
+  "Tenbyou no Uta": "tenbyou-no-uta",
+  Nachtmusik: "nachtmusik",
+  "Samama Festival!": "samama-festival",
+  "Risky Game": "risky-game",
+  // 恋と吟（こいとうた）
+  "Koi to Uta": "koi-to-gin",
+  "Natsu no Kage": "natsu-no-kage",
+  "Doutoku to Sara": "doutoku-to-sara",
+  "Dokoka de Hi wa Noboru": "dokoka-de-hi-wa-noboru",
+  "Blue Ambience": "blue-ambience",
+};
+
+/**
+ * 「正規化した曲名 → 曲」の索引。songs.ts の title と SONG_TITLE_ALIASES の両方を登録する。
+ * setlist.fm 由来の曲名を曲マスタに突合するときは、必ずこれを通す（build-song-stats / build-album-debut-stats 共通）。
+ * warn を渡すと、正規化後の衝突・エイリアスの指す id が無いといった不整合を報告する。
+ */
+export function buildTitleIndex<T extends { id: string; title: string }>(
+  songs: readonly T[],
+  warn: (message: string) => void = () => {},
+): Map<string, T> {
+  const byKey = new Map<string, T>();
+  const byId = new Map(songs.map((s) => [s.id, s]));
+  for (const song of songs) {
+    const key = normalizeSongTitle(song.title);
+    const dup = byKey.get(key);
+    if (dup) warn(`正規化後の曲名が衝突 "${dup.title}" / "${song.title}" → ${key}`);
+    byKey.set(key, song);
+  }
+  for (const [alias, id] of Object.entries(SONG_TITLE_ALIASES)) {
+    const song = byId.get(id);
+    if (!song) {
+      warn(`SONG_TITLE_ALIASES の "${alias}" が指す id "${id}" が songs.ts に無い`);
+      continue;
+    }
+    const key = normalizeSongTitle(alias);
+    const dup = byKey.get(key);
+    if (dup && dup.id !== id) warn(`エイリアス "${alias}" が "${dup.title}" と衝突 → ${key}`);
+    byKey.set(key, song);
+  }
+  return byKey;
+}

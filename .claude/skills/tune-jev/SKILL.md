@@ -18,6 +18,8 @@ Jev は判断モデル。曲の知識は無く、`buildState()` のメタデー�
 | --- | --- |
 | 特定の傾向（新曲多め、定番軽視など）を強めたい・弱めたい | `lib/jev.ts` の `guidance` 配列。1 項目 1 主張で短く |
 | 公演固有の事実を足したい | `lib/event.ts` の `facts`。確度の高い事実だけ。憶測は `rumors` に |
+| 新アルバム曲の目安曲数がずれている | `lib/jev.ts` の `newAlbumGuidance()` の文言、または `scripts/build-album-debut-stats.ts` のルール（120 日 / 15 曲）→ `npm run build:album-stats`。JSON は手で触らない |
+| setlist.fm の実績が 0 回になっている曲がある | `npm run build:stats` の未マッチ一覧を見て `lib/song-title.ts` の `SONG_TITLE_ALIASES` に別表記を足す。曲マスタに無い曲なら `/add-song` |
 | 曲ごとの判断材料が足りない | `buildState().songs` に渡すフィールドを増やす（`Song` 型に追加 → `songs.ts` にデータ） |
 | 見込みの段階が粗い・偏る | `PLAY_LEVELS` の文言・段階数。段階数を変えたら正規化も直す |
 | スロットの分け方が合わない | `SLOT_OPTIONS`（`Slot` 型・`SLOT_ORDER`・`page.tsx` も追随） |

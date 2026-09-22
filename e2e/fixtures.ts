@@ -153,6 +153,8 @@ export const ui = {
   },
   ready: (page: Page) => expect(page.locator("main")).toHaveAttribute("aria-busy", "false"),
   library: (page: Page) => page.locator('section[aria-labelledby="songs-heading"]'),
+  /** New Album Odds（新譜曲がセトリを占めた割合の過去実績と目安） */
+  odds: (page: Page) => page.locator('section[aria-labelledby="odds-heading"]'),
   mine: (page: Page) => page.locator('section[aria-labelledby="mine-heading"]'),
   jev: (page: Page) => page.locator('section[aria-labelledby="jev-heading"]'),
   gemini: (page: Page) => page.locator('section[aria-labelledby="gemini-heading"]'),

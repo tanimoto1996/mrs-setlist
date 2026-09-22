@@ -46,3 +46,6 @@ gemini-api-key
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+# Playwright MCP のスナップショット・スクリーンショット
+/.playwright-mcp/

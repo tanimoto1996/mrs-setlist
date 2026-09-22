@@ -36,7 +36,25 @@ npm run build:stats      # → lib/song-stats.json。突合できなかった曲
 - 1 リクエスト 1 秒以上あける。HTML スクレイピングはしない。
 - SE や Tape（`isTape=true`）は集計しない。
 - 未マッチの曲名は `lib/song-title.ts` の正規化ルールか `lib/songs.ts` の表記を直して再集計する。
+  setlist.fm の古い登録はローマ字（"Que Sera Sera" / "Dance Hall"）なので、`SONG_TITLE_ALIASES` に別表記 → id を足す。
   スクリプトが `songs.ts` を勝手に書き換えることはない。
+
+## フルアルバムが出た直後のライブで、新譜曲は何割か
+
+「アルバム発売日のツアー初日だから新曲が多いはず」を感覚で渡すと Jev の予想が回ごとにぶれるので、数字にして渡している。
+
+```bash
+npm run fetch:setlists:history   # setlist.fm の全期間 → data/setlists-history.json
+npm run build:album-stats        # → lib/album-debut-stats.json（アルバムごとの初日・ツアー平均の新譜曲比率を標準出力にも出す）
+```
+
+- 対象は `lib/albums.ts` のフルアルバム（TWELVE / Mrs. GREEN APPLE / ENSEMBLE / Attitude / ANTENNA / POPS）。
+- 「発売直後のツアー」= 発売日から 120 日以内で、演奏曲 15 曲以上の公演（フェス・TV 出演は除く）。
+- 収録曲は「先行シングル（発売前に演奏実績あり）」と「アルバム初出」に分けて数える。
+- setlist.fm に Phase 1（2016〜2020）のワンマン公演がほぼ登録されていないため、いま測れているのは
+  **ANTENNA → 2023-07-08 さいたまスーパーアリーナ初日: 24 曲中 8 曲（33%）、ツアー 8 公演平均 32%** だけ。
+  この 33% を `lib/jev.ts` の `buildState()` が `newAlbumHistory` と guidance（「POPS 曲は 8 曲前後」）として Jev / Gemini に渡し、
+  画面の New Album Odds カードにも同じ数字を出す。
 
 ## Gemini と比べる
 

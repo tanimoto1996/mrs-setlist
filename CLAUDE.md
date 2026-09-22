@@ -13,6 +13,8 @@ npm run test:e2e    # Playwright E2E をフルで実行。全部通ると push �
 npm run test:e2e:ui # Playwright の UI モード（デバッグ用。ゲートは更新しない）
 npm run fetch:setlists  # setlist.fm から直近セトリを取得 → data/setlists.json（SETLISTFM_API_KEY 必須、--refresh で再取得）
 npm run build:stats     # data/setlists.json を集計 → lib/song-stats.json（未マッチ曲名を標準出力に出す）
+npm run fetch:setlists:history  # setlist.fm の全期間（2015〜）→ data/setlists-history.json（アルバム別集計の材料）
+npm run build:album-stats       # フルアルバム発売直後ツアーの新譜曲比率 → lib/album-debut-stats.json
 npm run screenshot:setlist -- --in predictions/<date>.json [--engine gemini] [--full]  # 予想 JSON を画面に流し込んで PNG に撮る（API は呼ばない）
 ```
 
@@ -37,7 +39,11 @@ npm run screenshot:setlist -- --in predictions/<date>.json [--engine gemini] [--
   `lib/jev.ts` Jev 呼び出し（rubric・state・toSetlist は Gemini と共用）/ `lib/gemini.ts` Gemini 呼び出し / `lib/scoring.ts` 採点 / `app/api/predict/route.ts` API /
   `app/page.tsx` 画面（1 ファイルのクライアントコンポーネント、状態は localStorage）
 - `lib/song-stats.json` は setlist.fm 由来の演奏実績（`scripts/build-song-stats.ts` が生成）。手で編集しない。
-  曲名の突合は `lib/song-title.ts` の `normalizeSongTitle()` を両側に当てる。
+  曲名の突合は `lib/song-title.ts` の `buildTitleIndex()`（`normalizeSongTitle()` + ローマ字エイリアス `SONG_TITLE_ALIASES`）。
+  setlist.fm の古い登録はローマ字（"Que Sera Sera"）なので、未マッチが出たらエイリアスに 1 行足す。
+- `lib/albums.ts` フルアルバムの発売日 / `lib/album-debut-stats.json` 「発売直後のツアーで新譜曲が占めた割合」
+  （`scripts/build-album-debut-stats.ts` が生成、手で編集しない）/ `lib/album-stats.ts` その読み出しと目安の計算。
+  Jev の state（`newAlbumHistory`・guidance）と画面の New Album Odds カードが同じ数字を使う。
 - `e2e/` Playwright のテスト（`fixtures.ts` が Jev の遮断・seed・共通ロケータ）/ `playwright.config.ts` /
   `scripts/e2e-gate.mjs` E2E ラッパー（push 可の印を書く）/ `.claude/hooks/` 強制用 hook / `docs/` 手順と作業記録
 - `SETLISTFM_API_KEY` と `GEMINI_API_KEY`（またはルートの `gemini-api-key` ファイル）も `TYPESAFE_API_KEY` と同じ扱い。中身を読まない・出力しない。
