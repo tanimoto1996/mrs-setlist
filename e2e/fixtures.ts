@@ -155,6 +155,8 @@ export const ui = {
   library: (page: Page) => page.locator('section[aria-labelledby="songs-heading"]'),
   /** New Album Odds（新譜曲がセトリを占めた割合の過去実績と目安） */
   odds: (page: Page) => page.locator('section[aria-labelledby="odds-heading"]'),
+  /** Tour Carryover（連続ツアー間の曲の持ち越し率と、前回ツアーから残る曲数の目安） */
+  carryover: (page: Page) => page.locator('section[aria-labelledby="carryover-heading"]'),
   mine: (page: Page) => page.locator('section[aria-labelledby="mine-heading"]'),
   jev: (page: Page) => page.locator('section[aria-labelledby="jev-heading"]'),
   gemini: (page: Page) => page.locator('section[aria-labelledby="gemini-heading"]'),
@@ -172,7 +174,7 @@ export const ui = {
     expect(await ui.trackTitles(section)).toEqual(titles);
   },
   tab: (page: Page, name: "俺の予想に入れる" | "実セトリを入力") => page.getByRole("tab", { name }),
-  quick: (page: Page, name: "すべて" | "POPS 新曲" | "ライブ定番" | "タイアップ") =>
+  quick: (page: Page, name: "すべて" | "POPS 新曲" | "ライブ定番" | "タイアップ" | "前回ツアー") =>
     page.getByRole("group", { name: "クイックフィルタ" }).getByRole("button", { name }),
   search: (page: Page) => page.getByRole("searchbox", { name: "曲名で絞る" }),
 };

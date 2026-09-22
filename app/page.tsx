@@ -6,9 +6,10 @@ import { SHADOWS_OPENING } from "@/lib/event";
 import type { Engine, PredictionResult, Slot, SongPrediction } from "@/lib/jev";
 import { scoreSetlist, type ScoreBreakdown } from "@/lib/scoring";
 import { ALBUM_ORDER, SONGS, SONG_MAP, type Song } from "@/lib/songs";
+import { TOUR_STATS, projectCarriedSongs, recentTours, tourOf } from "@/lib/tour-stats";
 
 type Mode = "mine" | "actual";
-type Quick = "all" | "pops" | "staple" | "tieup";
+type Quick = "all" | "pops" | "staple" | "tieup" | "lastTour";
 
 interface Saved {
   mine: string[];
@@ -37,6 +38,8 @@ const QUICK_FILTERS: { key: Quick; label: string; match: (s: Song) => boolean }[
   { key: "pops", label: "POPS 新曲", match: (s) => !!s.pops },
   { key: "staple", label: "ライブ定番", match: (s) => !!s.staple },
   { key: "tieup", label: "タイアップ", match: (s) => !!s.tieup },
+  // 前回のワンマンツアー（lib/tour-stats.json の直近）で 1 回でも演奏された曲
+  { key: "lastTour", label: "前回ツアー", match: (s) => !!TOUR_STATS.songs[s.id]?.playedIn[0] },
 ];
 
 const SLOT_LABEL: Record<Slot, string> = {
@@ -392,6 +395,7 @@ export default function Page() {
             {/* ---- 予想と答え合わせ ---- */}
             <div className="rail space-y-6">
               <NewAlbumOdds setlistSize={size} />
+              <TourCarryover />
 
               <section className="card rise p-6" aria-labelledby="mine-heading" style={rise(4)}>
                 <div className="flex items-end justify-between gap-4">
@@ -708,6 +712,75 @@ function NewAlbumOdds({ setlistSize }: { setlistSize: number }) {
           {hasManual && " setlist.fm に無い公演は LiveFans などの公開セトリから手で起こした（「出典」リンク）。"}
         </p>
       )}
+    </section>
+  );
+}
+
+/**
+ * 連続するツアーの間で曲がどれだけ持ち越されたか（setlist.fm の過去実績）と、前回ツアーから残る曲数の目安。
+ * 同じ数字を lib/jev.ts の buildTourHistory() が Jev / Gemini の前提（tourHistory）として渡している。
+ */
+function TourCarryover() {
+  const s = TOUR_STATS.summary;
+  const carried = projectCarriedSongs();
+  const recent = recentTours();
+  const fc = tourOf(s.lastFanClubTour);
+  const title = (id: string) => SONG_MAP.get(id)?.title ?? id;
+  const r3 = s.carriedRateByStreak["3+"];
+  const r1 = s.carriedRateByStreak["1"];
+
+  return (
+    <section className="card rise p-6" aria-labelledby="carryover-heading" style={rise(3)}>
+      <div className="flex items-end justify-between gap-4">
+        <div>
+          <h2 id="carryover-heading" className="section-title">
+            Tour Carryover
+          </h2>
+          <p className="mt-1 text-sm font-bold text-dusk">前のツアーの曲は、次のツアーにどれだけ残るか</p>
+        </div>
+        {s.carriedShare && (
+          <p className="text-right">
+            <span className="latin block text-3xl font-bold text-deep tabular-nums" aria-label={`持ち越し率の平均 ${pctOf(s.carriedShare.mean)}`}>
+              {pctOf(s.carriedShare.mean)}
+            </span>
+            {r3 !== null && <span className="latin text-xs font-bold text-teal tabular-nums">連続 3 本以上の曲は {pctOf(r3)}</span>}
+          </p>
+        )}
+      </div>
+
+      {carried && s.carriedShare ? (
+        <p className="mt-4 rounded-2xl bg-mint px-4 py-3 text-sm font-bold leading-6 text-deep">
+          前回 <span className="latin">{carried.tour.shortName}</span>（{carried.tour.distinctSongs} 曲）からは {carried.mean} 曲前後（{carried.low}〜{carried.high} 曲）が残る目安。過去 {s.pairs} 組の持ち越し率は{" "}
+          {pctOf(s.carriedShare.min)}〜{pctOf(s.carriedShare.max)}。
+          {s.freshReturnedShare !== null && <> 新顔の {pctOf(s.freshReturnedShare)} は 1〜2 ツアー空けた曲の復活。</>}
+        </p>
+      ) : (
+        <p className="mt-4 text-sm leading-6 text-dusk">比べられるツアーが 2 本無いので、目安を出せない。</p>
+      )}
+
+      <ul className="mt-4 divide-y divide-line text-sm">
+        {TOUR_STATS.pairs.map((p) => {
+          const next = tourOf(p.next);
+          return (
+            <li key={p.next} className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 py-2">
+              <span className="font-bold text-deep">
+                {p.prevName} → {p.nextName}
+                {next?.fanClubOnly && <span className="ml-1 text-xs text-teal">FC</span>}
+              </span>
+              <span className="text-dusk tabular-nums">
+                持ち越し {p.carried}/{p.nextSongs} 曲 · {pctOf(p.carriedShare)} · 復活 {p.freshReturned} · 初登場 {p.freshFirstTime}
+              </span>
+            </li>
+          );
+        })}
+      </ul>
+
+      <p className="mt-3 text-xs leading-5 text-dusk">
+        {r1 !== null && r3 !== null && <>前のツアーで連続 1 本だけの曲は {pctOf(r1)}、3 本以上続いた曲は {pctOf(r3)} が次も演奏された。 </>}
+        {s.playedInAllRecent.length > 0 && <>直近 {recent.length} ツアー全部で演奏: {s.playedInAllRecent.map(title).join(" / ")}。 </>}
+        {fc && <>前回の FC 限定ツアー {fc.shortName} は平均 {Math.round(fc.avgSongs * 10) / 10} 曲。 </>}
+        Library の「前回ツアー」で前回の曲だけ出せる。この数字は Jev と Gemini の前提にも渡している。
+      </p>
     </section>
   );
 }

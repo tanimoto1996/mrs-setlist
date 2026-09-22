@@ -11,6 +11,7 @@
     "fetch:setlists:history": "node --no-warnings --env-file-if-exists=.env.local scripts/fetch-setlists.ts --since 2015-01-01 --out data/setlists-history.json",
     "build:stats": "node --no-warnings scripts/build-song-stats.ts",
     "build:album-stats": "node --no-warnings scripts/build-album-debut-stats.ts",
+    "build:tour-stats": "node --no-warnings scripts/build-tour-stats.ts",
     "test:e2e": "node scripts/e2e-gate.mjs",
     "test:e2e:ui": "playwright test --ui",
     "test:e2e:headed": "playwright test --headed",

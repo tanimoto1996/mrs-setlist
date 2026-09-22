@@ -3,13 +3,13 @@
  *
  *   npm run build:stats -- [--in data/setlists.json] [--out lib/song-stats.json]
  *
- * - 曲名は lib/song-title.ts の buildTitleIndex()（normalizeSongTitle() + ローマ字エイリアス）で突合する
+ * - 曲名は lib/song-title.ts の buildTitleIndex()（normalizeSongTitle() + ローマ字エイリアス）で突合する。メドレー表記は resolveSetlistTitle() が 1 曲ずつに分ける
  * - SE / Tape（isTape=true）は集計対象外
  * - songs.ts に無い曲は「未マッチ一覧」として出すだけで、songs.ts には触らない
  * - avgPosition は「その公演の演奏曲（Tape 除く、アンコール含む）の中で何番目か」を 0〜1 に正規化した平均
  */
 import { readFileSync, writeFileSync } from "node:fs";
-import { buildTitleIndex, normalizeSongTitle } from "../lib/song-title.ts";
+import { buildTitleIndex, resolveSetlistTitle } from "../lib/song-title.ts";
 import { SONGS, type Song, type SongStats, type SongStatsFile } from "../lib/songs.ts";
 import type { SetlistsFile } from "./setlistfm.ts";
 
@@ -61,18 +61,18 @@ for (const show of file.setlists) {
   const tour = show.tour ?? UNKNOWN_TOUR;
 
   played.forEach((entry, idx) => {
-    const song = byKey.get(normalizeSongTitle(entry.title));
-    if (!song) {
-      unmatched.set(entry.title, (unmatched.get(entry.title) ?? 0) + 1);
-      return;
+    // メドレー表記（"BFF / Variety"）は両方の曲に同じ位置で数える
+    const { songs, unmatched: miss } = resolveSetlistTitle(byKey, entry.title);
+    for (const m of miss) unmatched.set(m, (unmatched.get(m) ?? 0) + 1);
+    for (const song of songs) {
+      const a = accOf(song.id);
+      a.playCount++;
+      a.byTour.set(tour, (a.byTour.get(tour) ?? 0) + 1);
+      if (!a.lastPlayed || show.date > a.lastPlayed) a.lastPlayed = show.date;
+      if (idx === 0) a.openerCount++;
+      if (entry.encore !== null) a.encoreCount++;
+      a.positionSum += played.length > 1 ? idx / (played.length - 1) : 0;
     }
-    const a = accOf(song.id);
-    a.playCount++;
-    a.byTour.set(tour, (a.byTour.get(tour) ?? 0) + 1);
-    if (!a.lastPlayed || show.date > a.lastPlayed) a.lastPlayed = show.date;
-    if (idx === 0) a.openerCount++;
-    if (entry.encore !== null) a.encoreCount++;
-    a.positionSum += played.length > 1 ? idx / (played.length - 1) : 0;
   });
 }
 

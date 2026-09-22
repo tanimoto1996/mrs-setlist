@@ -17,7 +17,7 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { FULL_ALBUMS } from "../lib/albums.ts";
 import type { AlbumDebutStats, AlbumDebutStatsFile, AlbumShowStats, AlbumTourStats } from "../lib/album-stats.ts";
-import { buildTitleIndex, normalizeSongTitle } from "../lib/song-title.ts";
+import { buildTitleIndex, normalizeSongTitle, resolveSetlistTitle } from "../lib/song-title.ts";
 import { SONGS, type Song } from "../lib/songs.ts";
 import type { NormalizedSetlist, NormalizedSong, SetlistsFile } from "./setlistfm.ts";
 
@@ -93,7 +93,12 @@ const popsTracks = [...(FULL_ALBUMS.find((a) => a.album === "POPS")?.tracks ?? [
 if (JSON.stringify(popsFlagged) !== JSON.stringify(popsTracks)) {
   console.warn(`警告: lib/albums.ts の POPS.tracks と songs.ts の pops フラグがずれている`);
 }
-const resolve = (title: string): Song | undefined => byKey.get(normalizeSongTitle(title));
+/** 1 エントリ → 曲（メドレー表記は複数）。突合できなかった表記は unmatched に数える */
+const resolveAll = (title: string): Song[] => {
+  const { songs, unmatched: miss } = resolveSetlistTitle(byKey, title);
+  for (const m of miss) unmatched.set(m, (unmatched.get(m) ?? 0) + 1);
+  return songs;
+};
 const round = (x: number) => Math.round(x * 1000) / 1000;
 const addDays = (iso: string, days: number) => new Date(new Date(`${iso}T00:00:00Z`).getTime() + days * 86_400_000).toISOString().slice(0, 10);
 
@@ -110,12 +115,9 @@ function countShow(show: SourcedSetlist, trackIds: Set<string>, preReleased: Set
   const played = show.songs.filter((s) => !s.isTape);
   const newAlbumSongIds: string[] = [];
   for (const entry of played) {
-    const song = resolve(entry.title);
-    if (!song) {
-      unmatched.set(entry.title, (unmatched.get(entry.title) ?? 0) + 1);
-      continue;
+    for (const song of resolveAll(entry.title)) {
+      if (trackIds.has(song.id)) newAlbumSongIds.push(song.id);
     }
-    if (trackIds.has(song.id)) newAlbumSongIds.push(song.id);
   }
   return {
     date: show.date,
@@ -144,8 +146,7 @@ const albums: AlbumDebutStats[] = FULL_ALBUMS.map(({ album, released, tracks: tr
     if (show.date >= released) break;
     for (const entry of show.songs) {
       if (entry.isTape) continue;
-      const song = resolve(entry.title);
-      if (song && trackIds.has(song.id)) playedBefore.add(song.id);
+      for (const song of resolveAll(entry.title)) if (trackIds.has(song.id)) playedBefore.add(song.id);
     }
   }
   const preReleased = tracks.filter((s) => s.year < releaseYear || playedBefore.has(s.id)).map((s) => s.id);

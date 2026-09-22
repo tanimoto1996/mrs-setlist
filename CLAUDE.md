@@ -15,6 +15,7 @@ npm run fetch:setlists  # setlist.fm から直近セトリを取得 → data/set
 npm run build:stats     # data/setlists.json を集計 → lib/song-stats.json（未マッチ曲名を標準出力に出す）
 npm run fetch:setlists:history  # setlist.fm の全期間（2015〜）→ data/setlists-history.json（アルバム別集計の材料）
 npm run build:album-stats       # フルアルバム発売直後ツアーの新譜曲比率 → lib/album-debut-stats.json
+npm run build:tour-stats        # 連続ツアー間の曲の持ち越し率・曲ごとの直近ツアー出場状況 → lib/tour-stats.json
 npm run screenshot:setlist -- --in predictions/<date>.json [--engine gemini] [--full]  # 予想 JSON を画面に流し込んで PNG に撮る（API は呼ばない）
 ```
 
@@ -45,6 +46,11 @@ npm run screenshot:setlist -- --in predictions/<date>.json [--engine gemini] [--
   `data/manual-setlists.json` setlist.fm に無い公演を出典 URL 付きで手入力したセトリ（アルバム別集計だけに使う）/
   `lib/album-debut-stats.json` 「発売直後のツアーで新譜曲が占めた割合」（`scripts/build-album-debut-stats.ts` が生成、手で編集しない）/
   `lib/album-stats.ts` その読み出しと目安（直近〜平均のレンジ）。Jev の state（`newAlbumHistory`・guidance）と画面の New Album Odds カードが同じ数字を使う。
+- `lib/tours.ts` ワンマンツアーの正式名称と日付範囲・FC 限定か（出典 Wikipedia。setlist.fm に tour 名が無い公演をまとめるため）/
+  `lib/tour-stats.json` 「前のツアーの曲が次のツアーにどれだけ残ったか」（連続ツアー間の持ち越し率・連続回数別の残り方・曲ごとの直近 5 ツアー出場状況。
+  `scripts/build-tour-stats.ts` が `data/setlists-history.json` から生成、手で編集しない）/ `lib/tour-stats.ts` その読み出し。
+  Jev の state（`tourHistory`・`songs[].recentTours`・guidance）と画面の Tour Carryover カード・Library の「前回ツアー」フィルタが同じ数字を使う。
+- setlist.fm のメドレー表記（"BFF / Variety"）は `resolveSetlistTitle()` が " / " で分けて両方の曲に数える。
 - 曲マスタの `album` は「最初に収録されたアルバム」。2016〜2023 年のアルバム収録曲は出典で照合済み（`docs/worklog/2026-09-23-album-history-sources.md`）。
   出典が確認できない情報は書かない。不明なら不明のままにして報告する。
 - `e2e/` Playwright のテスト（`fixtures.ts` が Jev の遮断・seed・共通ロケータ）/ `playwright.config.ts` /

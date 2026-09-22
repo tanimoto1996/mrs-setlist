@@ -17,6 +17,7 @@ paths:
   確認した出典は worklog に残す（2026-09-23 の照合: `docs/worklog/2026-09-23-album-history-sources.md`）。
 - setlist.fm 側がローマ字（"Ao to Natsu"）で登録している曲は `lib/song-title.ts` の `SONG_TITLE_ALIASES` に
   別表記 → id を足す。`songs.ts` の title 自体は日本語の正式表記のまま。
+  メドレー表記（"BFF / Variety"）はエイリアスにしない。`resolveSetlistTitle()` が " / " で分けて 1 曲ずつ突合する。
 - `era` は `year` から自動算出（2022 以降が phase2）。手で指定しない。
 - `mood` は `up` / `mid` / `ballad` の 3 値。迷ったら `mid`。
 - `staple`（ライブ定番）は主観フラグ。ユーザーが明示したときだけ付ける。勝手に付けない。

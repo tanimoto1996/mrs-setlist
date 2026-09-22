@@ -2,7 +2,8 @@ import "server-only";
 import { TypeSafeClient, choice, score } from "@typesafe-ai/sdk";
 import { ALBUM_DEBUT_STATS, projectNewAlbumSongs } from "./album-stats";
 import type { EventContext } from "./event";
-import { SONG_STATS, type Song, type SongWithStats } from "./songs";
+import { SONGS, SONG_STATS, type Song, type SongWithStats } from "./songs";
+import { TOUR_STATS, projectCarriedSongs, recentTours, tourOf } from "./tour-stats";
 
 /**
  * 演奏される見込み。Score の rubric は 0 から順に並ぶ。
@@ -141,9 +142,104 @@ function newAlbumGuidance(history: ReturnType<typeof buildNewAlbumHistory>): str
   return lines;
 }
 
+/**
+ * 「前のツアーの曲は次のツアーにどれだけ残るか」の過去実績。lib/tour-stats.json（setlist.fm 全期間をツアー単位に集計）から作る。
+ * 「前回やった曲がそのまま並ぶ」「前回やったからもうやらない」のどちらにも寄らないよう、持ち越し率・連続回数別の残り方・
+ * 復活の割合を数字で渡す。songs[].recentTours（曲ごとの直近ツアーでの出場状況）の凡例もここに入れる。
+ * ツアーが 2 本未満で比較できなければ null。
+ */
+export function buildTourHistory() {
+  const recent = recentTours();
+  const s = TOUR_STATS.summary;
+  const carried = projectCarriedSongs();
+  if (recent.length === 0 || !s.carriedShare || !carried) return null;
+  const fc = tourOf(s.lastFanClubTour);
+  const fcPair = fc ? TOUR_STATS.pairs.find((p) => p.next === fc.key) : undefined;
+  const fcNonStaple = fc
+    ? Object.keys(fc.played).filter((id) => !SONGS.find((x) => x.id === id)?.staple).length / Math.max(1, fc.distinctSongs)
+    : null;
+  return {
+    rule: `演奏 ${TOUR_STATS.rule.oneManMinSongs} 曲以上の公演をワンマンとし、ツアー単位（曲はツアー中に 1 回でも演奏したか）で前後のツアーを比べた`,
+    /** songs[].recentTours.playedIn[i] はこの配列の i 番目のツアーに対応する（新しい順） */
+    recentTours: recent.map((t, i) => ({
+      index: i,
+      name: t.name,
+      from: t.from,
+      to: t.to,
+      shows: t.shows,
+      distinctSongs: t.distinctSongs,
+      fanClubOnly: t.fanClubOnly,
+    })),
+    carryover: {
+      pairs: TOUR_STATS.pairs.map((p) => ({
+        from: p.prevName,
+        to: p.nextName,
+        carried: `${p.carried}/${p.nextSongs}`,
+        carriedShare: p.carriedShare,
+        freshReturned: p.freshReturned,
+        freshFirstTime: p.freshFirstTime,
+      })),
+      carriedShare: s.carriedShare,
+      droppedShareMean: s.droppedShareMean,
+      freshReturnedShare: s.freshReturnedShare,
+      carriedRateByStreak: s.carriedRateByStreak,
+      lastTour: {
+        name: carried.tour.name,
+        distinctSongs: carried.tour.distinctSongs,
+        expectedCarried: { low: carried.low, mean: carried.mean, high: carried.high },
+      },
+      playedInAllRecent: s.playedInAllRecent,
+    },
+    lastFanClubTour: fc
+      ? {
+          name: fc.name,
+          shows: fc.shows,
+          avgSongs: fc.avgSongs,
+          carriedShareFromPrevious: fcPair?.carriedShare ?? null,
+          nonStapleShare: fcNonStaple === null ? null : Math.round(fcNonStaple * 1000) / 1000,
+        }
+      : null,
+  };
+}
+
+/** ツアー間の持ち越しの実績を guidance の文にする。実績が無ければ定性的な 1 行 */
+function tourCarryoverGuidance(history: ReturnType<typeof buildTourHistory>): string[] {
+  if (!history) return ["playCount が高く lastPlayed が新しい曲は次のツアーでも演奏されやすい"];
+  const c = history.carryover;
+  const titleOf = (id: string) => SONGS.find((x) => x.id === id)?.title ?? id;
+  const e = c.lastTour.expectedCarried;
+  const range = e.low === e.high ? `${e.mean} 曲前後` : `平均 ${e.mean} 曲前後（${e.low}〜${e.high} 曲）`;
+  const lines = [
+    `過去 ${c.pairs.length} 組の連続ツアー（tourHistory.carryover）では、次のツアーの曲のうち前のツアーにもあった曲は平均 ${pct(c.carriedShare.mean)}（${pct(c.carriedShare.min)}〜${pct(c.carriedShare.max)}）。` +
+      `前回ツアー ${c.lastTour.name}（${c.lastTour.distinctSongs} 曲）の曲がそのまま並ぶとは考えず、残るのは ${range}。` +
+      (c.freshReturnedShare !== null
+        ? `空いた枝は 1〜2 ツアー空けた過去曲の復活（新顔の ${pct(c.freshReturnedShare)}）と新曲で埋まる`
+        : "空いた枝は過去曲の復活と新曲で埋まる"),
+  ];
+  const r1 = c.carriedRateByStreak["1"];
+  const r3 = c.carriedRateByStreak["3+"];
+  if (r1 !== null && r3 !== null) {
+    const core = c.playedInAllRecent.map(titleOf).join(" / ");
+    lines.push(
+      `ただし続けて演奏されている曲は残りやすい: 前のツアーで連続 3 ツアー以上だった曲は ${pct(r3)} が次も演奏され、連続 1 ツアーだけの曲は ${pct(r1)}。` +
+        `songs[].recentTours の streak（直近から連続何ツアー）と toursSinceLastPlayed（何ツアー空いたか）を見る` +
+        (core ? `。直近 ${history.recentTours.length} ツアー全部で演奏された ${core} は最有力` : ""),
+    );
+  }
+  const fc = history.lastFanClubTour;
+  if (fc && fc.carriedShareFromPrevious !== null && fc.nonStapleShare !== null) {
+    lines.push(
+      `前回の FC 限定ツアー ${fc.name}（${fc.shows} 公演・平均 ${Math.round(fc.avgSongs * 10) / 10} 曲）では、直前ツアーからの持ち越しは ${pct(fc.carriedShareFromPrevious)} にとどまり、` +
+        `演奏曲の ${pct(fc.nonStapleShare)} は staple でない曲だった。FC ツアーでは定番の外の曲が入りやすい`,
+    );
+  }
+  return lines;
+}
+
 /** Jev / Gemini に渡す「判断材料」。両エンジンで同じものを使う（比較の前提を揃えるため） */
 export function buildState(event: EventContext, songs: SongWithStats[]) {
   const newAlbumHistory = buildNewAlbumHistory(event);
+  const tourHistory = buildTourHistory();
   const preReleased = new Set(newAlbumHistory?.projection.preReleased ?? []);
   return {
     event: {
@@ -162,13 +258,15 @@ export function buildState(event: EventContext, songs: SongWithStats[]) {
     },
     /** フルアルバム発売直後のツアーで新アルバム曲が占めた割合（過去実績）と、この公演の目安 */
     newAlbumHistory,
+    /** 連続するツアーの間で曲がどれだけ持ち越されたか（過去実績）と、songs[].recentTours の凡例 */
+    tourHistory,
     guidance: [
       ...newAlbumGuidance(newAlbumHistory),
+      ...tourCarryoverGuidance(tourHistory),
       "staple=true の曲はライブ定番で、ツアーをまたいで演奏されやすい",
       "tieup がある曲は認知度が高く、アリーナ規模のライブで選ばれやすい",
-      "era=phase1 かつ staple でない曲は、FC ツアーであっても演奏頻度は低い",
+      "era=phase1 かつ staple でない曲は普段の演奏頻度は低いが、FC ツアーでは掘り起こされることがある（tourHistory.lastFanClubTour を参照）",
       "ツアータイトル SHADOWS（影）と結びつく曲名・テーマは加点材料",
-      "playCount が高く lastPlayed が新しい曲は次のツアーでも演奏されやすい",
     ],
     songs: songs.map((s) => ({
       id: s.id,
@@ -184,6 +282,8 @@ export function buildState(event: EventContext, songs: SongWithStats[]) {
       albumTrackType: s.pops ? (preReleased.has(s.id) ? "pre-released" : "album-only") : null,
       // 過去ライブの演奏実績。stats が null の曲は実績データ未集計
       stats: s.stats,
+      // 直近ツアーでの出場状況（tourHistory.recentTours の順）。null は実績データ未集計
+      recentTours: TOUR_STATS.songs[s.id] ?? null,
     })),
   };
 }

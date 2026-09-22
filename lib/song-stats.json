@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-22T18:12:07.800Z",
+  "generatedAt": "2026-09-22T18:37:13.890Z",
   "since": "2024-09-01",
   "totalShows": 73,
   "songs": {
@@ -141,14 +141,15 @@
       "avgPosition": 0
     },
     "variety": {
-      "playCount": 2,
+      "playCount": 8,
       "playCountByTour": {
+        "ZENJI MITO TO IM/MUTABLE": 6,
         "(ツアー不明)": 2
       },
-      "lastPlayed": "2025-07-27",
+      "lastPlayed": "2026-07-05",
       "openerRate": 0,
       "encoreRate": 0,
-      "avgPosition": 0.455
+      "avgPosition": 0.375
     },
     "breakfast": {
       "playCount": 6,
@@ -206,6 +207,22 @@
       "encoreRate": 0,
       "avgPosition": 0.76
     },
+    "the-white-lounge": {
+      "playCount": 0,
+      "playCountByTour": {},
+      "lastPlayed": null,
+      "openerRate": 0,
+      "encoreRate": 0,
+      "avgPosition": null
+    },
+    "tsukimashiteha": {
+      "playCount": 0,
+      "playCountByTour": {},
+      "lastPlayed": null,
+      "openerRate": 0,
+      "encoreRate": 0,
+      "avgPosition": null
+    },
     "bitter-vacances": {
       "playCount": 7,
       "playCountByTour": {
@@ -227,6 +244,19 @@
       "encoreRate": 0,
       "avgPosition": 0.282
     },
+    "columbus": {
+      "playCount": 36,
+      "playCountByTour": {
+        "BABEL no TOH": 12,
+        "Harmony": 10,
+        "(ツアー不明)": 8,
+        "ZENJI MITO TO IM/MUTABLE": 6
+      },
+      "lastPlayed": "2026-07-05",
+      "openerRate": 0.056,
+      "encoreRate": 0,
+      "avgPosition": 0.684
+    },
     "familie": {
       "playCount": 21,
       "playCountByTour": {
@@ -240,17 +270,17 @@
       "avgPosition": 0.679
     },
     "lilac": {
-      "playCount": 45,
+      "playCount": 46,
       "playCountByTour": {
-        "(ツアー不明)": 17,
+        "(ツアー不明)": 18,
         "BABEL no TOH": 12,
         "Harmony": 10,
         "ZENJI MITO TO IM/MUTABLE": 6
       },
       "lastPlayed": "2026-07-18",
-      "openerRate": 0.156,
+      "openerRate": 0.174,
       "encoreRate": 0,
-      "avgPosition": 0.382
+      "avgPosition": 0.374
     },
     "nachtmusik": {
       "playCount": 0,
@@ -280,6 +310,16 @@
       "openerRate": 0,
       "encoreRate": 0,
       "avgPosition": 0.174
+    },
+    "stardom": {
+      "playCount": 6,
+      "playCountByTour": {
+        "ZENJI MITO TO IM/MUTABLE": 6
+      },
+      "lastPlayed": "2026-07-05",
+      "openerRate": 0,
+      "encoreRate": 0,
+      "avgPosition": 0.087
     },
     "theater": {
       "playCount": 0,
@@ -328,6 +368,17 @@
       "openerRate": 0,
       "encoreRate": 0,
       "avgPosition": null
+    },
+    "a-priori": {
+      "playCount": 22,
+      "playCountByTour": {
+        "BABEL no TOH": 12,
+        "Harmony": 10
+      },
+      "lastPlayed": "2025-12-20",
+      "openerRate": 0,
+      "encoreRate": 0,
+      "avgPosition": 0.549
     },
     "shunshu": {
       "playCount": 2,
@@ -493,12 +544,14 @@
       "avgPosition": null
     },
     "bff": {
-      "playCount": 0,
-      "playCountByTour": {},
-      "lastPlayed": null,
+      "playCount": 6,
+      "playCountByTour": {
+        "ZENJI MITO TO IM/MUTABLE": 6
+      },
+      "lastPlayed": "2026-07-05",
       "openerRate": 0,
       "encoreRate": 0,
-      "avgPosition": null
+      "avgPosition": 0.348
     },
     "feeling": {
       "playCount": 28,
@@ -634,15 +687,15 @@
       "avgPosition": 0.565
     },
     "ao-to-natsu": {
-      "playCount": 13,
+      "playCount": 14,
       "playCountByTour": {
-        "(ツアー不明)": 7,
+        "(ツアー不明)": 8,
         "ZENJI MITO TO IM/MUTABLE": 6
       },
       "lastPlayed": "2026-07-05",
-      "openerRate": 0.077,
+      "openerRate": 0.143,
       "encoreRate": 0,
-      "avgPosition": 0.646
+      "avgPosition": 0.6
     },
     "kudari": {
       "playCount": 10,

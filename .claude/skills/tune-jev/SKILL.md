@@ -19,6 +19,7 @@ Jev は判断モデル。曲の知識は無く、`buildState()` のメタデー�
 | 特定の傾向（新曲多め、定番軽視など）を強めたい・弱めたい | `lib/jev.ts` の `guidance` 配列。1 項目 1 主張で短く |
 | 公演固有の事実を足したい | `lib/event.ts` の `facts`。確度の高い事実だけ。憶測は `rumors` に |
 | 新アルバム曲の目安曲数がずれている | `lib/jev.ts` の `newAlbumGuidance()` の文言、`scripts/build-album-debut-stats.ts` のルール（120 日 / 15 曲）、または `data/manual-setlists.json` に出典付きで公演を足す → `npm run build:album-stats`。JSON は手で触らない |
+| 「前回やった曲」の扱い（持ち越し・復活）がずれている | `lib/jev.ts` の `tourCarryoverGuidance()` の文言、`scripts/build-tour-stats.ts` のルール（15 曲 / 45 日 / 直近 5 ツアー）、または `lib/tours.ts` のツアー名・FC 限定フラグ → `npm run build:tour-stats`。JSON は手で触らない |
 | setlist.fm の実績が 0 回になっている曲がある | `npm run build:stats` の未マッチ一覧を見て `lib/song-title.ts` の `SONG_TITLE_ALIASES` に別表記を足す。曲マスタに無い曲なら `/add-song` |
 | 曲ごとの判断材料が足りない | `buildState().songs` に渡すフィールドを増やす（`Song` 型に追加 → `songs.ts` にデータ） |
 | 見込みの段階が粗い・偏る | `PLAY_LEVELS` の文言・段階数。段階数を変えたら正規化も直す |

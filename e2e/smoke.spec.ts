@@ -1,4 +1,4 @@
-import { expect, test, ui } from "./fixtures";
+import { expect, SONG, test, ui } from "./fixtures";
 
 test.describe("起動", () => {
   test("ページが開き、公演の前提と全曲ライブラリが出る", async ({ page, jevCalls }) => {
@@ -39,6 +39,29 @@ test.describe("起動", () => {
     const twelve = odds.getByRole("listitem").filter({ hasText: "TWELVE" });
     await expect(twelve).toContainText(/初日 \d+\/\d+ 曲 · \d+%/);
     await expect(twelve.getByRole("link", { name: "TWELVE 初日セトリの出典" })).toHaveAttribute("href", /livefans|ameblo|fanplus/);
+  });
+
+  test("Tour Carryover に連続ツアー間の持ち越し率と前回ツアーから残る曲数の目安が出て、前回ツアーの曲で絞れる", async ({ page }) => {
+    await ui.open(page);
+    const card = ui.carryover(page);
+
+    await expect(card.getByRole("heading", { level: 2, name: "Tour Carryover" })).toBeVisible();
+    // 目安: 「前回 <ツアー>（N 曲）からは M 曲前後（L〜H 曲）が残る目安」。M / L / H は lib/tour-stats.json の持ち越し率の mean / min / max × 前回の曲数
+    await expect(card.getByText(/からは \d+ 曲前後（\d+〜\d+ 曲）が残る目安/)).toBeVisible();
+    // 連続ツアーの行: 直近のドーム → スタジアムの組が持ち越し曲数と % を出す
+    const pair = card.getByRole("listitem").filter({ hasText: "BABEL no TOH → ゼンじん未到 間奏編" });
+    await expect(pair).toContainText(/持ち越し \d+\/\d+ 曲 · \d+%/);
+
+    // クイックフィルタ「前回ツアー」: 前回ツアーで演奏された曲（ライラック）だけ残り、未演奏の新曲（Brand New）は消える
+    const library = ui.library(page);
+    const total = await library.locator("button.chip").count();
+    await ui.quick(page, "前回ツアー").click();
+    await expect(ui.quick(page, "前回ツアー")).toHaveAttribute("aria-pressed", "true");
+    await expect(ui.chip(page, SONG.lilac.title)).toBeVisible();
+    await expect(ui.chip(page, SONG.brandNew.title)).toHaveCount(0);
+    const filtered = await library.locator("button.chip").count();
+    expect(filtered).toBeGreaterThan(10);
+    expect(filtered).toBeLessThan(total);
   });
 
   test("スマホ幅では下部バーから俺の予想へ飛べる", async ({ page, isMobile }) => {

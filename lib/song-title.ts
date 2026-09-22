@@ -21,7 +21,7 @@ export function normalizeSongTitle(raw: string): string {
  * 古い登録はローマ字（"Que Sera Sera" / "Dance Hall" / "Ao to Natsu"）で書かれていて、
  * normalizeSongTitle() だけでは日本語タイトルと突合できない。ここに 1 行ずつ足す。
  * キーは setlist.fm の表記そのまま（照合時に normalizeSongTitle() を当てる）。
- * メドレー表記（"Ao to Natsu / Lilac"）は 1 曲に決められないので登録しない。
+ * メドレー表記（"BFF / Variety"）はここに登録せず、resolveSetlistTitle() が " / " で分けて 1 曲ずつ突合する。
  */
 export const SONG_TITLE_ALIASES: Record<string, string> = {
   "Que Sera Sera": "que-sera-sera",
@@ -77,6 +77,9 @@ export const SONG_TITLE_ALIASES: Record<string, string> = {
   "Hibi to Kimi": "hibi-to-kimi",
   Kikoridokei: "kikori-dokei",
   "Kikori Dokei": "kikori-dokei",
+  Columbus: "columbus",
+  "A Priori": "a-priori",
+  Tsukimashiteha: "tsukimashiteha",
 };
 
 /**
@@ -108,4 +111,23 @@ export function buildTitleIndex<T extends { id: string; title: string }>(
     byKey.set(key, song);
   }
   return byKey;
+}
+
+/**
+ * setlist.fm の 1 エントリ（曲名）を曲マスタに突合する。
+ * まず表記全体で探し、無ければメドレー表記（"BFF / Variety"）とみなして " / " で分けて 1 曲ずつ探す。
+ * 突合できなかった表記は unmatched に入れて返す（呼び出し側が「未マッチ一覧」として報告する）。
+ */
+export function resolveSetlistTitle<T>(byKey: ReadonlyMap<string, T>, title: string): { songs: T[]; unmatched: string[] } {
+  const whole = byKey.get(normalizeSongTitle(title));
+  if (whole) return { songs: [whole], unmatched: [] };
+  if (!title.includes(" / ")) return { songs: [], unmatched: [title] };
+  const songs: T[] = [];
+  const unmatched: string[] = [];
+  for (const part of title.split(" / ")) {
+    const song = byKey.get(normalizeSongTitle(part));
+    if (song) songs.push(song);
+    else unmatched.push(part);
+  }
+  return { songs, unmatched };
 }

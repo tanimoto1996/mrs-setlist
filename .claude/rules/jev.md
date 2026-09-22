@@ -16,6 +16,12 @@ paths:
   目安は「直近の ANTENNA の比率 × 曲数」〜「過去 5 枚の平均 × 曲数」のレンジ（`projectNewAlbumSongs()`）。
   目安を変えたいときは guidance の文言を直すか、`scripts/build-album-debut-stats.ts` のルール
   （120 日 / 15 曲）や `data/manual-setlists.json` の公演を見直して再集計する。JSON を手で書き換えない。
+- 「前回のツアーの曲はどれだけ残るか」も数字で渡す。`lib/tour-stats.json` から `buildTourHistory()` が `state.tourHistory`
+  （直近ツアーの凡例・連続ツアー間の持ち越し率・連続回数別の残り方・前回ツアーから残る曲数の目安・前回の FC 限定ツアー）を作り、
+  guidance の 3 行（持ち越し率と目安 / 連続している曲は残りやすい / FC ツアーは定番の外が入りやすい）もそこから生成する。
+  `songs[].recentTours` は曲ごとの直近 5 ツアーでの `playedIn`（新しい順）・`streak`・`toursSinceLastPlayed`。
+  ツアーのまとめ方（15 曲 / 45 日）や名称・FC 限定フラグを変えるなら `scripts/build-tour-stats.ts` / `lib/tours.ts` を直して
+  `npm run build:tour-stats`。JSON を手で書き換えない。
 - `@typesafe-ai/sdk` の `TypeSafeClient` は `TYPESAFE_API_KEY`（と任意で `TYPESAFE_BASE_URL`）を
   環境変数から読む。コードにキーを書かない。`import "server-only"` を外さない。
 - `lib/gemini.ts` は Gemini を同じ物差しで走らせる比較用。`buildState()` / `PLAY_LEVELS` / `SLOT_OPTIONS` / `toSetlist()` を

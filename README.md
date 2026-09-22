@@ -35,6 +35,7 @@ npm run build:stats      # → lib/song-stats.json。突合できなかった曲
 
 - 1 リクエスト 1 秒以上あける。HTML スクレイピングはしない。
 - SE や Tape（`isTape=true`）は集計しない。
+- メドレー表記（"BFF / Variety"）は `resolveSetlistTitle()` が " / " で分けて両方の曲に数える。
 - 未マッチの曲名は `lib/song-title.ts` の正規化ルールか `lib/songs.ts` の表記を直して再集計する。
   setlist.fm の古い登録はローマ字（"Que Sera Sera" / "Dance Hall"）なので、`SONG_TITLE_ALIASES` に別表記 → id を足す。
   スクリプトが `songs.ts` を勝手に書き換えることはない。
@@ -65,6 +66,37 @@ npm run build:album-stats        # → lib/album-debut-stats.json（アルバム
 
   平均 50%、直近の ANTENNA は 33%。`lib/jev.ts` の `buildState()` はこの両方を `newAlbumHistory` に入れ、guidance では
   「POPS 曲は 8〜12 曲、現在の状況は直近の比率に近い」と渡す。画面の New Album Odds カードも同じ数字を出す。
+
+## 前のツアーの曲は、次のツアーにどれだけ残るか
+
+「前回やった曲はまたやる」「前回やったからもうやらない」のどちらも感覚で渡すとぶれるので、連続するワンマンツアーの間で
+曲がどれだけ持ち越されたかを数字にして Jev に渡している。
+
+```bash
+npm run fetch:setlists:history   # setlist.fm の全期間 → data/setlists-history.json（アルバム別集計と共用）
+npm run build:tour-stats         # → lib/tour-stats.json（ツアー一覧・連続ツアー間の持ち越し・曲ごとの直近 5 ツアー出場状況を標準出力にも出す）
+```
+
+- 「ワンマン」= 演奏曲 15 曲以上の公演。公演は `lib/tours.ts` の正式名称（日付範囲、出典 Wikipedia）→ setlist.fm の tour 名 → 45 日以上空いたら別ツアー、の順でまとめる。
+- 曲は「ツアー中に 1 回でも演奏したか」で見る。連続する 2 ツアーごとに、持ち越し（次にも残った）/ 外れた / 新顔（復活・初登場）を数える。
+
+| 前のツアー → 次のツアー | 持ち越し | 外れた | 新顔（復活 / 初登場） |
+| --- | --- | --- | --- |
+| NOAH no HAKOBUNE → Atlantis (2023-08) | 8 / 21 = 38% | 15 / 23 | 13（0 / 13） |
+| Atlantis → The White Lounge (FC, 2023-12〜) | 4 / 15 = 27% | 17 / 21 | 11（3 / 8） |
+| The White Lounge → ゼンジン未到 銘銘編 (2024-07) | 3 / 26 = 12% | 12 / 15 | 23（11 / 12） |
+| ゼンジン未到 銘銘編 → Harmony (2024-10〜) | 7 / 19 = 37% | 19 / 26 | 12（5 / 7） |
+| Harmony → SEOUL 2025 (2025-02) | 7 / 18 = 39% | 12 / 19 | 11（9 / 2） |
+| SEOUL 2025 → FJORD (2025-07) | 10 / 23 = 44% | 8 / 18 | 13（4 / 9） |
+| FJORD → BABEL no TOH (2025-10〜) | 8 / 23 = 35% | 15 / 23 | 15（7 / 8） |
+| BABEL no TOH → ゼンじん未到 間奏編 (2026-04〜) | 7 / 25 = 28% | 16 / 23 | 18（13 / 5） |
+
+  持ち越しは平均 32%（12〜44%）。つまり前回ツアーの 25 曲のうち残るのは 8 曲前後で、外れた枝の半分近く（新顔の 45%）は
+  1〜2 ツアー空けた過去曲の復活。ただし前のツアーで連続 3 ツアー以上だった曲は 76% が次も演奏される（連続 1 ツアーだけなら 23%）。
+  直近 5 ツアー全部で演奏されたのは ライラック / ANTENNA / Magic。前回の FC 限定ツアー The White Lounge は平均 16 曲で、持ち越し 27%、
+  演奏曲の 80% が定番（`staple`）以外だった。
+  `lib/jev.ts` の `buildTourHistory()` がこれを `tourHistory` として渡し、曲ごとに `recentTours`（直近 5 ツアーでの演奏の有無・連続回数・
+  何ツアー空いたか）を付ける。画面の Tour Carryover カードと Library の「前回ツアー」フィルタも同じ数字を使う。
 
 ## Gemini と比べる
 

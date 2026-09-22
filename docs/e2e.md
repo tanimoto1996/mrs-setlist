@@ -6,7 +6,7 @@
 
 | ファイル | 保証していること |
 | --- | --- |
-| `smoke.spec.ts` | ページが開く、公演情報と全曲ライブラリが出る、初期状態、New Album Odds（過去実績と POPS の目安）、スマホ下部バー、`GET /api/predict` が 405 |
+| `smoke.spec.ts` | ページが開く、公演情報と全曲ライブラリが出る、初期状態、New Album Odds（過去実績と POPS の目安）、Tour Carryover（持ち越し率と前回ツアーから残る曲数の目安、「前回ツアー」フィルタ）、スマホ下部バー、`GET /api/predict` が 405 |
 | `my-setlist.spec.ts` | 曲を押して積む / 外す、並べ替え、リロード後も残る（localStorage）、検索・クイックフィルタ、24 曲の上限 |
 | `jev.spec.ts` | Jev の予想（**モック**）が slot 順に並ぶ、送信ボディ（`engine: "jev"`）、エラー表示、モックし忘れ時の安全弁 |
 | `gemini.spec.ts` | Gemini の予想（**モック**）が Gemini のカードに並び `engine: "gemini"` で呼ぶ、Jev との共通曲数、エラーは Gemini 側だけ、俺 / Jev / Gemini の 3 者採点と引き分け |
