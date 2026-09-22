@@ -43,7 +43,7 @@ npm run build:stats      # → lib/song-stats.json。突合できなかった曲
 ```bash
 # https://aistudio.google.com/apikey でキーを発行し、.env.local に GEMINI_API_KEY=... を書く
 # （またはプロジェクトルートの gemini-api-key ファイルにキーだけを 1 行書く。gitignore 済み）
-# モデルを変えるなら GEMINI_MODEL=...（既定 gemini-3.8-flash）
+# モデルを変えるなら GEMINI_MODEL=...（カンマ区切りで複数可。既定は gemini-3.8-flash → 3.7 → 3.6 → 3.5 の順に試し、混雑 503・上限 429 なら次へ）
 ```
 
 画面の「Gemini に予想させる」を押すと、Jev のカードの下に Gemini の予想が並ぶ。Library のチップには

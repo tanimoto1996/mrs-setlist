@@ -72,3 +72,14 @@
   play が高いのに slot=skip を返す曲が Jev より多く、上位 24 曲の中で middle と skip が混ざった。
 - 対処: `SetlistView` の見出し判定も skip を middle 扱いにし、key に行番号を含めた。あわせて Gemini への指示に
   「slot=skip なら play は 0 か 1、play=3 なら opener / middle / encore のどれか」と矛盾禁止を足した。
+
+## 追記（同日）: gemini-3.8-flash / 3.7-flash が 503（混雑）で通らない
+
+- 症状: 「Gemini に予想させる」が `Gemini API 503: This model is currently experiencing high demand` で失敗。
+  `GEMINI_MODEL=gemini-3.7-flash` に変えても同じ。
+- 調査: キーを表示しないプローブ（scratchpad、リポジトリには置かない）で ListModels と各モデルへの最小リクエストを投げた。
+  3.8-flash / 3.7-flash は 503、3.6-flash / 3.5-flash / 3.5-flash-lite / 3-flash-preview は 200、
+  3.1-pro-preview は 429（無料枠の上限）、2.5 系は新規ユーザーには 404。
+- 対処: `GEMINI_MODEL` をカンマ区切りの候補列にし、503 / 429 のときだけ次の候補へ切り替える（`DEFAULT_GEMINI_MODELS` =
+  3.8 → 3.7 → 3.6 → 3.5）。同じモデルの叩き直しはしない（「自動リトライを入れない」の規約どおり）。
+  どのモデルで予想したかは応答の `model` に入るので、カードの下に出る。

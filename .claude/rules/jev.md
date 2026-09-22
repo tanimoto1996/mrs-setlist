@@ -16,7 +16,8 @@ paths:
   `lib/jev.ts` から import して使い、独自の前提や rubric を持たせない（差が出たときに「材料の差」か「モデルの差」か切り分けるため）。
   Gemini への指示（`SYSTEM_INSTRUCTION`）は「state を主に、自身の知識は補助」。変えるときは worklog に理由を書く。
 - Gemini のキーは `GEMINI_API_KEY` 環境変数か、ルートの `gemini-api-key` ファイル（`getGeminiApiKey()`）。
-  ファイルの中身を読む・出力するコードを増やさない。モデルは `GEMINI_MODEL`（既定 `gemini-3.8-flash`）。
+  ファイルの中身を読む・出力するコードを増やさない。モデルは `GEMINI_MODEL`（カンマ区切りの候補列。既定は `DEFAULT_GEMINI_MODELS`）。
+  503 / 429 のときだけ次の候補へ移る。同じモデルを叩き直すリトライは入れない。
 - 質問は `score()`（4 段階 rubric、0 始まり）と `choice()`（`SLOT_OPTIONS`）の 2 種類。
   rubric の段階数を変えたら `likelihood` の正規化（`play.score / maxLevel`）も追随させる。
 - `SLOT_OPTIONS` に選択肢を足すときは `Slot` 型・`SLOT_ORDER`・`page.tsx` の表示も一緒に直す。

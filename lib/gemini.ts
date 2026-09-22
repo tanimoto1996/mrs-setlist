@@ -22,13 +22,19 @@ import type { SongWithStats } from "./songs";
  * 中身はここで fetch のヘッダーに載せるだけで、ログ・エラー・応答には出さない。
  */
 
-/** 既定モデル。GEMINI_MODEL 環境変数で差し替えられる */
-export const DEFAULT_GEMINI_MODEL = "gemini-3.8-flash";
+/**
+ * 既定のモデル候補。先頭から順に試し、混雑（503）や上限（429）で断られたら次へ。
+ * GEMINI_MODEL 環境変数（カンマ区切り可）で差し替えられる。
+ * リトライではなく「別モデルへの 1 回ずつの切り替え」なので、同じモデルを叩き直すことはない。
+ */
+export const DEFAULT_GEMINI_MODELS = ["gemini-3.8-flash", "gemini-3.7-flash", "gemini-3.6-flash", "gemini-3.5-flash"] as const;
 const ENDPOINT = "https://generativelanguage.googleapis.com/v1beta/models";
-/** Route Handler の maxDuration（60 秒）に当たる前に自分で切る */
-const TIMEOUT_MS = 55_000;
+/** Route Handler の maxDuration（60 秒）に当たる前に自分で切る（モデルを乗り換えても合計でこの範囲に収める） */
+const TIMEOUT_MS = 50_000;
 /** 全曲ぶんの JSON（1 曲 40 トークン前後 × 100 曲強）が収まる余裕 */
 const MAX_OUTPUT_TOKENS = 16_384;
+/** このステータスなら次のモデル候補に切り替える */
+const FALLBACK_STATUSES = new Set([429, 503]);
 
 export function getGeminiApiKey(): string | null {
   const fromEnv = process.env.GEMINI_API_KEY?.trim();
@@ -41,8 +47,13 @@ export function getGeminiApiKey(): string | null {
   }
 }
 
-export function getGeminiModel(): string {
-  return process.env.GEMINI_MODEL?.trim() || DEFAULT_GEMINI_MODEL;
+/** 試すモデルの一覧（順番どおり）。GEMINI_MODEL="a,b,c" で指定、未設定なら既定候補 */
+export function getGeminiModels(): string[] {
+  const fromEnv = (process.env.GEMINI_MODEL ?? "")
+    .split(",")
+    .map((m) => m.trim())
+    .filter(Boolean);
+  return fromEnv.length > 0 ? fromEnv : [...DEFAULT_GEMINI_MODELS];
 }
 
 const SLOT_KEYS = Object.keys(SLOT_OPTIONS) as Slot[];
@@ -113,17 +124,23 @@ interface GenerateContentResponse {
   modelVersion?: string;
 }
 
-export async function predictSetlistWithGemini(event: EventContext, songs: SongWithStats[]): Promise<PredictionResult> {
-  const apiKey = getGeminiApiKey();
-  if (!apiKey) throw new Error("GEMINI_API_KEY が未設定");
-  const model = getGeminiModel();
+/** Google のエラー本文から message だけ拾う（キーは含まれない）。長すぎるものは切る */
+async function errorDetail(res: Response): Promise<string> {
+  try {
+    const body = (await res.json()) as { error?: { message?: string } };
+    return (body.error?.message ?? "").slice(0, 300);
+  } catch {
+    return "";
+  }
+}
 
-  const res = await fetch(`${ENDPOINT}/${encodeURIComponent(model)}:generateContent`, {
+function callGemini(model: string, apiKey: string, prompt: string, signal: AbortSignal): Promise<Response> {
+  return fetch(`${ENDPOINT}/${encodeURIComponent(model)}:generateContent`, {
     method: "POST",
     headers: { "content-type": "application/json", "x-goog-api-key": apiKey },
     body: JSON.stringify({
       systemInstruction: { parts: [{ text: SYSTEM_INSTRUCTION }] },
-      contents: [{ role: "user", parts: [{ text: buildPrompt(buildState(event, songs)) }] }],
+      contents: [{ role: "user", parts: [{ text: prompt }] }],
       generationConfig: {
         temperature: 0.2,
         maxOutputTokens: MAX_OUTPUT_TOKENS,
@@ -131,19 +148,42 @@ export async function predictSetlistWithGemini(event: EventContext, songs: SongW
         responseJsonSchema: RESPONSE_SCHEMA,
       },
     }),
-    signal: AbortSignal.timeout(TIMEOUT_MS),
+    signal,
   });
+}
+
+export async function predictSetlistWithGemini(event: EventContext, songs: SongWithStats[]): Promise<PredictionResult> {
+  const apiKey = getGeminiApiKey();
+  if (!apiKey) throw new Error("GEMINI_API_KEY が未設定");
+
+  const prompt = buildPrompt(buildState(event, songs));
+  const signal = AbortSignal.timeout(TIMEOUT_MS);
+
+  // 混雑・上限で断られたら次のモデルへ。それ以外のエラーはそのまま返す
+  const declined: string[] = [];
+  let res: Response | null = null;
+  let model = "";
+  for (const candidate of getGeminiModels()) {
+    const r = await callGemini(candidate, apiKey, prompt, signal);
+    if (FALLBACK_STATUSES.has(r.status)) {
+      declined.push(`${candidate}=${r.status}`);
+      await r.body?.cancel();
+      continue;
+    }
+    res = r;
+    model = candidate;
+    break;
+  }
+  if (!res) {
+    throw new Error(
+      `Gemini API: 候補モデルが全部 混雑（503）か上限（429）で断った（${declined.join(", ")}）。` +
+        " しばらく待つか、GEMINI_MODEL にカンマ区切りで別モデルを足す",
+    );
+  }
 
   if (!res.ok) {
-    // Google のエラー本文から message だけ拾う（キーは含まれない）。長すぎるものは切る
-    let detail = "";
-    try {
-      const body = (await res.json()) as { error?: { message?: string } };
-      detail = body.error?.message ?? "";
-    } catch {
-      // 本文が JSON でなければステータスだけ
-    }
-    throw new Error(`Gemini API ${res.status}${detail ? `: ${detail.slice(0, 300)}` : ""}`);
+    const detail = await errorDetail(res);
+    throw new Error(`Gemini API ${res.status}（${model}）${detail ? `: ${detail}` : ""}`);
   }
 
   const data = (await res.json()) as GenerateContentResponse;
