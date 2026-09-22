@@ -1,7 +1,7 @@
 import "server-only";
 import { TypeSafeClient, choice, score } from "@typesafe-ai/sdk";
 import type { EventContext } from "./event";
-import type { Song } from "./songs";
+import { SONG_STATS, type Song, type SongWithStats } from "./songs";
 
 /** 演奏される見込み。Score の rubric は 0 から順に並ぶ。 */
 const PLAY_LEVELS = [
@@ -56,7 +56,7 @@ function buildQuestions(songs: Song[]) {
   return q;
 }
 
-function buildState(event: EventContext, songs: Song[]) {
+function buildState(event: EventContext, songs: SongWithStats[]) {
   return {
     event: {
       tour: event.tour,
@@ -66,12 +66,19 @@ function buildState(event: EventContext, songs: Song[]) {
       rumors: event.rumors || "(特になし)",
       expectedSetlistSize: event.setlistSize,
     },
+    /** songs[].stats の集計元。totalShows が割合・回数の分母の目安 */
+    pastShows: {
+      source: "setlist.fm",
+      since: SONG_STATS.since,
+      totalShows: SONG_STATS.totalShows,
+    },
     guidance: [
       "アルバム発売日のツアー初日なので、新アルバム収録曲は多めに演奏される傾向がある",
       "staple=true の曲はライブ定番で、ツアーをまたいで演奏されやすい",
       "tieup がある曲は認知度が高く、アリーナ規模のライブで選ばれやすい",
       "era=phase1 かつ staple でない曲は、FC ツアーであっても演奏頻度は低い",
       "ツアータイトル SHADOWS（影）と結びつく曲名・テーマは加点材料",
+      "playCount が高く lastPlayed が新しい曲は次のツアーでも演奏されやすい",
     ],
     songs: songs.map((s) => ({
       id: s.id,
@@ -83,16 +90,18 @@ function buildState(event: EventContext, songs: Song[]) {
       tieup: s.tieup ?? null,
       staple: s.staple ?? false,
       onNewAlbum: s.pops ?? false,
+      // 過去ライブの演奏実績。stats が null の曲は実績データ未集計
+      stats: s.stats,
     })),
   };
 }
 
 const SLOT_ORDER: Record<Slot, number> = { opener: 0, middle: 1, encore: 2, skip: 3 };
 
-export async function predictSetlist(event: EventContext, songs: Song[]): Promise<PredictionResult> {
+export async function predictSetlist(event: EventContext, songs: SongWithStats[]): Promise<PredictionResult> {
   const client = new TypeSafeClient();
 
-  const batches: Song[][] = [];
+  const batches: SongWithStats[][] = [];
   for (let i = 0; i < songs.length; i += BATCH_SIZE) batches.push(songs.slice(i, i + BATCH_SIZE));
 
   // fan-out: バッチを並列で投げる

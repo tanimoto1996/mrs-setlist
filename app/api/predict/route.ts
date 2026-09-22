@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { SHADOWS_OPENING, type EventContext } from "@/lib/event";
 import { predictSetlist } from "@/lib/jev";
-import { SONGS } from "@/lib/songs";
+import { getSongsWithStats } from "@/lib/songs";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -34,7 +34,8 @@ export async function POST(req: Request) {
   };
 
   try {
-    const result = await predictSetlist(event, SONGS);
+    // 曲マスタに setlist.fm 由来の演奏実績を付けて渡す
+    const result = await predictSetlist(event, getSongsWithStats());
     return NextResponse.json(result);
   } catch (e) {
     const message = e instanceof Error ? e.message : "Jev の呼び出しに失敗";

@@ -6,6 +6,8 @@
  * era:    phase1 = 2013-2020 / phase2 = 2022- (活動再開後)
  * staple: 直近ツアーやフェスで定番化している曲（主観）
  */
+import songStatsJson from "./song-stats.json" with { type: "json" };
+
 export type Mood = "up" | "mid" | "ballad";
 export type Era = "phase1" | "phase2";
 
@@ -158,6 +160,46 @@ export const SONGS: Song[] = [
 ];
 
 export const SONG_MAP: ReadonlyMap<string, Song> = new Map(SONGS.map((x) => [x.id, x]));
+
+// ---- 過去ライブの演奏実績（setlist.fm 由来） ----
+
+/**
+ * 曲ごとの演奏実績。scripts/build-song-stats.ts が data/setlists.json から集計して
+ * lib/song-stats.json に書き出す。手で編集しない。
+ * （interface でなく type にしているのは、Jev の state（JsonValue）にそのまま入れるため）
+ */
+export type SongStats = {
+  /** 集計期間中の演奏回数 */
+  playCount: number;
+  /** ツアー名ごとの演奏回数（多い順） */
+  playCountByTour: Record<string, number>;
+  /** 最後に演奏した日 (YYYY-MM-DD)。一度も無ければ null */
+  lastPlayed: string | null;
+  /** 演奏された公演のうち、1 曲目（SE/Tape 除く）だった割合 0〜1 */
+  openerRate: number;
+  /** 演奏された公演のうち、アンコールだった割合 0〜1 */
+  encoreRate: number;
+  /** 公演内での位置の平均。0 = 1 曲目、1 = ラスト。未演奏なら null */
+  avgPosition: number | null;
+};
+
+export interface SongStatsFile {
+  generatedAt: string;
+  /** 集計対象の開始日 (YYYY-MM-DD) */
+  since: string;
+  /** 曲情報のある公演数（割合の分母の目安） */
+  totalShows: number;
+  songs: Record<string, SongStats>;
+}
+
+/** stats は song-stats.json に無い曲（集計後に追加された曲など）だけ null */
+export type SongWithStats = Song & { stats: SongStats | null };
+
+export const SONG_STATS: SongStatsFile = songStatsJson as SongStatsFile;
+
+export function getSongsWithStats(): SongWithStats[] {
+  return SONGS.map((song) => ({ ...song, stats: SONG_STATS.songs[song.id] ?? null }));
+}
 
 export const ALBUM_ORDER = [
   "POPS",

@@ -18,6 +18,23 @@ Mrs. GREEN APPLE の全曲から、Ringo Jam Tour "SHADOWS" 香川初日 (2026/0
 Jev は知識モデルじゃなくて判断モデルなので、state に詰めたメタデータと
 「匂わせメモ」だけを材料に判断する。メタデータの質＝予想の質。
 
+## 過去ライブの演奏実績（setlist.fm）
+
+曲マスタだけだと Jev の材料が薄いので、setlist.fm の公式 API から直近 2 年分のセトリを取り、
+曲ごとの演奏回数・最終演奏日・1 曲目率・アンコール率・平均位置を `lib/song-stats.json` に集計して
+state の `songs[].stats` に載せている。
+
+```bash
+# https://api.setlist.fm/docs/1.0/index.html でキーを発行し .env.local に SETLISTFM_API_KEY=... を書く
+npm run fetch:setlists   # → data/setlists.json（生 JSON は data/raw/setlistfm/ にキャッシュ。--refresh で再取得）
+npm run build:stats      # → lib/song-stats.json。突合できなかった曲名を「未マッチ一覧」で出す
+```
+
+- 1 リクエスト 1 秒以上あける。HTML スクレイピングはしない。
+- SE や Tape（`isTape=true`）は集計しない。
+- 未マッチの曲名は `lib/song-title.ts` の正規化ルールか `lib/songs.ts` の表記を直して再集計する。
+  スクリプトが `songs.ts` を勝手に書き換えることはない。
+
 ## 動かす
 
 ```bash
