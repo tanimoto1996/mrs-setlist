@@ -87,6 +87,7 @@ export function buildNewAlbumHistory(event: EventContext) {
           songs: a.firstShow!.songs,
           newAlbumSongs: a.firstShow!.newAlbumSongs,
           share: a.firstShow!.newAlbumShare,
+          source: a.firstShow!.source,
           preReleasedPlayed: `${a.firstShow!.preReleasedPlayed}/${a.preReleased.length}`,
           albumOnlyPlayed: `${a.firstShow!.albumOnlyPlayed}/${a.albumOnly.length}`,
         },
@@ -101,8 +102,10 @@ export function buildNewAlbumHistory(event: EventContext) {
     projection: {
       album: projection.album,
       setlistSize: event.setlistSize,
-      firstShowShare: projection.share,
-      expectedNewAlbumSongs: projection.expectedSongs,
+      meanFirstShowShare: projection.meanShare,
+      latestFirstShowShare: projection.latestShare,
+      latestMeasuredAlbum: projection.latestAlbum,
+      expectedNewAlbumSongs: { low: projection.expectedLow, high: projection.expectedHigh },
       preReleasedFirstShowRate: summary.preReleasedFirstShowRate,
       albumOnlyFirstShowRate: summary.albumOnlyFirstShowRate,
       preReleased: projection.preReleased,
@@ -114,14 +117,20 @@ export function buildNewAlbumHistory(event: EventContext) {
 /** 新アルバム曲の目安を guidance の文にする。実績が無いときは定性的な 1 行 */
 function newAlbumGuidance(history: ReturnType<typeof buildNewAlbumHistory>): string[] {
   const p = history?.projection;
-  if (!p || p.firstShowShare === null || p.expectedNewAlbumSongs === null) {
+  const { low, high } = p?.expectedNewAlbumSongs ?? { low: null, high: null };
+  if (!p || p.meanFirstShowShare === null || low === null || high === null) {
     return ["アルバム発売日のツアー初日なので、新アルバム収録曲は多めに演奏される傾向がある"];
   }
-  const { firstShowShare, expectedNewAlbumSongs } = p;
+  const { meanFirstShowShare, latestFirstShowShare, latestMeasuredAlbum } = p;
+  const range = low === high ? `${low} 曲` : `${low}〜${high} 曲`;
+  const latest =
+    latestFirstShowShare !== null && latestMeasuredAlbum
+      ? `直近の ${latestMeasuredAlbum}（活動再開後・アリーナ）では ${pct(latestFirstShowShare)} まで下がっている。`
+      : "";
   const lines = [
-    `フルアルバム発売直後のツアー初日では、過去実績（newAlbumHistory）で新アルバム曲がセトリの ${pct(firstShowShare)} を占めた。` +
-      `この公演（${p.setlistSize} 曲）では onNewAlbum=true の曲を ${expectedNewAlbumSongs} 曲前後入れるのが基準。` +
-      "新アルバム曲を全部入れる・ほとんど外す、のどちらにも寄せない",
+    `フルアルバム発売直後のツアー初日では、過去実績（newAlbumHistory）で新アルバム曲がセトリの平均 ${pct(meanFirstShowShare)} を占めた。${latest}` +
+      `この公演（${p.setlistSize} 曲）では onNewAlbum=true の曲を ${range} 入れるのが基準で、` +
+      "全国アリーナ・持ち曲が多い現在の状況は直近の比率に近いと考える。新アルバム曲を全部入れる・ほとんど外す、のどちらにも寄せない",
   ];
   if (p.preReleasedFirstShowRate !== null && p.albumOnlyFirstShowRate !== null) {
     lines.push(

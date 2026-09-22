@@ -1,156 +1,445 @@
 {
-  "generatedAt": "2026-09-22T17:39:56.278Z",
-  "source": "setlist.fm",
+  "generatedAt": "2026-09-22T18:12:08.756Z",
+  "source": "setlist.fm + manual",
   "dataRange": {
     "since": "2015-01-01",
     "until": "2026-08-09"
   },
+  "manualShows": [
+    {
+      "date": "2016-03-01",
+      "venue": "千葉LOOK",
+      "url": "https://ameblo.jp/hapiayutt-gateaufraise/entry-12135023787.html"
+    },
+    {
+      "date": "2016-04-10",
+      "venue": "赤坂BLITZ",
+      "url": "https://music.fanplus.co.jp/news/20160407349ad8d3a"
+    },
+    {
+      "date": "2017-03-01",
+      "venue": "CLUB CITTA'川崎",
+      "url": "https://www.livefans.jp/events/741975"
+    },
+    {
+      "date": "2017-03-02",
+      "venue": "CLUB CITTA'川崎",
+      "url": "https://www.livefans.jp/events/741977"
+    },
+    {
+      "date": "2017-05-19",
+      "venue": "東京国際フォーラム ホールA",
+      "url": "https://www.livefans.jp/events/741995"
+    },
+    {
+      "date": "2018-05-12",
+      "venue": "パルテノン多摩 大ホール",
+      "url": "https://www.livefans.jp/events/892120"
+    },
+    {
+      "date": "2018-05-19",
+      "venue": "サンポートホール高松 大ホール",
+      "url": "https://www.livefans.jp/events/892121"
+    },
+    {
+      "date": "2018-05-26",
+      "venue": "大宮ソニックシティ 大ホール",
+      "url": "https://www.livefans.jp/events/892131"
+    },
+    {
+      "date": "2018-07-15",
+      "venue": "福岡サンパレス",
+      "url": "https://www.livefans.jp/events/892141"
+    },
+    {
+      "date": "2018-09-08",
+      "venue": "幕張メッセ 国際展示場",
+      "url": "https://www.billboard-japan.com/d_news/detail/67513/2"
+    },
+    {
+      "date": "2018-09-09",
+      "venue": "幕張メッセ 国際展示場",
+      "url": "https://www.billboard-japan.com/d_news/detail/67513/2"
+    },
+    {
+      "date": "2019-12-07",
+      "venue": "横浜アリーナ",
+      "url": "https://www.livefans.jp/events/1144409"
+    },
+    {
+      "date": "2019-12-08",
+      "venue": "横浜アリーナ",
+      "url": "https://www.livefans.jp/events/1144410"
+    },
+    {
+      "date": "2020-01-23",
+      "venue": "ドルフィンズアリーナ 第1競技場",
+      "url": "https://www.livefans.jp/events/1144411"
+    }
+  ],
   "rule": {
     "oneManMinSongs": 15,
     "tourWindowDays": 120
   },
   "summary": {
     "measuredAlbums": [
-      "ANTENNA"
-    ],
-    "noDataAlbums": [
       "TWELVE",
       "Mrs. GREEN APPLE",
       "ENSEMBLE",
-      "Attitude"
+      "Attitude",
+      "ANTENNA"
     ],
-    "firstShowShare": 0.333,
-    "tourShare": 0.321,
-    "preReleasedFirstShowRate": 0.667,
-    "albumOnlyFirstShowRate": 0.5,
-    "albumOnlyTourRate": 0.625
+    "noDataAlbums": [],
+    "firstShowShare": 0.495,
+    "latestFirstShowShare": 0.333,
+    "latestMeasuredAlbum": "ANTENNA",
+    "tourShare": 0.489,
+    "preReleasedFirstShowRate": 0.734,
+    "albumOnlyFirstShowRate": 0.711,
+    "albumOnlyTourRate": 0.744
   },
   "albums": [
     {
       "album": "TWELVE",
       "released": "2016-01-13",
-      "trackCount": 12,
+      "trackCount": 13,
       "preReleased": [
-        "gaou-jin",
-        "start",
-        "vip",
         "aijou-to-hokosaki",
-        "risky-game"
+        "hello"
       ],
       "albumOnly": [
+        "speaking",
         "public",
+        "ai",
+        "kikori-dokei",
+        "watashi",
+        "no7",
         "misukasazu",
-        "koi-to-gin",
-        "doutoku-to-sara",
-        "shoki-no-uta",
-        "umbrella",
-        "ai"
+        "simple",
+        "interlude-shiroi-asa",
+        "hug",
+        "shoki-no-uta"
       ],
-      "status": "no-data",
-      "firstShow": null,
-      "tour": null
+      "status": "measured",
+      "firstShow": {
+        "date": "2016-03-01",
+        "venue": "千葉LOOK",
+        "tour": "TWELVE TOUR ～春宵一刻とモノテトラ～",
+        "url": "https://ameblo.jp/hapiayutt-gateaufraise/entry-12135023787.html",
+        "source": "manual",
+        "sourceNote": "ファンブログ（ツアー初日の参加レポート）。LiveFans の公演ページ https://www.livefans.jp/events/560819 にはセトリ未登録",
+        "songs": 15,
+        "newAlbumSongs": 10,
+        "newAlbumShare": 0.667,
+        "preReleasedPlayed": 1,
+        "albumOnlyPlayed": 9,
+        "newAlbumSongIds": [
+          "aijou-to-hokosaki",
+          "speaking",
+          "kikori-dokei",
+          "ai",
+          "watashi",
+          "no7",
+          "misukasazu",
+          "simple",
+          "public",
+          "shoki-no-uta"
+        ]
+      },
+      "tour": {
+        "shows": 2,
+        "from": "2016-03-01",
+        "to": "2016-04-10",
+        "tourName": "TWELVE TOUR ～春宵一刻とモノテトラ～",
+        "sources": [
+          "manual"
+        ],
+        "avgSongs": 16,
+        "avgNewAlbumSongs": 10,
+        "avgNewAlbumShare": 0.628,
+        "tracksPlayed": 11,
+        "preReleasedPlayed": 2,
+        "albumOnlyPlayed": 9,
+        "trackPlayRate": {
+          "aijou-to-hokosaki": 1,
+          "speaking": 1,
+          "public": 1,
+          "ai": 0.5,
+          "kikori-dokei": 1,
+          "watashi": 1,
+          "no7": 1,
+          "misukasazu": 1,
+          "simple": 1,
+          "interlude-shiroi-asa": 0,
+          "hug": 0,
+          "hello": 0.5,
+          "shoki-no-uta": 1
+        }
+      }
     },
     {
       "album": "Mrs. GREEN APPLE",
       "released": "2017-01-11",
-      "trackCount": 12,
+      "trackCount": 13,
       "preReleased": [
-        "speaking",
         "in-the-morning",
         "kujira-no-uta",
-        "samama-festival"
+        "ubu",
+        "samama-festival",
+        "umbrella"
       ],
       "albumOnly": [
-        "just-a-friend",
-        "simpathy",
-        "connected",
+        "lion",
+        "omocha-no-heitai",
+        "zessei-seibutsu",
+        "soft-drink",
         "oz",
-        "whoo-whoo-whoo",
-        "dokoka-de-hi-wa-noboru",
-        "they-are",
-        "soft-drink"
+        "just-a-friend",
+        "factory",
+        "journey"
       ],
-      "status": "no-data",
-      "firstShow": null,
-      "tour": null
+      "status": "measured",
+      "firstShow": {
+        "date": "2017-03-01",
+        "venue": "CLUB CITTA'川崎",
+        "tour": "MGA MEET YOU TOUR",
+        "url": "https://www.livefans.jp/events/741975",
+        "source": "manual",
+        "sourceNote": "LiveFans",
+        "songs": 18,
+        "newAlbumSongs": 9,
+        "newAlbumShare": 0.5,
+        "preReleasedPlayed": 4,
+        "albumOnlyPlayed": 5,
+        "newAlbumSongIds": [
+          "zessei-seibutsu",
+          "oz",
+          "just-a-friend",
+          "kujira-no-uta",
+          "lion",
+          "ubu",
+          "in-the-morning",
+          "samama-festival",
+          "journey"
+        ]
+      },
+      "tour": {
+        "shows": 2,
+        "from": "2017-03-01",
+        "to": "2017-03-02",
+        "tourName": "MGA MEET YOU TOUR",
+        "sources": [
+          "manual"
+        ],
+        "avgSongs": 18,
+        "avgNewAlbumSongs": 9,
+        "avgNewAlbumShare": 0.5,
+        "tracksPlayed": 9,
+        "preReleasedPlayed": 4,
+        "albumOnlyPlayed": 5,
+        "trackPlayRate": {
+          "lion": 1,
+          "in-the-morning": 1,
+          "omocha-no-heitai": 0,
+          "zessei-seibutsu": 1,
+          "soft-drink": 0,
+          "kujira-no-uta": 1,
+          "ubu": 1,
+          "samama-festival": 1,
+          "oz": 1,
+          "just-a-friend": 1,
+          "factory": 0,
+          "umbrella": 0,
+          "journey": 1
+        }
+      }
     },
     {
       "album": "ENSEMBLE",
       "released": "2018-04-18",
       "trackCount": 13,
       "preReleased": [
-        "anzenpai",
         "wanted-wanted",
+        "they-are",
+        "whoo-whoo-whoo",
+        "smile-of-dreamer",
         "reverse",
-        "nani-wo-nani-wo"
+        "on-my-mind",
+        "dokoka-de-hi-wa-noboru"
       ],
       "albumOnly": [
         "love-me-love-you",
         "party",
-        "soup",
-        "splash",
-        "hug",
         "aufheben",
-        "tenbyou-no-uta",
-        "shunshu",
-        "hikari-no-uta"
+        "hajimari",
+        "splash",
+        "coffee"
       ],
-      "status": "no-data",
-      "firstShow": null,
-      "tour": null
+      "status": "measured",
+      "firstShow": {
+        "date": "2018-05-12",
+        "venue": "パルテノン多摩 大ホール",
+        "tour": "ENSEMBLE TOUR",
+        "url": "https://www.livefans.jp/events/892120",
+        "source": "manual",
+        "sourceNote": "LiveFans（ツアー初日）。Love me, Love you は 1 番サビまでと 2 番からの 2 回に分けて演奏",
+        "songs": 22,
+        "newAlbumSongs": 10,
+        "newAlbumShare": 0.455,
+        "preReleasedPlayed": 4,
+        "albumOnlyPlayed": 6,
+        "newAlbumSongIds": [
+          "coffee",
+          "aufheben",
+          "love-me-love-you",
+          "wanted-wanted",
+          "whoo-whoo-whoo",
+          "reverse",
+          "splash",
+          "they-are",
+          "party",
+          "love-me-love-you"
+        ]
+      },
+      "tour": {
+        "shows": 4,
+        "from": "2018-05-12",
+        "to": "2018-07-15",
+        "tourName": "ENSEMBLE TOUR",
+        "sources": [
+          "manual"
+        ],
+        "avgSongs": 22.25,
+        "avgNewAlbumSongs": 10,
+        "avgNewAlbumShare": 0.45,
+        "tracksPlayed": 9,
+        "preReleasedPlayed": 4,
+        "albumOnlyPlayed": 5,
+        "trackPlayRate": {
+          "love-me-love-you": 1,
+          "party": 1,
+          "wanted-wanted": 1,
+          "aufheben": 1,
+          "hajimari": 0,
+          "they-are": 1,
+          "whoo-whoo-whoo": 1,
+          "smile-of-dreamer": 0,
+          "splash": 1,
+          "reverse": 1,
+          "coffee": 1,
+          "on-my-mind": 0,
+          "dokoka-de-hi-wa-noboru": 0
+        }
+      }
     },
     {
       "album": "Attitude",
       "released": "2019-10-02",
-      "trackCount": 19,
+      "trackCount": 17,
       "preReleased": [
         "inferno",
-        "romanticism",
         "boku-no-koto",
-        "ao-to-natsu"
+        "ao-to-natsu",
+        "romanticism",
+        "soup"
       ],
       "albumOnly": [
+        "inspiration",
         "attitude",
         "cheers",
-        "circle",
-        "propose",
         "viking",
-        "ke-mo-sabe",
-        "folktale",
-        "uso-janai-yo",
-        "smile-of-dreamer",
+        "propose",
         "kudari",
-        "tsuki-to-anemone",
         "lovin",
-        "coffee",
-        "tomoshibi",
-        "himitsu"
+        "ke-mo-sabe",
+        "uso-janai-yo",
+        "how-to",
+        "circle",
+        "folktale"
       ],
-      "status": "no-data",
-      "firstShow": null,
-      "tour": null
+      "status": "measured",
+      "firstShow": {
+        "date": "2019-12-07",
+        "venue": "横浜アリーナ",
+        "tour": "Mrs. GREEN APPLE ARENA TOUR / エデンの園",
+        "url": "https://www.livefans.jp/events/1144409",
+        "source": "manual",
+        "sourceNote": "LiveFans（ツアー初日）。曲の集合は もとりょこblog https://motoryokoblog.com/?p=14860 と一致するが、序盤の曲順は出典ごとに違う（やわろっく https://www.yawarakai.com/28667 は青と夏を含まない 22 曲）",
+        "songs": 23,
+        "newAlbumSongs": 12,
+        "newAlbumShare": 0.522,
+        "preReleasedPlayed": 4,
+        "albumOnlyPlayed": 8,
+        "newAlbumSongIds": [
+          "viking",
+          "soup",
+          "propose",
+          "inferno",
+          "kudari",
+          "ke-mo-sabe",
+          "boku-no-koto",
+          "ao-to-natsu",
+          "cheers",
+          "lovin",
+          "folktale",
+          "circle"
+        ]
+      },
+      "tour": {
+        "shows": 3,
+        "from": "2019-12-07",
+        "to": "2020-01-23",
+        "tourName": "Mrs. GREEN APPLE ARENA TOUR / エデンの園",
+        "sources": [
+          "manual"
+        ],
+        "avgSongs": 23,
+        "avgNewAlbumSongs": 12,
+        "avgNewAlbumShare": 0.522,
+        "tracksPlayed": 12,
+        "preReleasedPlayed": 4,
+        "albumOnlyPlayed": 8,
+        "trackPlayRate": {
+          "inspiration": 0,
+          "attitude": 0,
+          "inferno": 1,
+          "cheers": 1,
+          "viking": 1,
+          "propose": 1,
+          "boku-no-koto": 1,
+          "ao-to-natsu": 1,
+          "kudari": 1,
+          "lovin": 1,
+          "ke-mo-sabe": 1,
+          "romanticism": 0,
+          "uso-janai-yo": 0,
+          "how-to": 0,
+          "soup": 1,
+          "circle": 1,
+          "folktale": 1
+        }
+      }
     },
     {
       "album": "ANTENNA",
       "released": "2023-07-05",
-      "trackCount": 14,
+      "trackCount": 13,
       "preReleased": [
-        "dance-hall",
-        "blue-ambience",
-        "floriginal",
-        "new-my-normal",
         "magic",
+        "watashi-wa-saikyo",
+        "que-sera-sera",
         "soranji"
       ],
       "albumOnly": [
         "antenna",
         "blizzard",
-        "doodle",
-        "feeling",
+        "unloveless",
         "loneliness",
         "norn",
-        "part-of-me",
-        "enen"
+        "daidai",
+        "doodle",
+        "bff",
+        "feeling"
       ],
       "status": "measured",
       "firstShow": {
@@ -158,19 +447,21 @@
         "venue": "Saitama Super Arena",
         "tour": null,
         "url": "https://www.setlist.fm/setlist/mrs-green-apple/2023/saitama-super-arena-saitama-japan-73a7caed.html",
+        "source": "setlist.fm",
+        "sourceNote": null,
         "songs": 24,
         "newAlbumSongs": 8,
         "newAlbumShare": 0.333,
         "preReleasedPlayed": 4,
         "albumOnlyPlayed": 4,
         "newAlbumSongIds": [
+          "watashi-wa-saikyo",
           "blizzard",
-          "new-my-normal",
           "loneliness",
-          "dance-hall",
           "norn",
           "magic",
           "soranji",
+          "que-sera-sera",
           "feeling"
         ]
       },
@@ -179,27 +470,29 @@
         "from": "2023-07-08",
         "to": "2023-08-13",
         "tourName": null,
+        "sources": [
+          "setlist.fm"
+        ],
         "avgSongs": 23.25,
-        "avgNewAlbumSongs": 7.5,
-        "avgNewAlbumShare": 0.321,
-        "tracksPlayed": 10,
-        "preReleasedPlayed": 5,
-        "albumOnlyPlayed": 5,
+        "avgNewAlbumSongs": 8,
+        "avgNewAlbumShare": 0.345,
+        "tracksPlayed": 11,
+        "preReleasedPlayed": 4,
+        "albumOnlyPlayed": 7,
         "trackPlayRate": {
           "antenna": 0.25,
-          "dance-hall": 1,
-          "blizzard": 0.75,
-          "doodle": 0,
-          "blue-ambience": 0,
-          "feeling": 0.75,
-          "floriginal": 0.25,
-          "new-my-normal": 0.75,
-          "loneliness": 1,
           "magic": 1,
+          "watashi-wa-saikyo": 1,
+          "blizzard": 0.75,
+          "que-sera-sera": 1,
           "soranji": 1,
+          "unloveless": 0.25,
+          "loneliness": 1,
           "norn": 0.75,
-          "part-of-me": 0,
-          "enen": 0
+          "daidai": 0,
+          "doodle": 0,
+          "bff": 0.25,
+          "feeling": 0.75
         }
       }
     },

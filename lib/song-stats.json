@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-22T17:38:37.425Z",
+  "generatedAt": "2026-09-22T18:12:07.800Z",
   "since": "2024-09-01",
   "totalShows": 73,
   "songs": {
@@ -260,69 +260,6 @@
       "encoreRate": 0,
       "avgPosition": null
     },
-    "antenna": {
-      "playCount": 38,
-      "playCountByTour": {
-        "BABEL no TOH": 12,
-        "(ツアー不明)": 10,
-        "Harmony": 10,
-        "ZENJI MITO TO IM/MUTABLE": 6
-      },
-      "lastPlayed": "2026-07-05",
-      "openerRate": 0.158,
-      "encoreRate": 0,
-      "avgPosition": 0.405
-    },
-    "dance-hall": {
-      "playCount": 6,
-      "playCountByTour": {
-        "(ツアー不明)": 6
-      },
-      "lastPlayed": "2025-12-24",
-      "openerRate": 0.167,
-      "encoreRate": 0,
-      "avgPosition": 0.67
-    },
-    "blizzard": {
-      "playCount": 2,
-      "playCountByTour": {
-        "(ツアー不明)": 2
-      },
-      "lastPlayed": "2025-09-15",
-      "openerRate": 0,
-      "encoreRate": 0,
-      "avgPosition": 0.3
-    },
-    "doodle": {
-      "playCount": 0,
-      "playCountByTour": {},
-      "lastPlayed": null,
-      "openerRate": 0,
-      "encoreRate": 0,
-      "avgPosition": null
-    },
-    "blue-ambience": {
-      "playCount": 1,
-      "playCountByTour": {
-        "(ツアー不明)": 1
-      },
-      "lastPlayed": "2025-08-17",
-      "openerRate": 0,
-      "encoreRate": 0,
-      "avgPosition": 0.333
-    },
-    "feeling": {
-      "playCount": 28,
-      "playCountByTour": {
-        "BABEL no TOH": 12,
-        "Harmony": 10,
-        "(ツアー不明)": 6
-      },
-      "lastPlayed": "2025-12-20",
-      "openerRate": 0,
-      "encoreRate": 0,
-      "avgPosition": 0.504
-    },
     "floriginal": {
       "playCount": 14,
       "playCountByTour": {
@@ -333,273 +270,6 @@
       "openerRate": 0,
       "encoreRate": 0,
       "avgPosition": 0.364
-    },
-    "new-my-normal": {
-      "playCount": 5,
-      "playCountByTour": {
-        "(ツアー不明)": 5
-      },
-      "lastPlayed": "2025-12-31",
-      "openerRate": 0,
-      "encoreRate": 0,
-      "avgPosition": 0.674
-    },
-    "loneliness": {
-      "playCount": 25,
-      "playCountByTour": {
-        "BABEL no TOH": 12,
-        "(ツアー不明)": 7,
-        "ZENJI MITO TO IM/MUTABLE": 6
-      },
-      "lastPlayed": "2026-07-05",
-      "openerRate": 0,
-      "encoreRate": 0,
-      "avgPosition": 0.572
-    },
-    "magic": {
-      "playCount": 33,
-      "playCountByTour": {
-        "BABEL no TOH": 12,
-        "Harmony": 10,
-        "ZENJI MITO TO IM/MUTABLE": 6,
-        "(ツアー不明)": 5
-      },
-      "lastPlayed": "2026-07-05",
-      "openerRate": 0.485,
-      "encoreRate": 0,
-      "avgPosition": 0.397
-    },
-    "soranji": {
-      "playCount": 28,
-      "playCountByTour": {
-        "BABEL no TOH": 12,
-        "Harmony": 10,
-        "(ツアー不明)": 6
-      },
-      "lastPlayed": "2026-08-09",
-      "openerRate": 0,
-      "encoreRate": 0,
-      "avgPosition": 0.659
-    },
-    "norn": {
-      "playCount": 10,
-      "playCountByTour": {
-        "Harmony": 10
-      },
-      "lastPlayed": "2024-11-20",
-      "openerRate": 0,
-      "encoreRate": 0,
-      "avgPosition": 0.833
-    },
-    "part-of-me": {
-      "playCount": 10,
-      "playCountByTour": {
-        "Harmony": 10
-      },
-      "lastPlayed": "2024-11-20",
-      "openerRate": 0,
-      "encoreRate": 0,
-      "avgPosition": 0.778
-    },
-    "enen": {
-      "playCount": 0,
-      "playCountByTour": {},
-      "lastPlayed": null,
-      "openerRate": 0,
-      "encoreRate": 0,
-      "avgPosition": null
-    },
-    "que-sera-sera": {
-      "playCount": 25,
-      "playCountByTour": {
-        "Harmony": 10,
-        "(ツアー不明)": 9,
-        "ZENJI MITO TO IM/MUTABLE": 6
-      },
-      "lastPlayed": "2026-07-05",
-      "openerRate": 0.04,
-      "encoreRate": 0.24,
-      "avgPosition": 0.794
-    },
-    "watashi-wa-saikyo": {
-      "playCount": 11,
-      "playCountByTour": {
-        "ZENJI MITO TO IM/MUTABLE": 6,
-        "(ツアー不明)": 5
-      },
-      "lastPlayed": "2026-07-05",
-      "openerRate": 0.273,
-      "encoreRate": 0,
-      "avgPosition": 0.184
-    },
-    "attitude": {
-      "playCount": 0,
-      "playCountByTour": {},
-      "lastPlayed": null,
-      "openerRate": 0,
-      "encoreRate": 0,
-      "avgPosition": null
-    },
-    "inferno": {
-      "playCount": 4,
-      "playCountByTour": {
-        "(ツアー不明)": 4
-      },
-      "lastPlayed": "2025-09-15",
-      "openerRate": 0,
-      "encoreRate": 0,
-      "avgPosition": 0.753
-    },
-    "romanticism": {
-      "playCount": 0,
-      "playCountByTour": {},
-      "lastPlayed": null,
-      "openerRate": 0,
-      "encoreRate": 0,
-      "avgPosition": null
-    },
-    "cheers": {
-      "playCount": 12,
-      "playCountByTour": {
-        "BABEL no TOH": 12
-      },
-      "lastPlayed": "2025-12-20",
-      "openerRate": 0,
-      "encoreRate": 0,
-      "avgPosition": 0.045
-    },
-    "circle": {
-      "playCount": 0,
-      "playCountByTour": {},
-      "lastPlayed": null,
-      "openerRate": 0,
-      "encoreRate": 0,
-      "avgPosition": null
-    },
-    "propose": {
-      "playCount": 0,
-      "playCountByTour": {},
-      "lastPlayed": null,
-      "openerRate": 0,
-      "encoreRate": 0,
-      "avgPosition": null
-    },
-    "viking": {
-      "playCount": 0,
-      "playCountByTour": {},
-      "lastPlayed": null,
-      "openerRate": 0,
-      "encoreRate": 0,
-      "avgPosition": null
-    },
-    "ke-mo-sabe": {
-      "playCount": 12,
-      "playCountByTour": {
-        "BABEL no TOH": 12
-      },
-      "lastPlayed": "2025-12-20",
-      "openerRate": 0,
-      "encoreRate": 0,
-      "avgPosition": 0.636
-    },
-    "folktale": {
-      "playCount": 0,
-      "playCountByTour": {},
-      "lastPlayed": null,
-      "openerRate": 0,
-      "encoreRate": 0,
-      "avgPosition": null
-    },
-    "uso-janai-yo": {
-      "playCount": 10,
-      "playCountByTour": {
-        "Harmony": 10
-      },
-      "lastPlayed": "2024-11-20",
-      "openerRate": 0,
-      "encoreRate": 0,
-      "avgPosition": 0.178
-    },
-    "smile-of-dreamer": {
-      "playCount": 0,
-      "playCountByTour": {},
-      "lastPlayed": null,
-      "openerRate": 0,
-      "encoreRate": 0,
-      "avgPosition": null
-    },
-    "kudari": {
-      "playCount": 10,
-      "playCountByTour": {
-        "Harmony": 10
-      },
-      "lastPlayed": "2024-11-20",
-      "openerRate": 0,
-      "encoreRate": 0,
-      "avgPosition": 0.5
-    },
-    "tsuki-to-anemone": {
-      "playCount": 0,
-      "playCountByTour": {},
-      "lastPlayed": null,
-      "openerRate": 0,
-      "encoreRate": 0,
-      "avgPosition": null
-    },
-    "boku-no-koto": {
-      "playCount": 6,
-      "playCountByTour": {
-        "ZENJI MITO TO IM/MUTABLE": 6
-      },
-      "lastPlayed": "2026-07-05",
-      "openerRate": 0,
-      "encoreRate": 0,
-      "avgPosition": 0.565
-    },
-    "lovin": {
-      "playCount": 0,
-      "playCountByTour": {},
-      "lastPlayed": null,
-      "openerRate": 0,
-      "encoreRate": 0,
-      "avgPosition": null
-    },
-    "coffee": {
-      "playCount": 2,
-      "playCountByTour": {
-        "(ツアー不明)": 2
-      },
-      "lastPlayed": "2025-02-16",
-      "openerRate": 0,
-      "encoreRate": 0,
-      "avgPosition": 0.529
-    },
-    "ao-to-natsu": {
-      "playCount": 13,
-      "playCountByTour": {
-        "(ツアー不明)": 7,
-        "ZENJI MITO TO IM/MUTABLE": 6
-      },
-      "lastPlayed": "2026-07-05",
-      "openerRate": 0.077,
-      "encoreRate": 0,
-      "avgPosition": 0.646
-    },
-    "tomoshibi": {
-      "playCount": 0,
-      "playCountByTour": {},
-      "lastPlayed": null,
-      "openerRate": 0,
-      "encoreRate": 0,
-      "avgPosition": null
-    },
-    "himitsu": {
-      "playCount": 0,
-      "playCountByTour": {},
-      "lastPlayed": null,
-      "openerRate": 0,
-      "encoreRate": 0,
-      "avgPosition": null
     },
     "avoid-note": {
       "playCount": 6,
@@ -627,27 +297,7 @@
       "encoreRate": 0,
       "avgPosition": null
     },
-    "anzenpai": {
-      "playCount": 2,
-      "playCountByTour": {
-        "(ツアー不明)": 2
-      },
-      "lastPlayed": "2025-07-27",
-      "openerRate": 0,
-      "encoreRate": 0,
-      "avgPosition": 0.227
-    },
-    "love-me-love-you": {
-      "playCount": 12,
-      "playCountByTour": {
-        "BABEL no TOH": 12
-      },
-      "lastPlayed": "2025-12-20",
-      "openerRate": 1,
-      "encoreRate": 0,
-      "avgPosition": 0
-    },
-    "party": {
+    "tsuki-to-anemone": {
       "playCount": 0,
       "playCountByTour": {},
       "lastPlayed": null,
@@ -655,17 +305,7 @@
       "encoreRate": 0,
       "avgPosition": null
     },
-    "wanted-wanted": {
-      "playCount": 12,
-      "playCountByTour": {
-        "BABEL no TOH": 12
-      },
-      "lastPlayed": "2025-12-20",
-      "openerRate": 0,
-      "encoreRate": 0,
-      "avgPosition": 0.273
-    },
-    "reverse": {
+    "tomoshibi": {
       "playCount": 0,
       "playCountByTour": {},
       "lastPlayed": null,
@@ -673,45 +313,7 @@
       "encoreRate": 0,
       "avgPosition": null
     },
-    "soup": {
-      "playCount": 12,
-      "playCountByTour": {
-        "BABEL no TOH": 12
-      },
-      "lastPlayed": "2025-12-20",
-      "openerRate": 0,
-      "encoreRate": 0,
-      "avgPosition": 0.545
-    },
-    "splash": {
-      "playCount": 0,
-      "playCountByTour": {},
-      "lastPlayed": null,
-      "openerRate": 0,
-      "encoreRate": 0,
-      "avgPosition": null
-    },
-    "nani-wo-nani-wo": {
-      "playCount": 6,
-      "playCountByTour": {
-        "ZENJI MITO TO IM/MUTABLE": 6
-      },
-      "lastPlayed": "2026-07-05",
-      "openerRate": 0,
-      "encoreRate": 0,
-      "avgPosition": 0.609
-    },
-    "hug": {
-      "playCount": 10,
-      "playCountByTour": {
-        "Harmony": 10
-      },
-      "lastPlayed": "2024-11-20",
-      "openerRate": 0,
-      "encoreRate": 0,
-      "avgPosition": 0.056
-    },
-    "aufheben": {
+    "himitsu": {
       "playCount": 0,
       "playCountByTour": {},
       "lastPlayed": null,
@@ -747,38 +349,6 @@
       "encoreRate": 0,
       "avgPosition": 0.278
     },
-    "speaking": {
-      "playCount": 0,
-      "playCountByTour": {},
-      "lastPlayed": null,
-      "openerRate": 0,
-      "encoreRate": 0,
-      "avgPosition": null
-    },
-    "in-the-morning": {
-      "playCount": 0,
-      "playCountByTour": {},
-      "lastPlayed": null,
-      "openerRate": 0,
-      "encoreRate": 0,
-      "avgPosition": null
-    },
-    "kujira-no-uta": {
-      "playCount": 0,
-      "playCountByTour": {},
-      "lastPlayed": null,
-      "openerRate": 0,
-      "encoreRate": 0,
-      "avgPosition": null
-    },
-    "just-a-friend": {
-      "playCount": 0,
-      "playCountByTour": {},
-      "lastPlayed": null,
-      "openerRate": 0,
-      "encoreRate": 0,
-      "avgPosition": null
-    },
     "simpathy": {
       "playCount": 0,
       "playCountByTour": {},
@@ -795,7 +365,7 @@
       "encoreRate": 0,
       "avgPosition": null
     },
-    "oz": {
+    "koi-to-gin": {
       "playCount": 0,
       "playCountByTour": {},
       "lastPlayed": null,
@@ -803,25 +373,394 @@
       "encoreRate": 0,
       "avgPosition": null
     },
-    "whoo-whoo-whoo": {
-      "playCount": 0,
-      "playCountByTour": {},
-      "lastPlayed": null,
-      "openerRate": 0,
+    "antenna": {
+      "playCount": 38,
+      "playCountByTour": {
+        "BABEL no TOH": 12,
+        "(ツアー不明)": 10,
+        "Harmony": 10,
+        "ZENJI MITO TO IM/MUTABLE": 6
+      },
+      "lastPlayed": "2026-07-05",
+      "openerRate": 0.158,
       "encoreRate": 0,
-      "avgPosition": null
+      "avgPosition": 0.405
     },
-    "dokoka-de-hi-wa-noboru": {
+    "magic": {
+      "playCount": 33,
+      "playCountByTour": {
+        "BABEL no TOH": 12,
+        "Harmony": 10,
+        "ZENJI MITO TO IM/MUTABLE": 6,
+        "(ツアー不明)": 5
+      },
+      "lastPlayed": "2026-07-05",
+      "openerRate": 0.485,
+      "encoreRate": 0,
+      "avgPosition": 0.397
+    },
+    "watashi-wa-saikyo": {
+      "playCount": 11,
+      "playCountByTour": {
+        "ZENJI MITO TO IM/MUTABLE": 6,
+        "(ツアー不明)": 5
+      },
+      "lastPlayed": "2026-07-05",
+      "openerRate": 0.273,
+      "encoreRate": 0,
+      "avgPosition": 0.184
+    },
+    "blizzard": {
       "playCount": 2,
       "playCountByTour": {
         "(ツアー不明)": 2
       },
-      "lastPlayed": "2025-07-27",
+      "lastPlayed": "2025-09-15",
       "openerRate": 0,
       "encoreRate": 0,
-      "avgPosition": 0.591
+      "avgPosition": 0.3
     },
-    "samama-festival": {
+    "que-sera-sera": {
+      "playCount": 25,
+      "playCountByTour": {
+        "Harmony": 10,
+        "(ツアー不明)": 9,
+        "ZENJI MITO TO IM/MUTABLE": 6
+      },
+      "lastPlayed": "2026-07-05",
+      "openerRate": 0.04,
+      "encoreRate": 0.24,
+      "avgPosition": 0.794
+    },
+    "soranji": {
+      "playCount": 28,
+      "playCountByTour": {
+        "BABEL no TOH": 12,
+        "Harmony": 10,
+        "(ツアー不明)": 6
+      },
+      "lastPlayed": "2026-08-09",
+      "openerRate": 0,
+      "encoreRate": 0,
+      "avgPosition": 0.659
+    },
+    "unloveless": {
+      "playCount": 12,
+      "playCountByTour": {
+        "BABEL no TOH": 12
+      },
+      "lastPlayed": "2025-12-20",
+      "openerRate": 0,
+      "encoreRate": 0,
+      "avgPosition": 0.091
+    },
+    "loneliness": {
+      "playCount": 25,
+      "playCountByTour": {
+        "BABEL no TOH": 12,
+        "(ツアー不明)": 7,
+        "ZENJI MITO TO IM/MUTABLE": 6
+      },
+      "lastPlayed": "2026-07-05",
+      "openerRate": 0,
+      "encoreRate": 0,
+      "avgPosition": 0.572
+    },
+    "norn": {
+      "playCount": 10,
+      "playCountByTour": {
+        "Harmony": 10
+      },
+      "lastPlayed": "2024-11-20",
+      "openerRate": 0,
+      "encoreRate": 0,
+      "avgPosition": 0.833
+    },
+    "daidai": {
+      "playCount": 0,
+      "playCountByTour": {},
+      "lastPlayed": null,
+      "openerRate": 0,
+      "encoreRate": 0,
+      "avgPosition": null
+    },
+    "doodle": {
+      "playCount": 0,
+      "playCountByTour": {},
+      "lastPlayed": null,
+      "openerRate": 0,
+      "encoreRate": 0,
+      "avgPosition": null
+    },
+    "bff": {
+      "playCount": 0,
+      "playCountByTour": {},
+      "lastPlayed": null,
+      "openerRate": 0,
+      "encoreRate": 0,
+      "avgPosition": null
+    },
+    "feeling": {
+      "playCount": 28,
+      "playCountByTour": {
+        "BABEL no TOH": 12,
+        "Harmony": 10,
+        "(ツアー不明)": 6
+      },
+      "lastPlayed": "2025-12-20",
+      "openerRate": 0,
+      "encoreRate": 0,
+      "avgPosition": 0.504
+    },
+    "new-my-normal": {
+      "playCount": 5,
+      "playCountByTour": {
+        "(ツアー不明)": 5
+      },
+      "lastPlayed": "2025-12-31",
+      "openerRate": 0,
+      "encoreRate": 0,
+      "avgPosition": 0.674
+    },
+    "dance-hall": {
+      "playCount": 6,
+      "playCountByTour": {
+        "(ツアー不明)": 6
+      },
+      "lastPlayed": "2025-12-24",
+      "openerRate": 0.167,
+      "encoreRate": 0,
+      "avgPosition": 0.67
+    },
+    "blue-ambience": {
+      "playCount": 1,
+      "playCountByTour": {
+        "(ツアー不明)": 1
+      },
+      "lastPlayed": "2025-08-17",
+      "openerRate": 0,
+      "encoreRate": 0,
+      "avgPosition": 0.333
+    },
+    "kimi-wo-shiranai": {
+      "playCount": 14,
+      "playCountByTour": {
+        "BABEL no TOH": 12,
+        "(ツアー不明)": 2
+      },
+      "lastPlayed": "2025-12-20",
+      "openerRate": 0,
+      "encoreRate": 0,
+      "avgPosition": 0.462
+    },
+    "enen": {
+      "playCount": 0,
+      "playCountByTour": {},
+      "lastPlayed": null,
+      "openerRate": 0,
+      "encoreRate": 0,
+      "avgPosition": null
+    },
+    "part-of-me": {
+      "playCount": 10,
+      "playCountByTour": {
+        "Harmony": 10
+      },
+      "lastPlayed": "2024-11-20",
+      "openerRate": 0,
+      "encoreRate": 0,
+      "avgPosition": 0.778
+    },
+    "inspiration": {
+      "playCount": 0,
+      "playCountByTour": {},
+      "lastPlayed": null,
+      "openerRate": 0,
+      "encoreRate": 0,
+      "avgPosition": null
+    },
+    "attitude": {
+      "playCount": 0,
+      "playCountByTour": {},
+      "lastPlayed": null,
+      "openerRate": 0,
+      "encoreRate": 0,
+      "avgPosition": null
+    },
+    "inferno": {
+      "playCount": 4,
+      "playCountByTour": {
+        "(ツアー不明)": 4
+      },
+      "lastPlayed": "2025-09-15",
+      "openerRate": 0,
+      "encoreRate": 0,
+      "avgPosition": 0.753
+    },
+    "cheers": {
+      "playCount": 12,
+      "playCountByTour": {
+        "BABEL no TOH": 12
+      },
+      "lastPlayed": "2025-12-20",
+      "openerRate": 0,
+      "encoreRate": 0,
+      "avgPosition": 0.045
+    },
+    "viking": {
+      "playCount": 0,
+      "playCountByTour": {},
+      "lastPlayed": null,
+      "openerRate": 0,
+      "encoreRate": 0,
+      "avgPosition": null
+    },
+    "propose": {
+      "playCount": 0,
+      "playCountByTour": {},
+      "lastPlayed": null,
+      "openerRate": 0,
+      "encoreRate": 0,
+      "avgPosition": null
+    },
+    "boku-no-koto": {
+      "playCount": 6,
+      "playCountByTour": {
+        "ZENJI MITO TO IM/MUTABLE": 6
+      },
+      "lastPlayed": "2026-07-05",
+      "openerRate": 0,
+      "encoreRate": 0,
+      "avgPosition": 0.565
+    },
+    "ao-to-natsu": {
+      "playCount": 13,
+      "playCountByTour": {
+        "(ツアー不明)": 7,
+        "ZENJI MITO TO IM/MUTABLE": 6
+      },
+      "lastPlayed": "2026-07-05",
+      "openerRate": 0.077,
+      "encoreRate": 0,
+      "avgPosition": 0.646
+    },
+    "kudari": {
+      "playCount": 10,
+      "playCountByTour": {
+        "Harmony": 10
+      },
+      "lastPlayed": "2024-11-20",
+      "openerRate": 0,
+      "encoreRate": 0,
+      "avgPosition": 0.5
+    },
+    "lovin": {
+      "playCount": 0,
+      "playCountByTour": {},
+      "lastPlayed": null,
+      "openerRate": 0,
+      "encoreRate": 0,
+      "avgPosition": null
+    },
+    "ke-mo-sabe": {
+      "playCount": 12,
+      "playCountByTour": {
+        "BABEL no TOH": 12
+      },
+      "lastPlayed": "2025-12-20",
+      "openerRate": 0,
+      "encoreRate": 0,
+      "avgPosition": 0.636
+    },
+    "romanticism": {
+      "playCount": 0,
+      "playCountByTour": {},
+      "lastPlayed": null,
+      "openerRate": 0,
+      "encoreRate": 0,
+      "avgPosition": null
+    },
+    "uso-janai-yo": {
+      "playCount": 10,
+      "playCountByTour": {
+        "Harmony": 10
+      },
+      "lastPlayed": "2024-11-20",
+      "openerRate": 0,
+      "encoreRate": 0,
+      "avgPosition": 0.178
+    },
+    "how-to": {
+      "playCount": 0,
+      "playCountByTour": {},
+      "lastPlayed": null,
+      "openerRate": 0,
+      "encoreRate": 0,
+      "avgPosition": null
+    },
+    "soup": {
+      "playCount": 12,
+      "playCountByTour": {
+        "BABEL no TOH": 12
+      },
+      "lastPlayed": "2025-12-20",
+      "openerRate": 0,
+      "encoreRate": 0,
+      "avgPosition": 0.545
+    },
+    "circle": {
+      "playCount": 0,
+      "playCountByTour": {},
+      "lastPlayed": null,
+      "openerRate": 0,
+      "encoreRate": 0,
+      "avgPosition": null
+    },
+    "folktale": {
+      "playCount": 0,
+      "playCountByTour": {},
+      "lastPlayed": null,
+      "openerRate": 0,
+      "encoreRate": 0,
+      "avgPosition": null
+    },
+    "love-me-love-you": {
+      "playCount": 12,
+      "playCountByTour": {
+        "BABEL no TOH": 12
+      },
+      "lastPlayed": "2025-12-20",
+      "openerRate": 1,
+      "encoreRate": 0,
+      "avgPosition": 0
+    },
+    "party": {
+      "playCount": 0,
+      "playCountByTour": {},
+      "lastPlayed": null,
+      "openerRate": 0,
+      "encoreRate": 0,
+      "avgPosition": null
+    },
+    "wanted-wanted": {
+      "playCount": 12,
+      "playCountByTour": {
+        "BABEL no TOH": 12
+      },
+      "lastPlayed": "2025-12-20",
+      "openerRate": 0,
+      "encoreRate": 0,
+      "avgPosition": 0.273
+    },
+    "aufheben": {
+      "playCount": 0,
+      "playCountByTour": {},
+      "lastPlayed": null,
+      "openerRate": 0,
+      "encoreRate": 0,
+      "avgPosition": null
+    },
+    "hajimari": {
       "playCount": 0,
       "playCountByTour": {},
       "lastPlayed": null,
@@ -839,6 +778,102 @@
       "encoreRate": 0,
       "avgPosition": 0.667
     },
+    "whoo-whoo-whoo": {
+      "playCount": 0,
+      "playCountByTour": {},
+      "lastPlayed": null,
+      "openerRate": 0,
+      "encoreRate": 0,
+      "avgPosition": null
+    },
+    "smile-of-dreamer": {
+      "playCount": 0,
+      "playCountByTour": {},
+      "lastPlayed": null,
+      "openerRate": 0,
+      "encoreRate": 0,
+      "avgPosition": null
+    },
+    "splash": {
+      "playCount": 0,
+      "playCountByTour": {},
+      "lastPlayed": null,
+      "openerRate": 0,
+      "encoreRate": 0,
+      "avgPosition": null
+    },
+    "reverse": {
+      "playCount": 0,
+      "playCountByTour": {},
+      "lastPlayed": null,
+      "openerRate": 0,
+      "encoreRate": 0,
+      "avgPosition": null
+    },
+    "coffee": {
+      "playCount": 2,
+      "playCountByTour": {
+        "(ツアー不明)": 2
+      },
+      "lastPlayed": "2025-02-16",
+      "openerRate": 0,
+      "encoreRate": 0,
+      "avgPosition": 0.529
+    },
+    "on-my-mind": {
+      "playCount": 0,
+      "playCountByTour": {},
+      "lastPlayed": null,
+      "openerRate": 0,
+      "encoreRate": 0,
+      "avgPosition": null
+    },
+    "dokoka-de-hi-wa-noboru": {
+      "playCount": 2,
+      "playCountByTour": {
+        "(ツアー不明)": 2
+      },
+      "lastPlayed": "2025-07-27",
+      "openerRate": 0,
+      "encoreRate": 0,
+      "avgPosition": 0.591
+    },
+    "lion": {
+      "playCount": 0,
+      "playCountByTour": {},
+      "lastPlayed": null,
+      "openerRate": 0,
+      "encoreRate": 0,
+      "avgPosition": null
+    },
+    "in-the-morning": {
+      "playCount": 0,
+      "playCountByTour": {},
+      "lastPlayed": null,
+      "openerRate": 0,
+      "encoreRate": 0,
+      "avgPosition": null
+    },
+    "omocha-no-heitai": {
+      "playCount": 12,
+      "playCountByTour": {
+        "BABEL no TOH": 12
+      },
+      "lastPlayed": "2025-12-20",
+      "openerRate": 0,
+      "encoreRate": 0,
+      "avgPosition": 0.227
+    },
+    "zessei-seibutsu": {
+      "playCount": 12,
+      "playCountByTour": {
+        "BABEL no TOH": 12
+      },
+      "lastPlayed": "2025-12-20",
+      "openerRate": 0,
+      "encoreRate": 0,
+      "avgPosition": 0.591
+    },
     "soft-drink": {
       "playCount": 10,
       "playCountByTour": {
@@ -849,29 +884,79 @@
       "encoreRate": 0,
       "avgPosition": 0.333
     },
-    "gaou-jin": {
-      "playCount": 3,
-      "playCountByTour": {
-        "(ツアー不明)": 3
-      },
-      "lastPlayed": "2025-12-31",
-      "openerRate": 0.333,
-      "encoreRate": 0.667,
-      "avgPosition": 0.636
-    },
-    "start": {
-      "playCount": 19,
-      "playCountByTour": {
-        "Harmony": 10,
-        "ZENJI MITO TO IM/MUTABLE": 6,
-        "(ツアー不明)": 3
-      },
-      "lastPlayed": "2026-07-05",
+    "kujira-no-uta": {
+      "playCount": 0,
+      "playCountByTour": {},
+      "lastPlayed": null,
       "openerRate": 0,
-      "encoreRate": 0.105,
-      "avgPosition": 0.491
+      "encoreRate": 0,
+      "avgPosition": null
     },
-    "vip": {
+    "ubu": {
+      "playCount": 0,
+      "playCountByTour": {},
+      "lastPlayed": null,
+      "openerRate": 0,
+      "encoreRate": 0,
+      "avgPosition": null
+    },
+    "samama-festival": {
+      "playCount": 0,
+      "playCountByTour": {},
+      "lastPlayed": null,
+      "openerRate": 0,
+      "encoreRate": 0,
+      "avgPosition": null
+    },
+    "oz": {
+      "playCount": 0,
+      "playCountByTour": {},
+      "lastPlayed": null,
+      "openerRate": 0,
+      "encoreRate": 0,
+      "avgPosition": null
+    },
+    "just-a-friend": {
+      "playCount": 0,
+      "playCountByTour": {},
+      "lastPlayed": null,
+      "openerRate": 0,
+      "encoreRate": 0,
+      "avgPosition": null
+    },
+    "factory": {
+      "playCount": 0,
+      "playCountByTour": {},
+      "lastPlayed": null,
+      "openerRate": 0,
+      "encoreRate": 0,
+      "avgPosition": null
+    },
+    "umbrella": {
+      "playCount": 0,
+      "playCountByTour": {},
+      "lastPlayed": null,
+      "openerRate": 0,
+      "encoreRate": 0,
+      "avgPosition": null
+    },
+    "journey": {
+      "playCount": 0,
+      "playCountByTour": {},
+      "lastPlayed": null,
+      "openerRate": 0,
+      "encoreRate": 0,
+      "avgPosition": null
+    },
+    "aijou-to-hokosaki": {
+      "playCount": 0,
+      "playCountByTour": {},
+      "lastPlayed": null,
+      "openerRate": 0,
+      "encoreRate": 0,
+      "avgPosition": null
+    },
+    "speaking": {
       "playCount": 0,
       "playCountByTour": {},
       "lastPlayed": null,
@@ -889,6 +974,42 @@
       "encoreRate": 0,
       "avgPosition": 0.182
     },
+    "ai": {
+      "playCount": 2,
+      "playCountByTour": {
+        "(ツアー不明)": 2
+      },
+      "lastPlayed": "2025-02-16",
+      "openerRate": 0,
+      "encoreRate": 0,
+      "avgPosition": 0.176
+    },
+    "kikori-dokei": {
+      "playCount": 0,
+      "playCountByTour": {},
+      "lastPlayed": null,
+      "openerRate": 0,
+      "encoreRate": 0,
+      "avgPosition": null
+    },
+    "watashi": {
+      "playCount": 0,
+      "playCountByTour": {},
+      "lastPlayed": null,
+      "openerRate": 0,
+      "encoreRate": 0,
+      "avgPosition": null
+    },
+    "no7": {
+      "playCount": 2,
+      "playCountByTour": {
+        "(ツアー不明)": 2
+      },
+      "lastPlayed": "2025-07-27",
+      "openerRate": 0,
+      "encoreRate": 0,
+      "avgPosition": 0.5
+    },
     "misukasazu": {
       "playCount": 0,
       "playCountByTour": {},
@@ -897,7 +1018,7 @@
       "encoreRate": 0,
       "avgPosition": null
     },
-    "aijou-to-hokosaki": {
+    "simple": {
       "playCount": 0,
       "playCountByTour": {},
       "lastPlayed": null,
@@ -905,13 +1026,51 @@
       "encoreRate": 0,
       "avgPosition": null
     },
-    "koi-to-gin": {
+    "interlude-shiroi-asa": {
       "playCount": 0,
       "playCountByTour": {},
       "lastPlayed": null,
       "openerRate": 0,
       "encoreRate": 0,
       "avgPosition": null
+    },
+    "hug": {
+      "playCount": 10,
+      "playCountByTour": {
+        "Harmony": 10
+      },
+      "lastPlayed": "2024-11-20",
+      "openerRate": 0,
+      "encoreRate": 0,
+      "avgPosition": 0.056
+    },
+    "hello": {
+      "playCount": 0,
+      "playCountByTour": {},
+      "lastPlayed": null,
+      "openerRate": 0,
+      "encoreRate": 0,
+      "avgPosition": null
+    },
+    "shoki-no-uta": {
+      "playCount": 0,
+      "playCountByTour": {},
+      "lastPlayed": null,
+      "openerRate": 0,
+      "encoreRate": 0,
+      "avgPosition": null
+    },
+    "start": {
+      "playCount": 19,
+      "playCountByTour": {
+        "Harmony": 10,
+        "ZENJI MITO TO IM/MUTABLE": 6,
+        "(ツアー不明)": 3
+      },
+      "lastPlayed": "2026-07-05",
+      "openerRate": 0,
+      "encoreRate": 0.105,
+      "avgPosition": 0.491
     },
     "risky-game": {
       "playCount": 0,
@@ -920,6 +1079,32 @@
       "openerRate": 0,
       "encoreRate": 0,
       "avgPosition": null
+    },
+    "lp": {
+      "playCount": 0,
+      "playCountByTour": {},
+      "lastPlayed": null,
+      "openerRate": 0,
+      "encoreRate": 0,
+      "avgPosition": null
+    },
+    "vip": {
+      "playCount": 0,
+      "playCountByTour": {},
+      "lastPlayed": null,
+      "openerRate": 0,
+      "encoreRate": 0,
+      "avgPosition": null
+    },
+    "zenmai": {
+      "playCount": 12,
+      "playCountByTour": {
+        "BABEL no TOH": 12
+      },
+      "lastPlayed": "2025-12-20",
+      "openerRate": 0,
+      "encoreRate": 0,
+      "avgPosition": 0.455
     },
     "doutoku-to-sara": {
       "playCount": 2,
@@ -931,39 +1116,63 @@
       "encoreRate": 0,
       "avgPosition": 0.318
     },
-    "shoki-no-uta": {
-      "playCount": 0,
-      "playCountByTour": {},
-      "lastPlayed": null,
+    "gaou-jin": {
+      "playCount": 3,
+      "playCountByTour": {
+        "(ツアー不明)": 3
+      },
+      "lastPlayed": "2025-12-31",
+      "openerRate": 0.333,
+      "encoreRate": 0.667,
+      "avgPosition": 0.636
+    },
+    "nani-wo-nani-wo": {
+      "playCount": 6,
+      "playCountByTour": {
+        "ZENJI MITO TO IM/MUTABLE": 6
+      },
+      "lastPlayed": "2026-07-05",
       "openerRate": 0,
       "encoreRate": 0,
-      "avgPosition": null
+      "avgPosition": 0.609
     },
-    "umbrella": {
-      "playCount": 0,
-      "playCountByTour": {},
-      "lastPlayed": null,
+    "conflict": {
+      "playCount": 6,
+      "playCountByTour": {
+        "ZENJI MITO TO IM/MUTABLE": 6
+      },
+      "lastPlayed": "2026-07-05",
       "openerRate": 0,
-      "encoreRate": 0,
-      "avgPosition": null
+      "encoreRate": 1,
+      "avgPosition": 0.913
     },
-    "ai": {
+    "anzenpai": {
       "playCount": 2,
       "playCountByTour": {
         "(ツアー不明)": 2
       },
-      "lastPlayed": "2025-02-16",
+      "lastPlayed": "2025-07-27",
       "openerRate": 0,
       "encoreRate": 0,
-      "avgPosition": 0.176
+      "avgPosition": 0.227
     },
-    "progressive": {
+    "hibi-to-kimi": {
       "playCount": 0,
       "playCountByTour": {},
       "lastPlayed": null,
       "openerRate": 0,
       "encoreRate": 0,
       "avgPosition": null
+    },
+    "wall-flower": {
+      "playCount": 2,
+      "playCountByTour": {
+        "(ツアー不明)": 2
+      },
+      "lastPlayed": "2025-07-27",
+      "openerRate": 0,
+      "encoreRate": 0,
+      "avgPosition": 0.273
     }
   }
 }

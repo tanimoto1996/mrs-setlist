@@ -634,8 +634,16 @@ function NewAlbumOdds({ setlistSize }: { setlistSize: number }) {
   const album = SHADOWS_OPENING.newAlbum ?? "POPS";
   const projection = projectNewAlbumSongs(album, setlistSize);
   const history = ALBUM_DEBUT_STATS.albums.filter((a) => a.status !== "upcoming");
-  const measured = ALBUM_DEBUT_STATS.albums.find((a) => a.status === "measured" && a.firstShow);
+  const measured = ALBUM_DEBUT_STATS.albums.filter((a) => a.status === "measured" && a.firstShow);
+  const latest = measured.at(-1);
+  const hasManual = measured.some((a) => a.firstShow?.source === "manual");
   const title = (id: string) => SONG_MAP.get(id)?.title ?? id;
+  const range =
+    projection.expectedLow === null || projection.expectedHigh === null
+      ? null
+      : projection.expectedLow === projection.expectedHigh
+        ? `${projection.expectedLow}`
+        : `${projection.expectedLow}〜${projection.expectedHigh}`;
 
   return (
     <section className="card rise p-6" aria-labelledby="odds-heading" style={rise(3)}>
@@ -646,16 +654,23 @@ function NewAlbumOdds({ setlistSize }: { setlistSize: number }) {
           </h2>
           <p className="mt-1 text-sm font-bold text-dusk">フルアルバム発売直後のツアーで、新譜曲はセトリの何割か</p>
         </div>
-        {projection.share !== null && (
-          <p className="latin text-3xl font-bold text-deep tabular-nums" aria-label={`初日の新譜曲比率 ${pctOf(projection.share)}`}>
-            {pctOf(projection.share)}
+        {projection.meanShare !== null && (
+          <p className="text-right">
+            <span className="latin block text-3xl font-bold text-deep tabular-nums" aria-label={`初日の新譜曲比率の平均 ${pctOf(projection.meanShare)}`}>
+              {pctOf(projection.meanShare)}
+            </span>
+            {projection.latestShare !== null && (
+              <span className="latin text-xs font-bold text-teal tabular-nums">
+                {projection.latestAlbum} {pctOf(projection.latestShare)}
+              </span>
+            )}
           </p>
         )}
       </div>
 
-      {projection.share !== null && projection.expectedSongs !== null ? (
+      {projection.meanShare !== null && range !== null ? (
         <p className="mt-4 rounded-2xl bg-mint px-4 py-3 text-sm font-bold leading-6 text-deep">
-          <span className="latin">{album}</span> から約 {projection.expectedSongs} 曲 / {setlistSize} 曲が入る目安。
+          <span className="latin">{album}</span> から約 {range} 曲 / {setlistSize} 曲が入る目安（直近 {projection.latestAlbum} の比率〜過去 {measured.length} 枚の平均）。
           収録 {projection.trackCount} 曲 = 先行シングル {projection.preReleased.length}（演奏実績あり）＋ アルバム初出 {projection.albumOnly.length}。
         </p>
       ) : (
@@ -672,6 +687,11 @@ function NewAlbumOdds({ setlistSize }: { setlistSize: number }) {
               <span className="text-dusk tabular-nums">
                 初日 {a.firstShow.newAlbumSongs}/{a.firstShow.songs} 曲 · {pctOf(a.firstShow.newAlbumShare)} · ツアー {a.tour.shows} 公演平均{" "}
                 {pctOf(a.tour.avgNewAlbumShare)}
+                {a.firstShow.source === "manual" && (
+                  <a href={a.firstShow.url} target="_blank" rel="noreferrer" className="ml-1 text-xs text-teal underline" aria-label={`${a.album} 初日セトリの出典`}>
+                    出典
+                  </a>
+                )}
               </span>
             ) : (
               <span className="text-xs text-dusk">setlist.fm にツアーのデータ無し</span>
@@ -680,11 +700,12 @@ function NewAlbumOdds({ setlistSize }: { setlistSize: number }) {
         ))}
       </ul>
 
-      {measured?.firstShow && (
+      {latest?.firstShow && (
         <p className="mt-3 text-xs leading-5 text-dusk">
-          {measured.album} の初日は先行シングル {measured.firstShow.preReleasedPlayed}/{measured.preReleased.length}、アルバム初出{" "}
-          {measured.firstShow.albumOnlyPlayed}/{measured.albumOnly.length} が演奏された。
+          直近の {latest.album} 初日は先行シングル {latest.firstShow.preReleasedPlayed}/{latest.preReleased.length}、アルバム初出{" "}
+          {latest.firstShow.albumOnlyPlayed}/{latest.albumOnly.length} が演奏された。
           今回の先行シングルは {projection.preReleased.map(title).join(" / ")}。 この目安は Jev と Gemini の前提にも渡している。
+          {hasManual && " setlist.fm に無い公演は LiveFans などの公開セトリから手で起こした（「出典」リンク）。"}
         </p>
       )}
     </section>

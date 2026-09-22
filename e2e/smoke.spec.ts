@@ -26,17 +26,19 @@ test.describe("起動", () => {
     expect(jevCalls).toHaveLength(0);
   });
 
-  test("New Album Odds に過去実績（ANTENNA）と POPS が何曲入るかの目安が出る", async ({ page }) => {
+  test("New Album Odds に過去 5 枚の実績と POPS が何曲入るかの目安が出る", async ({ page }) => {
     await ui.open(page);
     const odds = ui.odds(page);
 
     await expect(odds.getByRole("heading", { level: 2, name: "New Album Odds" })).toBeVisible();
-    // 目安: 「POPS から約 N 曲 / 24 曲」。N は lib/album-debut-stats.json の初日比率 × 24
-    await expect(odds.getByText(/POPS から約 \d+ 曲 \/ 24 曲/)).toBeVisible();
-    // 実績の行: 計測できた ANTENNA は初日の曲数と %、データが無いアルバムはその旨
+    // 目安: 「POPS から約 L〜H 曲 / 24 曲」。L / H は lib/album-debut-stats.json の直近比率・平均比率 × 24
+    await expect(odds.getByText(/POPS から約 \d+(〜\d+)? 曲 \/ 24 曲/)).toBeVisible();
+    // 実績の行: setlist.fm 由来の ANTENNA と、手入力（出典リンク付き）の TWELVE の両方が初日の曲数と % を出す
     const antenna = odds.getByRole("listitem").filter({ hasText: "ANTENNA" });
     await expect(antenna).toContainText(/初日 \d+\/\d+ 曲 · \d+%/);
-    await expect(odds.getByRole("listitem").filter({ hasText: "TWELVE" })).toContainText("データ無し");
+    const twelve = odds.getByRole("listitem").filter({ hasText: "TWELVE" });
+    await expect(twelve).toContainText(/初日 \d+\/\d+ 曲 · \d+%/);
+    await expect(twelve.getByRole("link", { name: "TWELVE 初日セトリの出典" })).toHaveAttribute("href", /livefans|ameblo|fanplus/);
   });
 
   test("スマホ幅では下部バーから俺の予想へ飛べる", async ({ page, isMobile }) => {

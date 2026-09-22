@@ -41,9 +41,12 @@ npm run screenshot:setlist -- --in predictions/<date>.json [--engine gemini] [--
 - `lib/song-stats.json` は setlist.fm 由来の演奏実績（`scripts/build-song-stats.ts` が生成）。手で編集しない。
   曲名の突合は `lib/song-title.ts` の `buildTitleIndex()`（`normalizeSongTitle()` + ローマ字エイリアス `SONG_TITLE_ALIASES`）。
   setlist.fm の古い登録はローマ字（"Que Sera Sera"）なので、未マッチが出たらエイリアスに 1 行足す。
-- `lib/albums.ts` フルアルバムの発売日 / `lib/album-debut-stats.json` 「発売直後のツアーで新譜曲が占めた割合」
-  （`scripts/build-album-debut-stats.ts` が生成、手で編集しない）/ `lib/album-stats.ts` その読み出しと目安の計算。
-  Jev の state（`newAlbumHistory`・guidance）と画面の New Album Odds カードが同じ数字を使う。
+- `lib/albums.ts` フルアルバムの発売日と正式な収録曲（`songs.ts` の `album` とは別。出典はファイル冒頭）/
+  `data/manual-setlists.json` setlist.fm に無い公演を出典 URL 付きで手入力したセトリ（アルバム別集計だけに使う）/
+  `lib/album-debut-stats.json` 「発売直後のツアーで新譜曲が占めた割合」（`scripts/build-album-debut-stats.ts` が生成、手で編集しない）/
+  `lib/album-stats.ts` その読み出しと目安（直近〜平均のレンジ）。Jev の state（`newAlbumHistory`・guidance）と画面の New Album Odds カードが同じ数字を使う。
+- 曲マスタの `album` は「最初に収録されたアルバム」。2016〜2023 年のアルバム収録曲は出典で照合済み（`docs/worklog/2026-09-23-album-history-sources.md`）。
+  出典が確認できない情報は書かない。不明なら不明のままにして報告する。
 - `e2e/` Playwright のテスト（`fixtures.ts` が Jev の遮断・seed・共通ロケータ）/ `playwright.config.ts` /
   `scripts/e2e-gate.mjs` E2E ラッパー（push 可の印を書く）/ `.claude/hooks/` 強制用 hook / `docs/` 手順と作業記録
 - `SETLISTFM_API_KEY` と `GEMINI_API_KEY`（またはルートの `gemini-api-key` ファイル）も `TYPESAFE_API_KEY` と同じ扱い。中身を読まない・出力しない。

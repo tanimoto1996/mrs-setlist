@@ -44,7 +44,7 @@ export const SONG_TITLE_ALIASES: Record<string, string> = {
   "Ke‐Mo Sah‐Bee": "ke-mo-sabe",
   "Nani wo Nani wo": "nani-wo-nani-wo",
   "Kaze to Machi": "kaze-to-machi",
-  // 藍（あい）。setlist.fm では "Ao" で登録されている
+  // 藍。公式のローマ字表記も "Ao"（ユニバーサル ミュージックの TWELVE 商品ページ）
   Ao: "ai",
   "Uso Janai yo": "uso-janai-yo",
   "Hikari no Uta": "hikari-no-uta",
@@ -66,6 +66,17 @@ export const SONG_TITLE_ALIASES: Record<string, string> = {
   "Doutoku to Sara": "doutoku-to-sara",
   "Dokoka de Hi wa Noboru": "dokoka-de-hi-wa-noboru",
   "Blue Ambience": "blue-ambience",
+  "Zessei Seibutsu": "zessei-seibutsu",
+  "Omocha no Heitai": "omocha-no-heitai",
+  Ubu: "ubu",
+  Unloveless: "unloveless",
+  Daidai: "daidai",
+  "Kimi wo Shiranai": "kimi-wo-shiranai",
+  Zenmai: "zenmai",
+  Watashi: "watashi",
+  "Hibi to Kimi": "hibi-to-kimi",
+  Kikoridokei: "kikori-dokei",
+  "Kikori Dokei": "kikori-dokei",
 };
 
 /**

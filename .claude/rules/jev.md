@@ -13,8 +13,9 @@ paths:
 - 「新アルバム曲は何曲入るか」は感覚ではなく数字で渡す。`event.newAlbum`（POPS）と `lib/album-debut-stats.json` から
   `buildNewAlbumHistory()` が `state.newAlbumHistory`（過去実績・目安曲数・先行シングル / アルバム初出の内訳）を作り、
   guidance の先頭 2 行もそこから生成する。`songs[].albumTrackType` は新アルバム曲だけ `pre-released` / `album-only`。
+  目安は「直近の ANTENNA の比率 × 曲数」〜「過去 5 枚の平均 × 曲数」のレンジ（`projectNewAlbumSongs()`）。
   目安を変えたいときは guidance の文言を直すか、`scripts/build-album-debut-stats.ts` のルール
-  （120 日 / 15 曲）を見直して再集計する。JSON を手で書き換えない。
+  （120 日 / 15 曲）や `data/manual-setlists.json` の公演を見直して再集計する。JSON を手で書き換えない。
 - `@typesafe-ai/sdk` の `TypeSafeClient` は `TYPESAFE_API_KEY`（と任意で `TYPESAFE_BASE_URL`）を
   環境変数から読む。コードにキーを書かない。`import "server-only"` を外さない。
 - `lib/gemini.ts` は Gemini を同じ物差しで走らせる比較用。`buildState()` / `PLAY_LEVELS` / `SLOT_OPTIONS` / `toSetlist()` を

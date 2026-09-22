@@ -4,7 +4,8 @@
  *
  *   npm run build:album-stats -- [--in data/setlists-history.json] [--out lib/album-debut-stats.json]
  *
- * - 対象アルバムと発売日は lib/albums.ts（FULL_ALBUMS）。曲とアルバムの対応は lib/songs.ts
+ * - 対象アルバムと発売日・収録曲は lib/albums.ts（FULL_ALBUMS）。songs.ts の album ではなく tracks を見る
+ * - setlist.fm に無い公演は data/manual-setlists.json（出典 URL 付きの手入力）で補う。同じ日付が両方にあれば setlist.fm 優先
  * - 「次のツアー」= 発売日から TOUR_WINDOW_DAYS 日以内の、演奏曲（Tape 除く）が ONE_MAN_MIN_SONGS 曲以上の公演。
  *   フェス・TV 出演（数曲）は含めない
  * - 収録曲は 2 種類に分ける:
@@ -18,7 +19,7 @@ import { FULL_ALBUMS } from "../lib/albums.ts";
 import type { AlbumDebutStats, AlbumDebutStatsFile, AlbumShowStats, AlbumTourStats } from "../lib/album-stats.ts";
 import { buildTitleIndex, normalizeSongTitle } from "../lib/song-title.ts";
 import { SONGS, type Song } from "../lib/songs.ts";
-import type { NormalizedSetlist, SetlistsFile } from "./setlistfm.ts";
+import type { NormalizedSetlist, NormalizedSong, SetlistsFile } from "./setlistfm.ts";
 
 const args = process.argv.slice(2);
 const opt = (name: string) => {
@@ -26,6 +27,7 @@ const opt = (name: string) => {
   return i >= 0 ? args[i + 1] : undefined;
 };
 const inPath = opt("in") ?? "data/setlists-history.json";
+const manualPath = opt("manual") ?? "data/manual-setlists.json";
 const outPath = opt("out") ?? "lib/album-debut-stats.json";
 
 /** これ未満の曲数の公演はフェス・TV とみなして「ツアー」に数えない */
@@ -41,17 +43,70 @@ try {
   process.exit(1);
 }
 
+/** 手入力セトリ（data/manual-setlists.json）の 1 公演 */
+interface ManualSetlist {
+  id: string;
+  date: string;
+  tour: string | null;
+  venue: string;
+  city: string;
+  url: string;
+  source: string;
+  orderReliable: boolean;
+  songs: string[];
+  encore: string[];
+}
+interface ManualSetlistsFile {
+  note: string;
+  setlists: ManualSetlist[];
+}
+
+type SourcedSetlist = NormalizedSetlist & { source: "setlist.fm" | "manual"; sourceNote: string | null };
+
+function fromManual(m: ManualSetlist): SourcedSetlist {
+  const songs: NormalizedSong[] = [
+    ...m.songs.map((title, i): NormalizedSong => ({ order: i + 1, title, encore: null, isTape: false })),
+    ...m.encore.map((title, i): NormalizedSong => ({ order: m.songs.length + i + 1, title, encore: 1, isTape: false })),
+  ];
+  return { id: m.id, date: m.date, tour: m.tour, venue: m.venue, city: m.city, url: m.url, songs, source: "manual", sourceNote: m.source };
+}
+
+let manual: ManualSetlistsFile = { note: "", setlists: [] };
+try {
+  manual = JSON.parse(readFileSync(manualPath, "utf8")) as ManualSetlistsFile;
+} catch {
+  console.warn(`${manualPath} が無いので setlist.fm のデータだけで集計する`);
+}
+
 const byKey = buildTitleIndex(SONGS, (m) => console.warn(`警告: ${m}`));
+for (const a of FULL_ALBUMS) {
+  for (const id of a.tracks) {
+    if (!SONGS.some((s) => s.id === id)) {
+      console.error(`lib/albums.ts の ${a.album} に songs.ts に無い id "${id}" がある`);
+      process.exit(1);
+    }
+  }
+}
+// POPS は songs.ts の pops フラグと同じ集合のはず
+const popsFlagged = SONGS.filter((s) => s.pops).map((s) => s.id).sort();
+const popsTracks = [...(FULL_ALBUMS.find((a) => a.album === "POPS")?.tracks ?? [])].sort();
+if (JSON.stringify(popsFlagged) !== JSON.stringify(popsTracks)) {
+  console.warn(`警告: lib/albums.ts の POPS.tracks と songs.ts の pops フラグがずれている`);
+}
 const resolve = (title: string): Song | undefined => byKey.get(normalizeSongTitle(title));
 const round = (x: number) => Math.round(x * 1000) / 1000;
 const addDays = (iso: string, days: number) => new Date(new Date(`${iso}T00:00:00Z`).getTime() + days * 86_400_000).toISOString().slice(0, 10);
 
-const shows = [...file.setlists].sort((a, b) => a.date.localeCompare(b.date));
+// setlist.fm と手入力を合わせる。同じ日付・会場の公演が両方にあれば setlist.fm を優先
+const fmShows: SourcedSetlist[] = file.setlists.map((s) => ({ ...s, source: "setlist.fm", sourceNote: null }));
+const fmDates = new Set(fmShows.map((s) => `${s.date}|${normalizeSongTitle(s.venue)}`));
+const manualShows = manual.setlists.filter((m) => !fmDates.has(`${m.date}|${normalizeSongTitle(m.venue)}`)).map(fromManual);
+const shows: SourcedSetlist[] = [...fmShows, ...manualShows].sort((a, b) => a.date.localeCompare(b.date));
 const lastDataDate = shows.at(-1)?.date ?? file.since;
 const unmatched = new Map<string, number>();
 
 /** 1 公演ぶんの新アルバム曲の数え上げ */
-function countShow(show: NormalizedSetlist, trackIds: Set<string>, preReleased: Set<string>): AlbumShowStats {
+function countShow(show: SourcedSetlist, trackIds: Set<string>, preReleased: Set<string>): AlbumShowStats {
   const played = show.songs.filter((s) => !s.isTape);
   const newAlbumSongIds: string[] = [];
   for (const entry of played) {
@@ -67,6 +122,8 @@ function countShow(show: NormalizedSetlist, trackIds: Set<string>, preReleased: 
     venue: show.venue,
     tour: show.tour,
     url: show.url,
+    source: show.source,
+    sourceNote: show.sourceNote,
     songs: played.length,
     newAlbumSongs: newAlbumSongIds.length,
     newAlbumShare: round(newAlbumSongIds.length / played.length),
@@ -76,8 +133,8 @@ function countShow(show: NormalizedSetlist, trackIds: Set<string>, preReleased: 
   };
 }
 
-const albums: AlbumDebutStats[] = FULL_ALBUMS.map(({ album, released }) => {
-  const tracks = SONGS.filter((s) => s.album === album);
+const albums: AlbumDebutStats[] = FULL_ALBUMS.map(({ album, released, tracks: trackList }) => {
+  const tracks = trackList.map((id) => SONGS.find((s) => s.id === id)!);
   const trackIds = new Set(tracks.map((s) => s.id));
   const releaseYear = Number(released.slice(0, 4));
 
@@ -122,6 +179,7 @@ const albums: AlbumDebutStats[] = FULL_ALBUMS.map(({ album, released }) => {
     from: perShow[0].date,
     to: perShow.at(-1)!.date,
     tourName: tourShows.find((s) => s.tour)?.tour ?? null,
+    sources: [...new Set(perShow.map((s) => s.source))],
     avgSongs: avg((s) => s.songs),
     avgNewAlbumSongs: avg((s) => s.newAlbumSongs),
     avgNewAlbumShare: avg((s) => s.newAlbumShare),
@@ -138,13 +196,16 @@ const mean = (xs: number[]) => (xs.length ? round(xs.reduce((a, b) => a + b, 0) 
 
 const out: AlbumDebutStatsFile = {
   generatedAt: new Date().toISOString(),
-  source: "setlist.fm",
+  source: "setlist.fm + manual",
   dataRange: { since: file.since, until: lastDataDate },
+  manualShows: manualShows.map((s) => ({ date: s.date, venue: s.venue, url: s.url })),
   rule: { oneManMinSongs: ONE_MAN_MIN_SONGS, tourWindowDays: TOUR_WINDOW_DAYS },
   summary: {
     measuredAlbums: measured.map((a) => a.album),
     noDataAlbums: albums.filter((a) => a.status === "no-data").map((a) => a.album),
     firstShowShare: mean(measured.map((a) => a.firstShow!.newAlbumShare)),
+    latestFirstShowShare: measured.at(-1)?.firstShow?.newAlbumShare ?? null,
+    latestMeasuredAlbum: measured.at(-1)?.album ?? null,
     tourShare: mean(measured.map((a) => a.tour!.avgNewAlbumShare)),
     preReleasedFirstShowRate: mean(
       measured.filter((a) => a.preReleased.length > 0).map((a) => a.firstShow!.preReleasedPlayed / a.preReleased.length),
@@ -163,7 +224,7 @@ writeFileSync(outPath, JSON.stringify(out, null, 2) + "\n");
 // ---- 報告 ----
 const titleOf = (id: string) => SONGS.find((s) => s.id === id)?.title ?? id;
 const pct = (x: number) => `${Math.round(x * 100)}%`;
-console.log(`データ範囲: ${file.since} 〜 ${lastDataDate}（${shows.length} 公演）`);
+console.log(`データ範囲: ${file.since} 〜 ${lastDataDate}（setlist.fm ${fmShows.length} 公演 + 手入力 ${manualShows.length} 公演）`);
 console.log(`ルール: 発売日から ${TOUR_WINDOW_DAYS} 日以内・${ONE_MAN_MIN_SONGS} 曲以上の公演を「発売直後のツアー」とする\n`);
 for (const a of albums) {
   console.log(`■ ${a.album}（${a.released}）収録 ${a.trackCount} 曲 = 先行 ${a.preReleased.length} + アルバム曲 ${a.albumOnly.length}`);
@@ -172,7 +233,7 @@ for (const a of albums) {
   if (a.status === "measured" && a.firstShow && a.tour) {
     const f = a.firstShow;
     console.log(
-      `   初日 ${f.date} ${f.venue}: ${f.newAlbumSongs} / ${f.songs} 曲 = ${pct(f.newAlbumShare)}` +
+      `   初日 ${f.date} ${f.venue}（${f.source}）: ${f.newAlbumSongs} / ${f.songs} 曲 = ${pct(f.newAlbumShare)}` +
         `（先行 ${f.preReleasedPlayed} / ${a.preReleased.length}、アルバム曲 ${f.albumOnlyPlayed} / ${a.albumOnly.length}）`,
     );
     console.log(`   演奏: ${f.newAlbumSongIds.map(titleOf).join(" / ")}`);
@@ -183,7 +244,8 @@ for (const a of albums) {
   }
 }
 console.log(
-  `\nまとめ: 初日の新アルバム曲比率 ${out.summary.firstShowShare === null ? "-" : pct(out.summary.firstShowShare)}` +
+  `\nまとめ: 初日の新アルバム曲比率 平均 ${out.summary.firstShowShare === null ? "-" : pct(out.summary.firstShowShare)}` +
+    `、直近 ${out.summary.latestMeasuredAlbum ?? "-"} ${out.summary.latestFirstShowShare === null ? "-" : pct(out.summary.latestFirstShowShare)}` +
     ` / ツアー平均 ${out.summary.tourShare === null ? "-" : pct(out.summary.tourShare)}` +
     `（計測できたアルバム: ${out.summary.measuredAlbums.join(", ") || "なし"}）`,
 );

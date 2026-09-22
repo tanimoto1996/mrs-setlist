@@ -48,13 +48,23 @@ npm run fetch:setlists:history   # setlist.fm の全期間 → data/setlists-his
 npm run build:album-stats        # → lib/album-debut-stats.json（アルバムごとの初日・ツアー平均の新譜曲比率を標準出力にも出す）
 ```
 
-- 対象は `lib/albums.ts` のフルアルバム（TWELVE / Mrs. GREEN APPLE / ENSEMBLE / Attitude / ANTENNA / POPS）。
+- 対象と収録曲は `lib/albums.ts` の `FULL_ALBUMS`（TWELVE / Mrs. GREEN APPLE / ENSEMBLE / Attitude / ANTENNA / POPS）。
+  収録曲は Wikipedia とユニバーサル ミュージックの商品ページで照合した正式なリストで、`songs.ts` の `album`（最初に収録されたアルバム）とは別。
 - 「発売直後のツアー」= 発売日から 120 日以内で、演奏曲 15 曲以上の公演（フェス・TV 出演は除く）。
 - 収録曲は「先行シングル（発売前に演奏実績あり）」と「アルバム初出」に分けて数える。
-- setlist.fm に Phase 1（2016〜2020）のワンマン公演がほぼ登録されていないため、いま測れているのは
-  **ANTENNA → 2023-07-08 さいたまスーパーアリーナ初日: 24 曲中 8 曲（33%）、ツアー 8 公演平均 32%** だけ。
-  この 33% を `lib/jev.ts` の `buildState()` が `newAlbumHistory` と guidance（「POPS 曲は 8 曲前後」）として Jev / Gemini に渡し、
-  画面の New Album Odds カードにも同じ数字を出す。
+- setlist.fm には Phase 1（2016〜2020）のワンマン公演がほぼ無いので、`data/manual-setlists.json` に LiveFans などの公開セトリから
+  手で起こした公演（出典 URL 付き）を足している。曲別の演奏実績（`song-stats.json`）には使わない。
+
+| アルバム | 初日 | 新譜曲 | ツアー平均 | 出典 |
+| --- | --- | --- | --- | --- |
+| TWELVE (2016-01-13) | 2016-03-01 千葉LOOK | 10 / 15 = 67% | 2 公演 63% | ファンブログ・Fanplus |
+| Mrs. GREEN APPLE (2017-01-11) | 2017-03-01 CLUB CITTA'川崎 | 9 / 18 = 50% | 2 公演 50% | LiveFans |
+| ENSEMBLE (2018-04-18) | 2018-05-12 パルテノン多摩 | 10 / 22 = 46% | 4 公演 45% | LiveFans |
+| Attitude (2019-10-02) | 2019-12-07 横浜アリーナ | 12 / 23 = 52% | 3 公演 52% | LiveFans（曲順は出典で食い違い） |
+| ANTENNA (2023-07-05) | 2023-07-08 さいたまスーパーアリーナ | 8 / 24 = 33% | 8 公演 35% | setlist.fm |
+
+  平均 50%、直近の ANTENNA は 33%。`lib/jev.ts` の `buildState()` はこの両方を `newAlbumHistory` に入れ、guidance では
+  「POPS 曲は 8〜12 曲、現在の状況は直近の比率に近い」と渡す。画面の New Album Odds カードも同じ数字を出す。
 
 ## Gemini と比べる
 

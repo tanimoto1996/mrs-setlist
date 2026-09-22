@@ -1,0 +1,173 @@
+{
+  "note": "setlist.fm に登録が無い公演を、公開されているセトリ情報・ライブレポートから手で起こしたもの。1 公演ごとに出典 URL を付ける。scripts/build-album-debut-stats.ts（アルバム別の新譜曲比率）だけが読み、曲別の演奏実績（lib/song-stats.json）には使わない。曲順の出典が食い違う公演は orderReliable=false にして、曲の集合だけを信用する。",
+  "setlists": [
+    {
+      "id": "manual-2016-03-01",
+      "date": "2016-03-01",
+      "tour": "TWELVE TOUR ～春宵一刻とモノテトラ～",
+      "venue": "千葉LOOK",
+      "city": "千葉",
+      "url": "https://ameblo.jp/hapiayutt-gateaufraise/entry-12135023787.html",
+      "source": "ファンブログ（ツアー初日の参加レポート）。LiveFans の公演ページ https://www.livefans.jp/events/560819 にはセトリ未登録",
+      "orderReliable": true,
+      "songs": ["愛情と矛先", "Speaking", "アンゼンパイ", "キコリ時計", "藍", "私", "No.7", "ミスカサズ", "うブ", "リスキーゲーム", "SimPle", "StaRt", "パブリック"],
+      "encore": ["我逢人", "庶幾の唄"]
+    },
+    {
+      "id": "manual-2016-04-10",
+      "date": "2016-04-10",
+      "tour": "TWELVE TOUR ～春宵一刻とモノテトラ～",
+      "venue": "赤坂BLITZ",
+      "city": "東京",
+      "url": "https://music.fanplus.co.jp/news/20160407349ad8d3a",
+      "source": "Fanplus Music ライブレポート（ツアーファイナル）",
+      "orderReliable": true,
+      "songs": ["愛情と矛先", "SimPle", "アンゼンパイ", "キコリ時計", "ミスカサズ", "私", "HeLLo", "春愁", "Speaking", "うブ", "No.7", "リスキーゲーム", "StaRt", "パブリック"],
+      "encore": ["我逢人", "庶幾の唄", "サママ・フェスティバル！"]
+    },
+    {
+      "id": "manual-2017-03-01",
+      "date": "2017-03-01",
+      "tour": "MGA MEET YOU TOUR",
+      "venue": "CLUB CITTA'川崎",
+      "city": "川崎",
+      "url": "https://www.livefans.jp/events/741975",
+      "source": "LiveFans",
+      "orderReliable": true,
+      "songs": ["絶世生物", "VIP", "ツキマシテハ", "アンゼンパイ", "Oz", "Just a Friend", "鯨の唄", "春愁", "Lion", "うブ", "WHOO WHOO WHOO", "In the Morning", "サママ・フェスティバル！", "愛情と矛先", "StaRt", "JOURNEY"],
+      "encore": ["Speaking", "庶幾の唄"]
+    },
+    {
+      "id": "manual-2017-03-02",
+      "date": "2017-03-02",
+      "tour": "MGA MEET YOU TOUR",
+      "venue": "CLUB CITTA'川崎",
+      "city": "川崎",
+      "url": "https://www.livefans.jp/events/741977",
+      "source": "LiveFans",
+      "orderReliable": true,
+      "songs": ["Oz", "VIP", "ツキマシテハ", "アンゼンパイ", "絶世生物", "Just a Friend", "鯨の唄", "春愁", "Lion", "うブ", "WHOO WHOO WHOO", "In the Morning", "サママ・フェスティバル！", "ナニヲナニヲ", "StaRt", "JOURNEY"],
+      "encore": ["Speaking", "庶幾の唄"]
+    },
+    {
+      "id": "manual-2017-05-19",
+      "date": "2017-05-19",
+      "tour": "MGA MEET YOU TOUR",
+      "venue": "東京国際フォーラム ホールA",
+      "city": "東京",
+      "url": "https://www.livefans.jp/events/741995",
+      "source": "LiveFans（ツアーファイナル）",
+      "orderReliable": true,
+      "songs": ["Oz", "HeLLo", "おもちゃの兵隊", "Lion", "アンゼンパイ", "soFt-dRink", "絶世生物", "ツキマシテハ", "Just a Friend", "鯨の唄", "我逢人", "Hug", "VIP", "うブ", "WHOO WHOO WHOO", "スマイロブドリーマ", "SwitCh", "Speaking", "サママ・フェスティバル！", "In the Morning", "JOURNEY"],
+      "encore": ["StaRt", "どこかで日は昇る", "庶幾の唄"]
+    },
+    {
+      "id": "manual-2018-05-12",
+      "date": "2018-05-12",
+      "tour": "ENSEMBLE TOUR",
+      "venue": "パルテノン多摩 大ホール",
+      "city": "東京",
+      "url": "https://www.livefans.jp/events/892120",
+      "source": "LiveFans（ツアー初日）。Love me, Love you は 1 番サビまでと 2 番からの 2 回に分けて演奏",
+      "orderReliable": true,
+      "songs": ["FACTORY", "StaRt", "Lion", "キコリ時計", "Oz", "Coffee", "アウフヘーベン", "パブリック", "鯨の唄", "Love me, Love you", "WanteD! WanteD!", "WHOO WHOO WHOO", "L.P", "REVERSE", "救出論", "SPLASH!!!", "Speaking", "They are", "PARTY", "Love me, Love you"],
+      "encore": ["春愁", "我逢人"]
+    },
+    {
+      "id": "manual-2018-05-19",
+      "date": "2018-05-19",
+      "tour": "ENSEMBLE TOUR",
+      "venue": "サンポートホール高松 大ホール",
+      "city": "高松",
+      "url": "https://www.livefans.jp/events/892121",
+      "source": "LiveFans",
+      "orderReliable": true,
+      "songs": ["パブリック", "鯨の唄", "StaRt", "Lion", "Oz", "Love me, Love you", "アウフヘーベン", "Coffee", "キコリ時計", "FACTORY", "WanteD! WanteD!", "WHOO WHOO WHOO", "L.P", "REVERSE", "救出論", "SPLASH!!!", "Speaking", "They are", "PARTY", "Love me, Love you"],
+      "encore": ["春愁", "我逢人"]
+    },
+    {
+      "id": "manual-2018-05-26",
+      "date": "2018-05-26",
+      "tour": "ENSEMBLE TOUR",
+      "venue": "大宮ソニックシティ 大ホール",
+      "city": "さいたま",
+      "url": "https://www.livefans.jp/events/892131",
+      "source": "LiveFans",
+      "orderReliable": true,
+      "songs": ["FACTORY", "StaRt", "Lion", "キコリ時計", "Oz", "Coffee", "アウフヘーベン", "パブリック", "鯨の唄", "Love me, Love you", "WanteD! WanteD!", "WHOO WHOO WHOO", "L.P", "REVERSE", "救出論", "SPLASH!!!", "Speaking", "They are", "PARTY", "Love me, Love you"],
+      "encore": ["春愁", "我逢人"]
+    },
+    {
+      "id": "manual-2018-07-15",
+      "date": "2018-07-15",
+      "tour": "ENSEMBLE TOUR",
+      "venue": "福岡サンパレス",
+      "city": "福岡",
+      "url": "https://www.livefans.jp/events/892141",
+      "source": "LiveFans",
+      "orderReliable": true,
+      "songs": ["StaRt", "Coffee", "FACTORY", "Love me, Love you", "Oz", "パブリック", "アウフヘーベン", "キコリ時計", "鯨の唄", "Lion", "WanteD! WanteD!", "WHOO WHOO WHOO", "L.P", "REVERSE", "救出論", "SPLASH!!!", "Speaking", "They are", "PARTY", "Love me, Love you"],
+      "encore": ["春愁", "我逢人", "青と夏"]
+    },
+    {
+      "id": "manual-2018-09-08",
+      "date": "2018-09-08",
+      "tour": "ENSEMBLE TOUR ～フェット・ドゥ・ラ・ルージュ～",
+      "venue": "幕張メッセ 国際展示場",
+      "city": "千葉",
+      "url": "https://www.billboard-japan.com/d_news/detail/67513/2",
+      "source": "Billboard JAPAN ライブレポート（ツアーファイナル 2DAYS の 1 日目）。「未発表曲」はタイトル不明のためそのまま",
+      "orderReliable": true,
+      "songs": ["Love me, Love you", "キコリ時計", "ナニヲナニヲ", "StaRt", "リスキーゲーム", "Oz", "道徳と皿", "パブリック", "アウフヘーベン", "Coffee", "鯨の唄", "FACTORY", "ミスカサズ", "WanteD! WanteD!", "うブ", "WHOO WHOO WHOO", "L.P", "REVERSE", "青と夏", "未発表曲", "SPLASH!!!", "Speaking", "They are", "PARTY", "Love me, Love you"],
+      "encore": ["光のうた", "はじまり", "我逢人"]
+    },
+    {
+      "id": "manual-2018-09-09",
+      "date": "2018-09-09",
+      "tour": "ENSEMBLE TOUR ～ソワレ・ドゥ・ラ・ブリュ～",
+      "venue": "幕張メッセ 国際展示場",
+      "city": "千葉",
+      "url": "https://www.billboard-japan.com/d_news/detail/67513/2",
+      "source": "Billboard JAPAN ライブレポート（ツアーファイナル 2DAYS の 2 日目）",
+      "orderReliable": true,
+      "songs": ["Love me, Love you", "キコリ時計", "愛情と矛先", "StaRt", "HeLLo", "Oz", "日々と君", "パブリック", "アウフヘーベン", "Coffee", "鯨の唄", "FACTORY", "ツキマシテハ", "WanteD! WanteD!", "うブ", "WHOO WHOO WHOO", "L.P", "REVERSE", "青と夏", "未発表曲", "SPLASH!!!", "Speaking", "They are", "PARTY", "Love me, Love you"],
+      "encore": ["光のうた", "CONFLICT", "はじまり", "我逢人"]
+    },
+    {
+      "id": "manual-2019-12-07",
+      "date": "2019-12-07",
+      "tour": "Mrs. GREEN APPLE ARENA TOUR / エデンの園",
+      "venue": "横浜アリーナ",
+      "city": "横浜",
+      "url": "https://www.livefans.jp/events/1144409",
+      "source": "LiveFans（ツアー初日）。曲の集合は もとりょこblog https://motoryokoblog.com/?p=14860 と一致するが、序盤の曲順は出典ごとに違う（やわろっく https://www.yawarakai.com/28667 は青と夏を含まない 22 曲）",
+      "orderReliable": false,
+      "songs": ["Viking", "藍", "アンゼンパイ", "VIP", "WaLL FloWeR", "愛情と矛先", "Soup", "ProPose", "インフェルノ", "クダリ", "REVERSE", "ア・プリオリ", "ナニヲナニヲ", "Ke-Mo Sah-Bee", "僕のこと", "StaRt", "WanteD! WanteD!", "青と夏", "CHEERS", "lovin'", "Folktale"],
+      "encore": ["Circle", "我逢人"]
+    },
+    {
+      "id": "manual-2019-12-08",
+      "date": "2019-12-08",
+      "tour": "Mrs. GREEN APPLE ARENA TOUR / エデンの園",
+      "venue": "横浜アリーナ",
+      "city": "横浜",
+      "url": "https://www.livefans.jp/events/1144410",
+      "source": "LiveFans。映像作品『EDEN no SONO Live at YOKOHAMA ARENA 2019.12.08』の収録日",
+      "orderReliable": true,
+      "songs": ["ProPose", "藍", "Soup", "アンゼンパイ", "VIP", "インフェルノ", "WaLL FloWeR", "愛情と矛先", "Viking", "クダリ", "REVERSE", "ア・プリオリ", "ナニヲナニヲ", "Ke-Mo Sah-Bee", "僕のこと", "StaRt", "WanteD! WanteD!", "青と夏", "CHEERS", "lovin'", "Folktale"],
+      "encore": ["Circle", "我逢人"]
+    },
+    {
+      "id": "manual-2020-01-23",
+      "date": "2020-01-23",
+      "tour": "Mrs. GREEN APPLE ARENA TOUR / エデンの園",
+      "venue": "ドルフィンズアリーナ 第1競技場",
+      "city": "名古屋",
+      "url": "https://www.livefans.jp/events/1144411",
+      "source": "LiveFans",
+      "orderReliable": true,
+      "songs": ["ProPose", "藍", "Soup", "アンゼンパイ", "VIP", "インフェルノ", "WaLL FloWeR", "愛情と矛先", "Viking", "クダリ", "REVERSE", "ア・プリオリ", "ナニヲナニヲ", "Ke-Mo Sah-Bee", "僕のこと", "StaRt", "WanteD! WanteD!", "青と夏", "CHEERS", "lovin'", "Folktale"],
+      "encore": ["Circle", "我逢人"]
+    }
+  ]
+}

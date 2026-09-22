@@ -26,6 +26,7 @@ paths:
 - 文言は日本語。一人称は「俺」、Jev は「Jev」、Gemini は「Gemini」で統一する。
 - rail の先頭にある New Album Odds（`odds-heading`、`NewAlbumOdds` コンポーネント）は `lib/album-stats.ts` の数字を
   そのまま出す。Jev の state と同じ値なので、画面側で丸め方や計算を変えない（変えるなら `lib/album-stats.ts`）。
+  手入力（`source: "manual"`）の実績行には出典リンク（`aria-label="<アルバム> 初日セトリの出典"`）を必ず出す。
 - 予想カードは Jev（`jev-heading`）と Gemini（`gemini-heading`）で同じ構成（見出し・ボタン・アラート・`SetlistView`・モデル名とトークン）。
   片方だけ変えない。`Saved.jev` / `Saved.gemini` は同じ `PredictionResult` 型で、`ask(engine)` が `/api/predict` に `engine` を付けて呼ぶ。
 - アクセシビリティ: タブ UI には `role="tablist"` / `aria-selected`、トグルには `aria-pressed`、
