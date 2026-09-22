@@ -1,0 +1,75 @@
+@import "tailwindcss";
+
+@theme {
+  --color-mist: #e7e4ee;
+  --color-paper: #fbfafd;
+  --color-ink: #251e36;
+  --color-dusk: #8e88a0;
+  --color-apple: #6fa84f;
+  --color-apple-deep: #3f7a2a;
+  --color-rouge: #c63d3a;
+  --font-display: var(--font-display), "Hiragino Mincho ProN", serif;
+  --font-body: var(--font-body), "Hiragino Sans", sans-serif;
+  --shadow-cast: 4px 4px 0 0 var(--color-ink);
+  --shadow-cast-sm: 2px 2px 0 0 var(--color-ink);
+  --shadow-cast-apple: 4px 4px 0 0 var(--color-apple-deep);
+}
+
+html {
+  background: var(--color-mist);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+}
+
+body {
+  min-height: 100dvh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* SHADOWS: タイトル文字の影を、影そのものとして見せる */
+@layer components {
+  .shadow-title {
+    font-family: var(--font-display);
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    line-height: 0.9;
+    text-shadow:
+      0.06em 0.06em 0 var(--color-apple),
+      0.12em 0.12em 0 var(--color-ink);
+  }
+
+  .cast {
+    background: var(--color-paper);
+    border: 2px solid var(--color-ink);
+    box-shadow: var(--shadow-cast);
+  }
+
+  .cast-sm {
+    background: var(--color-paper);
+    border: 1.5px solid var(--color-ink);
+    box-shadow: var(--shadow-cast-sm);
+  }
+
+  /* 選択した曲は影が縮んで「押し込まれた」状態になる */
+  .pressed {
+    transform: translate(2px, 2px);
+    box-shadow: none;
+    background: var(--color-apple);
+    color: var(--color-paper);
+  }
+}
+
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 3px solid var(--color-apple);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .cast-sm,
+  .pressed {
+    transition: transform 120ms ease, box-shadow 120ms ease, background-color 120ms ease;
+  }
+}
