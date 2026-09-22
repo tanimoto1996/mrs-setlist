@@ -99,6 +99,7 @@ function buildPrompt(state: ReturnType<typeof buildState>) {
     `slot: ${slots} のいずれかのキー。`,
     "confidence: その判断の確信度（0〜1）。",
     `expectedSetlistSize（${state.event.expectedSetlistSize} 曲）を目安に、play=3 を付ける曲を絞り込んでください。全曲に高い値を付けないこと。`,
+    "play と slot は矛盾させないこと: slot=skip の曲は play を 0 か 1 にし、play=3 の曲には opener / middle / encore のいずれかを付ける。",
     "1 曲も抜かさず、songId は state.songs[].id をそのまま返してください。",
     "",
     "state:",

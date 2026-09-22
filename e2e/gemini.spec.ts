@@ -37,6 +37,18 @@ test.describe("Gemini に予想させて Jev と比べる（API はモック）"
     await expect(ui.gemini(page).getByText(`Jev と同じ曲 ${SETLIST_SIZE} / ${SETLIST_SIZE}`)).toBeVisible();
   });
 
+  test("slot=skip の曲が上位に混ざっても見出しは Opening → Middle → Encore の 3 つだけ", async ({ page, seed }) => {
+    // 並べ替え（toSetlist）は skip を middle 扱いにするので、表示側も同じ扱いでないと Middle / Others が交互に出る
+    const gemini = fakePrediction("e2e-fake-gemini");
+    gemini.predictions = gemini.predictions.map((p) => (p.songId === "kyohan" || p.songId === "lulu" ? { ...p, slot: "skip" } : p));
+    await seed({ gemini });
+    await ui.open(page);
+
+    const section = ui.gemini(page);
+    await expect(ui.tracks(section)).toHaveCount(SETLIST_SIZE);
+    await expect(section.locator("li.slot-label")).toHaveText(["Opening", "Middle", "Encore"]);
+  });
+
   test("失敗したら Gemini のカードだけにアラートが出る", async ({ page, mockJev }) => {
     await mockJev({ status: 500, error: "テスト用: GEMINI_API_KEY が未設定" });
     await ui.open(page);

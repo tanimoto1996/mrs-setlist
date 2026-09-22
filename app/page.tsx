@@ -654,17 +654,20 @@ function SetlistView({
   const actualSet = new Set(actual);
   const judged = actual.length > 0;
 
-  // Jev の並びはスロット順なので、スロットが切り替わる所に小見出しを挟む
+  // Jev / Gemini の並びはスロット順なので、スロットが切り替わる所に小見出しを挟む。
+  // 並べ替え（lib/jev.ts の toSetlist）は skip を middle 扱いにしているので、表示も同じ扱いにしないと
+  // Middle / Others が交互に出て見出しが重複する（key の重複警告にもなる）
   const rows: React.ReactNode[] = [];
   let lastSlot: Slot | null = null;
   ids.forEach((id, i) => {
     const s = SONG_MAP.get(id);
     const p = likelihood?.get(id);
-    if (p && p.slot !== lastSlot) {
-      lastSlot = p.slot;
+    const slot: Slot | null = p ? (p.slot === "skip" ? "middle" : p.slot) : null;
+    if (slot && slot !== lastSlot) {
+      lastSlot = slot;
       rows.push(
-        <li key={`slot-${p.slot}`} className="slot-label" aria-hidden="true">
-          {SLOT_LABEL[p.slot]}
+        <li key={`slot-${slot}-${i}`} className="slot-label" aria-hidden="true">
+          {SLOT_LABEL[slot]}
         </li>,
       );
     }

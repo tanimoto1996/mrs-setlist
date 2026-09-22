@@ -64,3 +64,11 @@
 - `responseJsonSchema` を Gemini が受け付けない場合（モデルや API 版の違い）は、`generationConfig.responseSchema` に
   切り替える。エラー本文はそのまま画面のアラートに出る。
 - Gemini の思考トークン（`thoughtsTokenCount`）は out に合算している。コストを見るなら分けてもよい。
+
+## 追記（同日）: Gemini の結果で slot 見出しが重複した
+
+- 症状: Gemini の予想を表示すると React が `slot-middle` / `slot-skip` の key 重複を警告し、Middle と Others の見出しが交互に出た。
+- 原因: `toSetlist()` は skip を middle 扱いで並べるが、`SetlistView` は元の slot で見出しを切っていた。Gemini は
+  play が高いのに slot=skip を返す曲が Jev より多く、上位 24 曲の中で middle と skip が混ざった。
+- 対処: `SetlistView` の見出し判定も skip を middle 扱いにし、key に行番号を含めた。あわせて Gemini への指示に
+  「slot=skip なら play は 0 か 1、play=3 なら opener / middle / encore のどれか」と矛盾禁止を足した。
