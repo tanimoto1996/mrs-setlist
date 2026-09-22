@@ -47,6 +47,19 @@ npm run dev
 OpenRouter 経由にするなら `TYPESAFE_BASE_URL=https://openrouter.ai/api` と
 OpenRouter のキーを `TYPESAFE_API_KEY` に入れる。
 
+## テスト（E2E）と作業の流れ
+
+画面の振る舞いは Playwright の E2E（`e2e/`）で担保する。Jev の API はテストでは必ずモックする（本物は有料）。
+
+```bash
+npm run test:e2e       # フル実行。dev サーバーが 3000 で動いていればそれを使う
+npm run test:e2e:ui    # UI モードでデバッグ
+```
+
+ローカルではシステムの Google Chrome を使う（macOS 12 では Playwright 同梱の Chromium が入らないため）。
+実装したら **ドキュメント・作業記録（`docs/worklog/`）→ typecheck → E2E → commit → push** の順で締める。
+E2E を通していない内容の `git push` は Claude Code の hook が止める。詳細は `docs/workflow.md` と `docs/e2e.md`。
+
 ## デプロイ
 
 Vercel にそのまま載る。環境変数 `TYPESAFE_API_KEY` を設定するだけ。

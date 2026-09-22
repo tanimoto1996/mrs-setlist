@@ -209,8 +209,9 @@ export default function Page() {
         </div>
       </div>
 
-      {/* ---- 本体（グレーの帯） ---- */}
-      <main className="band-fog">
+      {/* ---- 本体（グレーの帯） ----
+          aria-busy は localStorage から予想を読み戻すまで true。E2E（e2e/fixtures.ts の ui.open）はこれが false になるのを待つ */}
+      <main className="band-fog" aria-busy={!hydrated}>
         <div className="mx-auto max-w-7xl px-5 pb-32 pt-12 sm:px-8 lg:pt-16">
           <div className="grid gap-12 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)] lg:gap-10">
             {/* ---- 全曲ライブラリ ---- */}

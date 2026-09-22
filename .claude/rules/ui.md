@@ -26,4 +26,6 @@ paths:
 - アクセシビリティ: タブ UI には `role="tablist"` / `aria-selected`、トグルには `aria-pressed`、
   アイコンだけのボタンには `aria-label`、進捗には `role="progressbar"` を付ける慣習を維持。
   `prefers-reduced-motion: reduce` で transform 系アニメーションを止める。
+- `<main aria-busy={!hydrated}>` は localStorage を読み戻すまで true。E2E の `ui.open`（`e2e/fixtures.ts`）が
+  これが false になるのを待ってから操作するので、外したり別の要素に移したりしない（移すなら fixtures も直す）。
 - Next.js 16 の API は学習データと違う可能性がある。迷ったら `node_modules/next/dist/docs/` を読む。

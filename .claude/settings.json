@@ -1,16 +1,27 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "enableAllProjectMcpServers": true,
   "permissions": {
     "allow": [
       "Bash(npm run typecheck)",
       "Bash(npm run build)",
       "Bash(npm run dev*)",
       "Bash(npm install)",
+      "Bash(npm run test:e2e*)",
+      "Bash(npx playwright *)",
       "Bash(node --no-warnings .claude/skills/*)",
+      "Bash(node --no-warnings scripts/*)",
       "Bash(git status*)",
       "Bash(git diff*)",
       "Bash(git log*)",
-      "Bash(git check-ignore*)"
+      "Bash(git check-ignore*)",
+      "Bash(git rev-parse*)",
+      "Bash(git rev-list*)",
+      "Bash(git branch*)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git push)",
+      "Bash(git push origin *)"
     ],
     "deny": [
       "Read(./.env)",
@@ -20,6 +31,45 @@
       "Bash(cat jev-api-key)",
       "Bash(git push --force*)",
       "Bash(git push -f*)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/pre-bash.mjs\"",
+            "timeout": 30,
+            "statusMessage": "push ゲートを確認中…"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit|NotebookEdit|Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/post-tool.mjs\"",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/stop-gate.mjs\"",
+            "timeout": 30,
+            "statusMessage": "未 push の変更が無いか確認中…"
+          }
+        ]
+      }
     ]
   }
 }

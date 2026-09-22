@@ -30,6 +30,7 @@ yarn-error.log*
 .vercel
 
 jev-api-key
+gemini-api-key
 
 # Claude Code（個人設定・一時ファイル）
 .claude/settings.local.json
@@ -37,3 +38,11 @@ jev-api-key
 
 # setlist.fm の生キャッシュ（npm run fetch:setlists が再生成する）
 /data/raw/
+
+
+
+# Playwright（E2E）の成果物
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
