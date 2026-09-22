@@ -28,3 +28,9 @@ yarn-error.log*
 
 # vercel
 .vercel
+
+jev-api-key
+
+# Claude Code（個人設定・一時ファイル）
+.claude/settings.local.json
+.claude/tmp/
