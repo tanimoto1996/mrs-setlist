@@ -43,3 +43,5 @@ npm run build:stats     # data/setlists.json を集計 → lib/song-stats.json�
 | `/predict` | ローカル dev サーバー経由で Jev に予想させ `predictions/` に保存 |
 | `/score-setlist` | 実セトリを入力して俺・Jev を採点 |
 | `/tune-jev` | Jev に渡す前提・ガイダンス・rubric を調整し、前後で比較 |
+| `/find-skills` | skills.sh からスキルを探して、日本語にして `.claude/skills/` に導入 |
+| `/modernize-ui` | 見た目・UI・UX をモダンに、ミセスらしく整えて Web Interface Guidelines で監査 |

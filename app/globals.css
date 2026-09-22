@@ -1,75 +1,507 @@
 @import "tailwindcss";
 
+/*
+ * デザイントークン。方向性は .claude/skills/modernize-ui/reference/brand.md。
+ * 公式サイト（mrsgreenapple.com）の配色に寄せる: ライムのグラデ × 白の丸角カード × 深緑の文字。
+ */
 @theme {
-  --color-mist: #e7e4ee;
-  --color-paper: #fbfafd;
-  --color-ink: #251e36;
-  --color-dusk: #8e88a0;
-  --color-apple: #6fa84f;
-  --color-apple-deep: #3f7a2a;
-  --color-rouge: #c63d3a;
-  --font-display: var(--font-display), "Hiragino Mincho ProN", serif;
-  --font-body: var(--font-body), "Hiragino Sans", sans-serif;
-  --shadow-cast: 4px 4px 0 0 var(--color-ink);
-  --shadow-cast-sm: 2px 2px 0 0 var(--color-ink);
-  --shadow-cast-apple: 4px 4px 0 0 var(--color-apple-deep);
+  --color-deep: #002928;
+  --color-forest: #235d36;
+  --color-green: #005e3c;
+  --color-lime: #a7da20;
+  --color-lime-light: #e2ff91;
+  --color-cream: #faffdf;
+  --color-mint: #e7f5cf;
+  --color-teal: #15c378;
+  --color-fog: #f4f4f4;
+  --color-line: #d1d1d1;
+  --color-dusk: #5f6b63;
+  --color-rouge: #c4083a;
+  --color-lilac: #be8ef8;
+  --color-sky: #54adff;
+  --color-orange: #ffa223;
+  --color-aqua: #31c9ba;
+
+  --font-latin: var(--font-jakarta), "Plus Jakarta Sans", sans-serif;
+  --font-body: var(--font-zen), "Zen Kaku Gothic New", "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+
+  --shadow-card: 0 2px 3px rgb(0 0 0 / 0.06);
+  --shadow-float: 0 13px 13px -8px rgb(0 0 0 / 0.17);
+
+  --animate-rise: rise 600ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  --animate-shimmer: shimmer 1.4s linear infinite;
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes shimmer {
+    to {
+      background-position: 200% 0;
+    }
+  }
 }
 
 html {
-  background: var(--color-mist);
-  color: var(--color-ink);
+  background: var(--color-fog);
+  color: var(--color-deep);
   font-family: var(--font-body);
+  color-scheme: light;
 }
 
 body {
   min-height: 100dvh;
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  -webkit-tap-highlight-color: transparent;
 }
 
-/* SHADOWS: タイトル文字の影を、影そのものとして見せる */
+button,
+a,
+input,
+textarea {
+  touch-action: manipulation;
+}
+
+h1,
+h2,
+h3,
+p {
+  text-wrap: pretty;
+}
+
+::selection {
+  background: var(--color-lime-light);
+  color: var(--color-deep);
+}
+
 @layer components {
-  .shadow-title {
-    font-family: var(--font-display);
+  /* 公式のライムグラデ。ヒーローと結果セクションの地 */
+  .band-lime {
+    background: linear-gradient(45deg, var(--color-lime), #d0f752 62%, var(--color-lime-light) 78%);
+  }
+  .band-fog {
+    background: var(--color-fog);
+  }
+
+  /* 英字の見出し（News / Schedule の書体） */
+  .latin {
+    font-family: var(--font-latin);
+  }
+  .section-title {
+    font-family: var(--font-latin);
+    font-weight: 600;
+    font-size: clamp(1.75rem, 3vw, 2.25rem);
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+    color: var(--color-deep);
+  }
+  .kicker {
+    font-family: var(--font-latin);
+    font-weight: 700;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-teal);
+  }
+
+  /* キービジュアルの代わりの「ポスター」。写真は使わないので文字で作る */
+  .poster {
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+    background:
+      radial-gradient(60% 80% at 80% 20%, rgb(226 255 145 / 0.35), transparent 60%),
+      radial-gradient(50% 60% at 10% 90%, rgb(21 195 120 / 0.35), transparent 60%),
+      linear-gradient(180deg, #0b4a3a, var(--color-deep) 70%);
+    color: #fff;
+    box-shadow: var(--shadow-float);
+  }
+  .poster::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image: radial-gradient(rgb(255 255 255 / 0.08) 1px, transparent 1px);
+    background-size: 22px 22px;
+    mask-image: linear-gradient(180deg, transparent, black 40%, black 70%, transparent);
+  }
+  .wordmark {
+    font-family: var(--font-latin);
     font-weight: 800;
-    letter-spacing: 0.04em;
+    font-size: clamp(3.25rem, 10.5vw, 10rem);
+    letter-spacing: -0.035em;
     line-height: 0.9;
-    text-shadow:
-      0.06em 0.06em 0 var(--color-apple),
-      0.12em 0.12em 0 var(--color-ink);
+    background: linear-gradient(90deg, var(--color-lime-light), var(--color-lime) 60%, var(--color-teal));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
   }
 
-  .cast {
-    background: var(--color-paper);
-    border: 2px solid var(--color-ink);
-    box-shadow: var(--shadow-cast);
+  /* 白の丸角カード（radius 10px は公式と同じ） */
+  .card {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: var(--shadow-card);
   }
 
-  .cast-sm {
-    background: var(--color-paper);
-    border: 1.5px solid var(--color-ink);
-    box-shadow: var(--shadow-cast-sm);
+  /* 曲チップ */
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2.5rem;
+    padding: 0.45rem 0.9rem;
+    border-radius: 999px;
+    border: 1px solid var(--color-line);
+    background: #fff;
+    color: var(--color-deep);
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1.2;
+    text-align: left;
   }
-
-  /* 選択した曲は影が縮んで「押し込まれた」状態になる */
-  .pressed {
-    transform: translate(2px, 2px);
+  .chip:hover {
+    border-color: var(--color-teal);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-card);
+  }
+  .chip-on {
+    background: var(--color-deep);
+    border-color: var(--color-deep);
+    color: var(--color-lime-light);
+    font-weight: 700;
+  }
+  .chip-on:hover {
+    border-color: var(--color-deep);
+    transform: none;
     box-shadow: none;
-    background: var(--color-apple);
-    color: var(--color-paper);
+  }
+  .chip-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.45rem;
+    height: 1.45rem;
+    margin-left: -0.35rem;
+    border-radius: 999px;
+    background: var(--color-teal);
+    color: #fff;
+    font-family: var(--font-latin);
+    font-weight: 700;
+    font-size: 0.7rem;
+    font-variant-numeric: tabular-nums;
+  }
+  .chip-meta {
+    font-family: var(--font-latin);
+    font-size: 0.75rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    color: var(--color-teal);
+  }
+  /* 公式の「NEW」タグ */
+  .tag-new {
+    padding: 0.1rem 0.4rem;
+    border-radius: 3px;
+    background: var(--color-deep);
+    color: #fff;
+    font-family: var(--font-latin);
+    font-weight: 700;
+    font-size: 0.6rem;
+    letter-spacing: 0.05em;
+  }
+  .chip-on .tag-new {
+    background: var(--color-lime-light);
+    color: var(--color-deep);
+  }
+
+  /* 切り替え（俺の予想 / 実セトリ）とクイックフィルタ */
+  .seg {
+    display: inline-flex;
+    max-width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding: 0.25rem;
+    gap: 0.25rem;
+    border-radius: 999px;
+    border: 1px solid var(--color-line);
+    background: #fff;
+  }
+  .seg::-webkit-scrollbar {
+    display: none;
+  }
+  .seg > button {
+    flex: none;
+    padding: 0.45rem 0.95rem;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--color-dusk);
+  }
+  .seg > button:hover {
+    color: var(--color-deep);
+    background: var(--color-fog);
+  }
+  .seg > button[aria-selected="true"],
+  .seg > button[aria-pressed="true"] {
+    background: var(--color-deep);
+    color: #fff;
+    font-weight: 700;
+  }
+
+  .field {
+    width: 100%;
+    border-radius: 10px;
+    border: 1px solid var(--color-line);
+    background: #fff;
+    color: var(--color-deep);
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+  }
+  .field::placeholder {
+    color: #969696;
+  }
+  .field:hover {
+    border-color: var(--color-teal);
+  }
+
+  /* 公式の「MORE >」ボタン。深緑のピル */
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 2.9rem;
+    padding: 0.7rem 1.5rem;
+    border-radius: 999px;
+    background: var(--color-forest);
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.9rem;
+  }
+  .btn-primary:hover:not(:disabled) {
+    background: var(--color-deep);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-float);
+  }
+  .btn-primary:disabled {
+    cursor: progress;
+    background: linear-gradient(100deg, var(--color-forest) 30%, var(--color-green) 50%, var(--color-forest) 70%);
+    background-size: 200% 100%;
+    animation: var(--animate-shimmer);
+  }
+  .btn-lime {
+    background: var(--color-deep);
+    color: var(--color-lime-light);
+  }
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.5rem;
+    padding: 0.5rem 1.1rem;
+    border-radius: 999px;
+    border: 1px solid var(--color-deep);
+    color: var(--color-deep);
+    font-size: 0.85rem;
+    font-weight: 700;
+    background: transparent;
+  }
+  .btn-ghost:hover {
+    background: var(--color-deep);
+    color: #fff;
+  }
+
+  /* リスト内の小さな操作ボタン */
+  .icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.9rem;
+    height: 1.9rem;
+    border-radius: 999px;
+    border: 1px solid transparent;
+    color: var(--color-dusk);
+    font-size: 0.8rem;
+    line-height: 1;
+  }
+  .icon-btn:hover:not(:disabled) {
+    border-color: var(--color-line);
+    color: var(--color-deep);
+    background: #fff;
+  }
+  .icon-btn:disabled {
+    opacity: 0.3;
+  }
+
+  /* 進捗バー */
+  .bar {
+    position: relative;
+    height: 0.4rem;
+    border-radius: 999px;
+    overflow: hidden;
+    background: var(--color-fog);
+  }
+  .bar-fill {
+    position: absolute;
+    inset: 0 auto 0 0;
+    border-radius: inherit;
+    background: linear-gradient(90deg, var(--color-teal), var(--color-lime));
+  }
+
+  /* セトリの行。公式 Schedule の行（薄いライムの帯 + 丸い日付）に倣う */
+  .track {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.55rem 0.75rem;
+    border-radius: 10px;
+    background: linear-gradient(90deg, var(--color-cream), var(--color-mint));
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+  .track-num {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 999px;
+    background: var(--color-teal);
+    color: #fff;
+    font-family: var(--font-latin);
+    font-weight: 700;
+    font-size: 0.8rem;
+    font-variant-numeric: tabular-nums;
+  }
+  .track-hit .track-num {
+    background: var(--color-deep);
+    color: var(--color-lime-light);
+  }
+  .track-miss {
+    background: var(--color-fog);
+    color: var(--color-dusk);
+  }
+  .track-miss .track-num {
+    background: var(--color-line);
+    color: #fff;
+  }
+  .track-miss .track-title {
+    text-decoration: line-through;
+    text-decoration-color: var(--color-rouge);
+  }
+
+  /* Jev のスロット見出し（序盤 / 中盤 / アンコール） */
+  .slot-label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 1rem 0 0.4rem;
+    font-family: var(--font-latin);
+    font-weight: 700;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-teal);
+  }
+  .slot-label::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--color-line);
+  }
+
+  /* スコアの大きい数字 */
+  .score-num {
+    font-family: var(--font-latin);
+    font-weight: 800;
+    font-size: clamp(3rem, 8vw, 4.5rem);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
+    color: var(--color-deep);
+  }
+  .score-win {
+    background: linear-gradient(135deg, var(--color-lime-light), var(--color-lime));
+  }
+
+  /* 右カラムは lg 以上で追従 */
+  @media (min-width: 64rem) {
+    .rail {
+      position: sticky;
+      top: 1.5rem;
+      max-height: calc(100dvh - 3rem);
+      overflow-y: auto;
+      scrollbar-width: thin;
+      padding-right: 0.25rem;
+    }
+  }
+
+  /* スマホ用の下部バー。safe-area を避けて浮かせる */
+  .dock {
+    position: fixed;
+    left: 1rem;
+    right: 1rem;
+    bottom: calc(1rem + env(safe-area-inset-bottom));
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    padding: 0.75rem 1.1rem;
+    border-radius: 999px;
+    background: #fff;
+    box-shadow: var(--shadow-float);
+    color: var(--color-deep);
+  }
+
+  /* 初回表示の順送りリビール。--i で遅らせる */
+  .rise {
+    animation: var(--animate-rise);
+    animation-delay: calc(var(--i, 0) * 100ms);
   }
 }
 
 button:focus-visible,
 input:focus-visible,
 textarea:focus-visible,
-select:focus-visible {
-  outline: 3px solid var(--color-apple);
+a:focus-visible {
+  outline: 3px solid var(--color-teal);
   outline-offset: 2px;
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .cast-sm,
-  .pressed {
-    transition: transform 120ms ease, box-shadow 120ms ease, background-color 120ms ease;
+  .chip,
+  .seg > button,
+  .btn-primary,
+  .btn-ghost,
+  .icon-btn,
+  .field {
+    transition:
+      transform 160ms ease,
+      box-shadow 160ms ease,
+      background-color 160ms ease,
+      border-color 160ms ease,
+      color 160ms ease;
+  }
+  .bar-fill {
+    transition: width 400ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rise,
+  .btn-primary:disabled {
+    animation: none;
+  }
+  .chip:hover,
+  .btn-primary:hover:not(:disabled) {
+    transform: none;
   }
 }
