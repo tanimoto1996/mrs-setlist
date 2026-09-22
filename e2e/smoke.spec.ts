@@ -16,9 +16,10 @@ test.describe("起動", () => {
     expect(total).toBeGreaterThan(50);
     await expect(library.locator("button.chip")).toHaveCount(total);
 
-    // 初期状態: 俺の予想は空、Jev は未実行、答え合わせは案内だけ
+    // 初期状態: 俺の予想は空、Jev と Gemini は未実行、答え合わせは案内だけ
     await expect(ui.mine(page).getByText("Library で曲を押すと")).toBeVisible();
     await expect(ui.jev(page).getByRole("button", { name: "Jev に予想させる" })).toBeEnabled();
+    await expect(ui.gemini(page).getByRole("button", { name: "Gemini に予想させる" })).toBeEnabled();
     await expect(ui.result(page).getByRole("button", { name: "実セトリを入力する" })).toBeVisible();
 
     // 開いただけでは有料の Jev を呼ばない

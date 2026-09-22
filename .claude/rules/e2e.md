@@ -11,7 +11,7 @@ paths:
 
 - テストは `e2e/*.spec.ts`。共通のフィクスチャ・ロケータは `e2e/fixtures.ts` にまとめる。
   `test` / `expect` は `@playwright/test` からではなく `./fixtures` から import する（安全弁が効くのはそちら）。
-- **`/api/predict`（Jev、有料）を本物で叩くテストを書かない。** `fixtures.ts` の `page` は既定で 500 を返して止める。
+- **`/api/predict`（Jev / Gemini、有料）を本物で叩くテストを書かない。** `fixtures.ts` の `page` は既定で 500 を返して止める。
   成功系は `mockJev(fakePrediction())`、失敗系は `mockJev({ status, error })` で応答を差し替える。
 - ページは `ui.open(page)` / `ui.reload(page)` で開く。`page.goto` を直接呼ばない（hydration 待ちが抜けてフレークする）。
 - 初期状態は `seed({...})` で localStorage に `Saved` を流し込む（`ui.open` より前に呼ぶ）。

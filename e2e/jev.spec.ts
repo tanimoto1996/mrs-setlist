@@ -12,7 +12,7 @@ test.describe("Jev に予想させる（API はモック）", () => {
     // 送ったもの: メモと想定曲数。1 回しか呼ばない
     await expect.poll(() => jevCalls.length).toBe(1);
     expect(jevCalls[0].method()).toBe("POST");
-    expect(JSON.parse(jevCalls[0].postData() ?? "{}")).toEqual({ rumors: "リハ音漏れで Soranji", setlistSize: SETLIST_SIZE });
+    expect(JSON.parse(jevCalls[0].postData() ?? "{}")).toEqual({ rumors: "リハ音漏れで Soranji", setlistSize: SETLIST_SIZE, engine: "jev" });
 
     // 受け取ったもの: 24 曲が Opening → Middle → Encore の順に並ぶ
     await expect(ui.tracks(jev)).toHaveCount(SETLIST_SIZE);

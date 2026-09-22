@@ -3,8 +3,11 @@ import { TypeSafeClient, choice, score } from "@typesafe-ai/sdk";
 import type { EventContext } from "./event";
 import { SONG_STATS, type Song, type SongWithStats } from "./songs";
 
-/** 演奏される見込み。Score の rubric は 0 から順に並ぶ。 */
-const PLAY_LEVELS = [
+/**
+ * 演奏される見込み。Score の rubric は 0 から順に並ぶ。
+ * Gemini（lib/gemini.ts）にも同じ段階を渡して、同じ物差しで比べられるようにしている。
+ */
+export const PLAY_LEVELS = [
   "まず演奏されない",
   "演奏される可能性は低い",
   "演奏されてもおかしくない",
@@ -12,7 +15,7 @@ const PLAY_LEVELS = [
 ] as const;
 
 /** どの位置で演奏されそうか。skip を入れておくと「やらない」が逃げ場として使える。 */
-const SLOT_OPTIONS = {
+export const SLOT_OPTIONS = {
   opener: "オープニング〜序盤（1〜4曲目あたり）",
   middle: "本編の中盤〜後半",
   encore: "アンコール",
@@ -20,6 +23,10 @@ const SLOT_OPTIONS = {
 } as const;
 
 export type Slot = keyof typeof SLOT_OPTIONS;
+
+/** 予想エンジン。API の engine パラメータ・画面の保存先（Saved のキー）と同じ文字列 */
+export type Engine = "jev" | "gemini";
+export const ENGINES: readonly Engine[] = ["jev", "gemini"];
 
 export interface SongPrediction {
   songId: string;
@@ -56,7 +63,8 @@ function buildQuestions(songs: Song[]) {
   return q;
 }
 
-function buildState(event: EventContext, songs: SongWithStats[]) {
+/** Jev / Gemini に渡す「判断材料」。両エンジンで同じものを使う（比較の前提を揃えるため） */
+export function buildState(event: EventContext, songs: SongWithStats[]) {
   return {
     event: {
       tour: event.tour,
@@ -96,7 +104,20 @@ function buildState(event: EventContext, songs: SongWithStats[]) {
   };
 }
 
-const SLOT_ORDER: Record<Slot, number> = { opener: 0, middle: 1, encore: 2, skip: 3 };
+export const SLOT_ORDER: Record<Slot, number> = { opener: 0, middle: 1, encore: 2, skip: 3 };
+
+/**
+ * likelihood 上位 setlistSize 曲を slot 順（opener → middle → encore）に並べて予想セトリにする。
+ * 上位に入ったのに slot=skip の曲は middle 扱い。Jev / Gemini 共通。
+ */
+export function toSetlist(predictions: SongPrediction[], setlistSize: number): string[] {
+  return [...predictions]
+    .sort((a, b) => b.likelihood - a.likelihood)
+    .slice(0, setlistSize)
+    .map((p) => ({ ...p, slot: p.slot === "skip" ? "middle" : p.slot }))
+    .sort((a, b) => SLOT_ORDER[a.slot] - SLOT_ORDER[b.slot] || b.likelihood - a.likelihood)
+    .map((p) => p.songId);
+}
 
 export async function predictSetlist(event: EventContext, songs: SongWithStats[]): Promise<PredictionResult> {
   const client = new TypeSafeClient();
@@ -136,11 +157,5 @@ export async function predictSetlist(event: EventContext, songs: SongWithStats[]
 
   predictions.sort((a, b) => b.likelihood - a.likelihood);
 
-  const setlist = predictions
-    .slice(0, event.setlistSize)
-    .map((p) => ({ ...p, slot: p.slot === "skip" ? "middle" : p.slot }))
-    .sort((a, b) => SLOT_ORDER[a.slot] - SLOT_ORDER[b.slot] || b.likelihood - a.likelihood)
-    .map((p) => p.songId);
-
-  return { model, predictions, setlist, usage };
+  return { model, predictions, setlist: toSetlist(predictions, event.setlistSize), usage };
 }

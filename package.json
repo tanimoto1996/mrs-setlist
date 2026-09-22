@@ -12,7 +12,8 @@
     "test:e2e": "node scripts/e2e-gate.mjs",
     "test:e2e:ui": "playwright test --ui",
     "test:e2e:headed": "playwright test --headed",
-    "test:e2e:report": "playwright show-report"
+    "test:e2e:report": "playwright show-report",
+    "screenshot:setlist": "node --no-warnings scripts/screenshot-setlist.ts"
   },
   "dependencies": {
     "@typesafe-ai/sdk": "^0.6.0",

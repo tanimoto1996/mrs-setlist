@@ -1,10 +1,11 @@
 /**
- * ローカルの dev サーバー経由で Jev に予想させ、結果 JSON を保存する。
+ * ローカルの dev サーバー経由で Jev（または Gemini）に予想させ、結果 JSON を保存する。
  *
- *   node .claude/skills/predict/scripts/predict.ts [--rumors "..."] [--size 24] [--out path.json]
+ *   node .claude/skills/predict/scripts/predict.ts [--engine jev|gemini] [--rumors "..."] [--size 24] [--out path.json]
  *
  * 事前に `npm run dev` が http://localhost:3000 で動いていること。
- * Jev を 1 回呼ぶごとに全曲（約 6 バッチ並列）ぶんのトークンを消費する。
+ * Jev を 1 回呼ぶごとに全曲（約 6 バッチ並列）ぶんのトークンを消費する。Gemini は全曲 1 リクエスト。
+ * 保存した JSON は `npm run screenshot:setlist -- --in <path>` で画像にできる。
  */
 import { writeFileSync } from "node:fs";
 import { SONG_MAP } from "../../../../lib/songs.ts";
@@ -17,16 +18,22 @@ const opt = (name: string) => {
 };
 
 const base = process.env.BASE_URL ?? "http://localhost:3000";
+const engine = opt("engine") ?? "jev";
+if (engine !== "jev" && engine !== "gemini") {
+  console.error("--engine は jev か gemini");
+  process.exit(1);
+}
 const rumors = opt("rumors") ?? "";
 const size = Number(opt("size") ?? 24);
-const out = opt("out") ?? `predictions/${new Date().toISOString().slice(0, 10)}.json`;
+const today = new Date().toISOString().slice(0, 10);
+const out = opt("out") ?? `predictions/${today}${engine === "jev" ? "" : `-${engine}`}.json`;
 
 let res: Response;
 try {
   res = await fetch(`${base}/api/predict`, {
     method: "POST",
     headers: { "content-type": "application/json" },
-    body: JSON.stringify({ rumors, setlistSize: size }),
+    body: JSON.stringify({ rumors, setlistSize: size, engine }),
   });
 } catch {
   console.error(`${base} に接続できません。別ターミナルで \`npm run dev\` を起動してください。`);
@@ -41,6 +48,7 @@ if (!res.ok || "error" in data) {
 writeFileSync(out, JSON.stringify(data, null, 2));
 
 const title = (id: string) => SONG_MAP.get(id)?.title ?? id;
+console.log(`engine: ${engine}`);
 console.log(`model: ${data.model}`);
 console.log(`usage: in=${data.usage.input_tokens} out=${data.usage.output_tokens}`);
 console.log(`saved: ${out}\n`);

@@ -21,6 +21,8 @@
   --color-sky: #54adff;
   --color-orange: #ffa223;
   --color-aqua: #31c9ba;
+  /* Gemini の見込み表示用。青系で Jev の teal と見分ける */
+  --color-cobalt: #2f6fd6;
 
   --font-latin: var(--font-jakarta), "Plus Jakarta Sans", sans-serif;
   --font-body: var(--font-zen), "Zen Kaku Gothic New", "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
@@ -204,6 +206,14 @@ p {
     font-weight: 700;
     font-variant-numeric: tabular-nums;
     color: var(--color-teal);
+  }
+  /* Gemini の見込み。Jev（chip-meta）と並んで出るので色で見分ける */
+  .chip-meta-alt {
+    font-family: var(--font-latin);
+    font-size: 0.75rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    color: var(--color-cobalt);
   }
   /* 公式の「NEW」タグ */
   .tag-new {

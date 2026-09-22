@@ -1,8 +1,9 @@
-# SHADOWS セトリ予想 — Jev vs 俺
+# SHADOWS セトリ予想 — Jev vs Gemini vs 俺
 
 Mrs. GREEN APPLE の全曲から、Ringo Jam Tour "SHADOWS" 香川初日 (2026/09/30) の
 セットリストを当てる遊び。自分で予想を組んで、TypeSafe の判断モデル **Jev** にも
-同じ前提で予想させ、ライブ後に実セトリを入れて採点する。
+同じ前提で予想させ、ライブ後に実セトリを入れて採点する。Jev の精度を測る比較対象として、
+Google の **Gemini** にも同じ前提・同じ物差しで予想させられる。
 
 ## 仕組み
 
@@ -12,8 +13,10 @@ Mrs. GREEN APPLE の全曲から、Ringo Jam Tour "SHADOWS" 香川初日 (2026/0
   - `Score`：演奏される見込み（4 段階 rubric → 0〜1 に正規化）
   - `Choice`：序盤 / 中盤 / アンコール / やらない
   を聞き、上位 N 曲を slot 順に並べて予想セトリにする
-- `lib/scoring.ts` … 曲一致 10 点、順番 ±2 で +5、1 曲目・ラスト曲的中で各 +15
-- `app/api/predict/route.ts` … API キーはサーバ側だけ。フロントには渡さない
+- `lib/gemini.ts` … 同じ state・同じ rubric を Gemini（`generateContent` + JSON スキーマ）に全曲 1 リクエストで渡し、
+  Jev と同じ `PredictionResult` に正規化する。Gemini は曲の知識も持つので「state を主に、知識は補助」と指示
+- `lib/scoring.ts` … 曲一致 10 点、順番 ±2 で +5、1 曲目・ラスト曲的中で各 +15。俺 / Jev / Gemini の 3 者で勝敗
+- `app/api/predict/route.ts` … `engine: "jev" | "gemini"` で切り替え。API キーはサーバ側だけ。フロントには渡さない
 
 Jev は知識モデルじゃなくて判断モデルなので、state に詰めたメタデータと
 「匂わせメモ」だけを材料に判断する。メタデータの質＝予想の質。
@@ -34,6 +37,27 @@ npm run build:stats      # → lib/song-stats.json。突合できなかった曲
 - SE や Tape（`isTape=true`）は集計しない。
 - 未マッチの曲名は `lib/song-title.ts` の正規化ルールか `lib/songs.ts` の表記を直して再集計する。
   スクリプトが `songs.ts` を勝手に書き換えることはない。
+
+## Gemini と比べる
+
+```bash
+# https://aistudio.google.com/apikey でキーを発行し、.env.local に GEMINI_API_KEY=... を書く
+# （またはプロジェクトルートの gemini-api-key ファイルにキーだけを 1 行書く。gitignore 済み）
+# モデルを変えるなら GEMINI_MODEL=...（既定 gemini-3.8-flash）
+```
+
+画面の「Gemini に予想させる」を押すと、Jev のカードの下に Gemini の予想が並ぶ。Library のチップには
+Jev（緑）と Gemini（青）の見込み % が両方出て、Result は俺 / Jev / Gemini の 3 者で採点される。
+
+### 予想を JSON・画像で残す
+
+各カードの「JSON を保存」で予想を `PredictionResult` の JSON としてダウンロードできる。
+`predictions/` に置いて次のコマンドを回すと、そのカードの見た目そのままの PNG になる（API は呼ばない）。
+
+```bash
+npm run screenshot:setlist -- --in predictions/2026-09-23.json                  # Jev のカードだけ
+npm run screenshot:setlist -- --in predictions/2026-09-23-gemini.json --engine gemini --full  # ページ全体
+```
 
 ## 動かす
 
@@ -62,7 +86,7 @@ E2E を通していない内容の `git push` は Claude Code の hook が止め
 
 ## デプロイ
 
-Vercel にそのまま載る。環境変数 `TYPESAFE_API_KEY` を設定するだけ。
+Vercel にそのまま載る。環境変数 `TYPESAFE_API_KEY`（Gemini も使うなら `GEMINI_API_KEY`）を設定するだけ。
 Route Handler の `maxDuration` を 60 秒にしてあるので、Hobby プランでも全曲分の
 バッチが収まる想定（102 曲 / 20 曲 ≒ 6 リクエスト並列）。
 

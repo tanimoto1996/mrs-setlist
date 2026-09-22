@@ -12,6 +12,7 @@ export interface Saved {
   actual: string[];
   rumors: string;
   jev: PredictionResult | null;
+  gemini: PredictionResult | null;
 }
 
 /** lib/event.ts の SHADOWS_OPENING.setlistSize */
@@ -57,8 +58,8 @@ const FAKE_SETLIST: { id: string; slot: Slot }[] = [
   { id: "wanted-wanted", slot: "encore" },
 ];
 
-/** 本物の PredictionResult と同じ形のダミー。Jev（有料）は呼ばない */
-export function fakePrediction(): PredictionResult {
+/** 本物の PredictionResult と同じ形のダミー。Jev / Gemini（有料）は呼ばない。model 名で Jev 用と Gemini 用を見分ける */
+export function fakePrediction(model = "e2e-fake-model"): PredictionResult {
   const predictions: SongPrediction[] = FAKE_SETLIST.map(({ id, slot }, i) => {
     const likelihood = Math.round((1 - i / FAKE_SETLIST.length) * 100) / 100;
     const slotProbabilities: Record<Slot, number> = { opener: 0.1, middle: 0.1, encore: 0.1, skip: 0.1 };
@@ -66,7 +67,7 @@ export function fakePrediction(): PredictionResult {
     return { songId: id, likelihood, confidence: 0.8, slot, slotProbabilities };
   });
   return {
-    model: "e2e-fake-model",
+    model,
     predictions,
     setlist: FAKE_SETLIST.map((s) => s.id),
     usage: { input_tokens: 1234, output_tokens: 567 },
@@ -78,7 +79,10 @@ interface Fixtures {
   jevCalls: Request[];
   /** localStorage に Saved を流し込む。`page.goto` より前に呼ぶ */
   seed: (saved: Partial<Saved>) => Promise<void>;
-  /** `/api/predict` の応答を差し替える。成功なら PredictionResult、失敗なら { status, error } */
+  /**
+   * `/api/predict` の応答を差し替える。成功なら PredictionResult、失敗なら { status, error }。
+   * engine（jev / gemini）を区別せず同じ応答を返す。どちらが呼ばれたかは jevCalls のボディで見る
+   */
   mockJev: (response: PredictionResult | { status: number; error: string }) => Promise<void>;
 }
 
@@ -108,7 +112,7 @@ export const test = base.extend<Fixtures>({
 
   seed: async ({ page }, use) => {
     await use(async (saved) => {
-      const value: Saved = { mine: [], actual: [], rumors: "", jev: null, ...saved };
+      const value: Saved = { mine: [], actual: [], rumors: "", jev: null, gemini: null, ...saved };
       await page.addInitScript(
         ([key, json]) => localStorage.setItem(key, json),
         [STORAGE_KEY, JSON.stringify(value)] as const,
@@ -151,11 +155,12 @@ export const ui = {
   library: (page: Page) => page.locator('section[aria-labelledby="songs-heading"]'),
   mine: (page: Page) => page.locator('section[aria-labelledby="mine-heading"]'),
   jev: (page: Page) => page.locator('section[aria-labelledby="jev-heading"]'),
+  gemini: (page: Page) => page.locator('section[aria-labelledby="gemini-heading"]'),
   result: (page: Page) => page.locator('section[aria-labelledby="result-heading"]'),
   /** Library の曲チップ。表示名の完全一致で探す（"Soranji" と "Soranji 2" を取り違えない） */
   chip: (page: Page, title: string) =>
     ui.library(page).locator("button.chip").filter({ has: page.locator("span", { hasText: exact(title) }) }),
-  /** セトリの行（My Setlist / Jev's Call 共通） */
+  /** セトリの行（My Setlist / Jev's Call / Gemini's Call 共通） */
   tracks: (section: ReturnType<Page["locator"]>) => section.locator("li.track"),
   trackTitles: async (section: ReturnType<Page["locator"]>) =>
     (await ui.tracks(section).locator(".track-title").allInnerTexts()).map((t) => t.replace(/（的中）|（外れ）/g, "").trim()),

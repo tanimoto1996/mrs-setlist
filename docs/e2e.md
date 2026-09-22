@@ -8,7 +8,8 @@
 | --- | --- |
 | `smoke.spec.ts` | ページが開く、公演情報と全曲ライブラリが出る、初期状態、スマホ下部バー、`GET /api/predict` が 405 |
 | `my-setlist.spec.ts` | 曲を押して積む / 外す、並べ替え、リロード後も残る（localStorage）、検索・クイックフィルタ、24 曲の上限 |
-| `jev.spec.ts` | Jev の予想（**モック**）が slot 順に並ぶ、送信ボディ、エラー表示、モックし忘れ時の安全弁 |
+| `jev.spec.ts` | Jev の予想（**モック**）が slot 順に並ぶ、送信ボディ（`engine: "jev"`）、エラー表示、モックし忘れ時の安全弁 |
+| `gemini.spec.ts` | Gemini の予想（**モック**）が Gemini のカードに並び `engine: "gemini"` で呼ぶ、Jev との共通曲数、エラーは Gemini 側だけ、俺 / Jev / Gemini の 3 者採点と引き分け |
 | `result.spec.ts` | 実セトリ入力で即採点、点数（`lib/scoring.ts` の式どおり）、勝敗、確認ダイアログ付きのクリア |
 
 デスクトップ（Desktop Chrome）とスマホ幅（Pixel 7）の 2 プロジェクトで同じ spec を回す。
@@ -41,13 +42,13 @@ npx playwright test e2e/jev.spec.ts -g "失敗"   # 絞り込み（push ゲー�
 規約は `.claude/rules/e2e.md`（`e2e/` を開くと自動で読み込まれる）。要点:
 
 - `import { test, expect, ui, SONG, ... } from "./fixtures"`。`@playwright/test` から直接 `test` を取らない。
-- **Jev（`/api/predict`）は絶対に本物を呼ばない**。`fixtures.ts` の `page` が既定で遮断し、テストごとに
+- **Jev と Gemini（どちらも `/api/predict`、engine で切り替え）は絶対に本物を呼ばない**。`fixtures.ts` の `page` が既定で遮断し、テストごとに
   `mockJev(fakePrediction())` / `mockJev({ status: 502, error: "..." })` で応答を決める。
 - ページは `ui.open(page)` で開く（`page.goto` を直接呼ばない）。`domcontentloaded` で進んでから
   `<main aria-busy="false">`（hydration 完了）を待つ。リロードも `ui.reload(page)`。
   hydration 前に入力すると React が状態を初期化して消えるので、この待ちがないテストはフレークする。
 - 初期状態は `seed({ mine: [...], actual: [...], jev: ... })`。`ui.open(page)` より前に呼ぶ。
-- 画面の場所は `ui.library(page)` / `ui.mine(page)` / `ui.jev(page)` / `ui.result(page)`、
+- 画面の場所は `ui.library(page)` / `ui.mine(page)` / `ui.jev(page)` / `ui.gemini(page)` / `ui.result(page)`、
   曲チップは `ui.chip(page, "Soranji")`（表示名の完全一致）、セトリの行は `ui.tracks(section)`。
 - 曲を名指しするときは `SONG` に id と表示名を足す。`lib/songs.ts` を変えたら追随。
 - ブラウザで未捕捉の例外が 1 つでも出ると、そのテストは失敗扱いになる（fixtures が `pageerror` を集めている）。
@@ -60,7 +61,7 @@ npx playwright test e2e/jev.spec.ts -g "失敗"   # 絞り込み（push ゲー�
 - ブラウザはシステムの Chrome をヘッドレス・使い捨てプロファイル（`--isolated`）で起動する。
 - 使いどころ: 実装した見た目の確認、E2E を書く前にアクセシビリティツリー（`browser_snapshot`）を見てロケータを決める、
   E2E で再現しづらい操作の手動確認。
-- **MCP からも「Jev に予想させる」は押さない**。本物の `/api/predict` に届いて課金される。
+- **MCP からも「Jev に予想させる」「Gemini に予想させる」は押さない**。本物の `/api/predict` に届いて課金される。
 - `enableAllProjectMcpServers: true`（`.claude/settings.json`）で、この `.mcp.json` は確認なしで有効になる。
 - MCP 側の Playwright が「ブラウザが無い」と言ったら `browser_install` ツールではなく、`--browser chrome` が
   効いているか（`.mcp.json`）を確認する。macOS 12 では同梱 Chromium は入らない。

@@ -29,6 +29,8 @@
       "Read(./jev-api-key)",
       "Bash(cat .env*)",
       "Bash(cat jev-api-key)",
+      "Bash(cat gemini-api-key)",
+      "Read(./gemini-api-key)",
       "Bash(git push --force*)",
       "Bash(git push -f*)"
     ]
